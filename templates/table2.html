@@ -1,0 +1,142 @@
+{%extends "layout.html" %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
+</button> 
+{% endblock %}
+{% block upload%}
+<nav class="nav gris d-flex justify-content-between p-1 ">
+    <form class="p-1 d-flex" action="/table2" method="POST" enctype="multipart/form-data">
+        
+            <input type="file" name="archivo2" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
+        
+        <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+    </form>   
+</nav>
+
+
+{% endblock %}
+
+{%  block content%}
+<div class="nav d-flex justify-content-around mt-4">
+    <div class="barra-instructor">
+        <select class="btn btn-success">
+            <option value="instructor1">Instructor 1</option>
+            <option value="instructor2">Instructor 2</option>
+            <option value="instructor3">Instructor 3</option>
+        </select>
+    </div>
+    <div class="barra-alternativa">
+        <select class="btn btn-success">
+            <option value="alternativa1">Alternativa 1</option>
+            <option value="alternativa2">Alternativa 2</option>
+            <option value="alternativa3">Alternativa 3</option>
+        </select>
+    </div>
+    <button id="asignar-instructor" class="btn btn-success" onclick="consultaraprendiz()">Asignar Instructor</button>
+</div>
+    
+
+    <div class="container-fluid mt-lg-3">
+        <table id="juiciospendientes" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
+            <thead>
+                <tr class="">
+                    <th class="text-center">#</th>
+                    <th class="text-center">Número de Documento</th>
+                    <th class="text-center">Nombres</th>
+                    <th class="text-center">Apellidos</th>
+                    <th class="text-center">Competencia</th>
+                    <th class="text-center">Resultado</th>
+                    <th class="text-center">Juicio</th>
+                    
+                    
+                    
+                    <!-- <th>Competencia</th>
+                    <th>Juicio de Evaluación</th> -->
+                    <!-- Agrega aquí las columnas adicionales que desees mostrar -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in evaluar.iterrows() %}
+                    <tr>
+                        <td>{{index + 1}}</td>
+                        <td>{{ row['Número de Documento'] }}</td>
+                        <td>{{ row['Nombre'] }}</td>
+                        <td>{{row['Apellidos']}}</td>
+                        <td>{{row['Competencia']}}</td>
+                        <td>{{row['Resultado de Aprendizaje']}}</td>
+                        <td>{{row['Juicio de Evaluación']}}</td>
+                        
+                        <!-- <td>{{row['Competencia']}}</td>
+                        <td>{{row['Juicio de Evaluación']}}</td> -->
+                        <!-- Agrega aquí las columnas adicionales que desees mostrar -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="modal fade" id="modalAsignarInstructor" tabindex="-1" role="dialog" aria-labelledby="modalAsignarInstructorLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAsignarInstructorLabel">Asignar Instructor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label for="nombreAprendiz">Nombre del Aprendiz:</label>
+                    <input type="text" id="nombreAprendiz" class="form-control">
+    
+                    <label for="correoElectronico">Correo Electrónico:</label>
+                    <input type="text" id="correoElectronico" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="asignarInstructor()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+     
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
+    <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+    
+        <script>
+              $(document).ready(function() {
+            $('.table').DataTable({
+                
+                language: {
+                    processing: "Tratamiento en curso...",
+                    search: "Buscar&nbsp;:",
+                    lengthMenu: "Agrupar de _MENU_ items",
+                    info: "Mostrando del item _START_ al _END_ de un total de _TOTAL_ items",
+                    infoEmpty: "No existen datos.",
+                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron datos con tu busqueda",
+                    emptyTable: "No hay datos disponibles en la tabla.",
+                    paginate: {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    aria: {
+                        sortAscending: ": active para ordenar la columna en orden ascendente",
+                        sortDescending: ": active para ordenar la columna en orden descendente"
+                    }
+                },
+                
+            });
+        });
+
+        </script>
+
+{%endblock%}

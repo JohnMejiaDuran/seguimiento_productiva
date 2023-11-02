@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/Registroinstructor.css">
+    <title>Registro instructor</title>
+</head>
+<header>
+    
+    <!-- <div class="user-icon" id="userIcon">
+        <img src="acceso.png" alt="Icono de Usuario">
+        <div class="menu" id="menu">
+            <ul>
+                <li><a href="#">Editar Perfil</a></li>
+                <li><a href="paginainicio.html">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </div> -->
+    <nav class="navbar">
+        <div class="img">
+            <img src="acceso.png" alt="">
+            <label for="">Administradora</label>
+        </div>
+        <div class="navbar-left">
+            <a href="consultaraprendiz.html"><button>Consultar aprendiz</button></a>
+            
+        </div>
+    </nav>
+    <img src="./Logo-sena-blanco-sin-fondo.png" alt="">
+    </header>
+    
+<body>
+    <form class="form">
+        <h1>Registro instructor</h1>
+        <label>Seleccione su estado</label>
+        <select name="select">
+          <option>Contratista</option>
+          <option>De planta</option>
+        </select>
+        <label>Ingrese numero de cedula</label> 
+        <input class="container-inputs" type="text" name="name" id="name" placeholder="numero de cedula">
+        <label>Ingrese nombre completo</label>
+        <input class="container-inputs" type="text" name="name" id="name" placeholder="nombre completo">
+        <label>Ingrese correo electronico</label>
+        <input class="container-inputs" type="text" name="correo" id="correo" placeholder="E-mail">
+        <label>Ingrese numero de telefono</label>
+        <input class="container-inputs" type="text" name="tel" id="tel" placeholder="telefono">
+        </div>
+        <button type="submit" >Registrar</button>
+        <script src="js/registroinstructor.js"></script>
+</body>
+</html>

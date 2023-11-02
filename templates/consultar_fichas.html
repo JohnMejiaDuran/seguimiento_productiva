@@ -1,0 +1,39 @@
+{%extends "layout.html" %}
+
+{% block upload%}
+<nav class="nav gris d-flex justify-content-between p-1 ">
+    <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+        
+            <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
+        
+        <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+    </form>   
+</nav>
+{% endblock %}
+
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
+</button> 
+{% endblock%}
+
+{% block instructores %}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="Registroinstructor.html">Instructores</a>
+</button>
+{% endblock %}
+
+{% block indicadores %}
+<button type="button" class="btn btn-outline-success ">
+    <a   class="nav-link active text-white" href="Registroinstructor.html">indicadores</a>
+</button>
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('/static/img/sena.jpg');
+        background-size: cover;
+    }
+</style>
+{% endblock %}

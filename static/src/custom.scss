@@ -1,0 +1,35 @@
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+$verde: #00af00;
+$gris: $gray-500;
+.logo {
+    width: 60px;
+}
+
+.color-custom{
+    background-color:$verde;
+}
+
+.gris {
+    background-color: $gris;
+}
+
+.btn.btn-outline-success {
+    border: none;
+}
+.btn.btn-outline-secondary {
+    border: none;
+}
+
+.custom-input {
+    border-width: 2px;
+    color: black;
+    border: solid 3px;/* Ajusta el grosor del borde según tus preferencias */
+}
+
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// Then add additional custom code here
