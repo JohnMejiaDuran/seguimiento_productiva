@@ -29,6 +29,9 @@ $gris: $gray-500;
     border: solid 3px;/* Ajusta el grosor del borde según tus preferencias */
 }
 
+body {
+    background-color: rgba(128, 128, 128, 0.137);
+}
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 

@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, url_for,redirect,flash
 import pandas as pd
-
+from models.seguimientos import Instructor
 
 consultar_ficha = Blueprint("consultar_ficha", __name__)
 
@@ -16,6 +16,8 @@ def consultarficha():
 @consultar_ficha.route("/table", methods=["GET", "POST"])
 def table():
     rol = "Empresario"
+    instructores = Instructor.query.all()
+
     if request.method == "POST":
         # Verifica si se ha enviado un archivo en la solicitud.
 
@@ -67,7 +69,7 @@ def table():
 
                 # Luego puedes aplicar drop_duplicates
                 novedades = aprendices_novedades.drop_duplicates(subset=('Número de Documento')).reset_index()
-                return render_template("table.html", aprendices_aprobados=aprendices_aprobados,evaluar=evaluar, novedades=novedades, rol=rol)
+                return render_template("table.html", aprendices_aprobados=aprendices_aprobados,evaluar=evaluar, novedades=novedades, rol=rol, instructores=instructores)
     flash('No se ha seleccionado ningún archivo.', 'error')
     return redirect(url_for('consultar_ficha.consultarficha'))
 

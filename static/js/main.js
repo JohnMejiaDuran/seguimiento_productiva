@@ -26,3 +26,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+const asignarInstructor = document.getElementById("asignarInstructor");
+const instructorSelect = document.getElementById("instructorSelect");
+
+instructorSelect.addEventListener("change", function () {
+    if (instructorSelect.value) {
+        asignarInstructor.disabled = false;
+        asignarInstructor.classList.remove("btn-outline-success")
+        asignarInstructor.classList.add("btn-success")
+    } else {
+        asignarInstructor.disabled = true;
+        
+    }
+});

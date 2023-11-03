@@ -2,7 +2,13 @@
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
-</button> 
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="instructores">Instructores</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a   class="nav-link active text-white" href="registro_instructor.html">indicadores</a>
+</button>
 {% endblock %}
 {% block upload%}
 <nav class="nav gris d-flex justify-content-between p-1 ">
@@ -77,9 +83,22 @@
     <ul>
         <button class="btn btn-success">Descargar</button>
     </ul>
+
     <ul class="nav d-flex align-items-center">
-        <li class="mx-3" >Asignar instructor</li>
-        <li ><select  class="btn btn-success" name="" id=""><option value="" >Lucdovina</option></select></li>
+        <li class="mx-3">
+            <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
+                <option disabled selected value="">Selecciona un instructor</option>
+                {% for instructor in instructores %}
+                <option value="instructor" >{{instructor.nombre}}</option>
+                {% endfor %}
+            </select>
+        </li>
+        <li>
+            <button type="submit" class="btn-lg btn-outline-success" id="asignarInstructor" disabled>
+                Asignar instructor
+            </button>
+        </li>
+        
     </ul>
 </div>
 
