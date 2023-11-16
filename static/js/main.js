@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-const asignarInstructor = document.getElementById("asignarInstructor");
+const asignarInstructor = document.getElementById("asignar_instructor");
 const instructorSelect = document.getElementById("instructorSelect");
 
 instructorSelect.addEventListener("change", function () {
@@ -39,3 +39,38 @@ instructorSelect.addEventListener("change", function () {
         
     }
 });
+
+
+// $('#asignar_instructor').on('click', function() {
+//     var datosAEnviar = [];
+
+//     $('#aprobados tbody tr').each(function(index) {
+//         var documento = $(this).find('input[name="documento' + index + '"]').val();
+//         var nombre = $(this).find('input[name="nombre' + index + '"]').val();
+//         var apellido = $(this).find('input[name="apellido' + index + '"]').val();
+//         var alternativa = $(this).find('select[name="alternativa' + index + '"]').val();
+
+//         datosAEnviar.push({
+//             documento: documento,
+//             nombre: nombre,
+//             apellido: apellido,
+//             alternativa: alternativa
+//         });
+//     });
+
+//     // Enviar los datos mediante AJAX con el tipo de contenido 'application/json'
+//     $.ajax({
+//         type: 'POST',
+//         url: '/guardar_aprendices',
+//         contentType: 'application/json; charset=utf-8', // Configurar el tipo de contenido
+//         dataType: 'json', // Esperar datos JSON en la respuesta del servidor
+//         data: JSON.stringify({ datos: datosAEnviar }),
+//         success: function(response) {
+//             alert(response); // Muestra la respuesta del servidor
+//         },
+//         error: function(error) {
+//             console.error('Error al enviar los datos:', error);
+//         }
+//     });
+// });
+

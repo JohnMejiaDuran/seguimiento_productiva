@@ -21,7 +21,7 @@
 {% endblock %}
 {% block content %}
 
-<div class="container col-3 mt-5  pb-3   card rounded-5">
+<div class="container col-5 mt-3  pb-3 card rounded-3 mx-auto" style="height: 80vh;">
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
         <h1 class="">Registro instructor</h1>
         <div class="text-start mt-4">
@@ -33,29 +33,30 @@
             </select>
         </div>
 
-        <div class="text-start mt-3">
-            <label class="form-label">Ingrese numero de cedula</label> 
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese numero de cedula</label> 
             <input class="container-inputs form-control rounded-pill" type="text" name="documento" placeholder="numero de cedula">
         </div>
-        <div class="text-start mt-3">
-            <label class="form-label">Ingrese nombre completo</label>
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese nombre completo</label>
             <input class="container-inputs form-control rounded-pill" type="text" name="nombre"  placeholder="nombre completo">
         </div>
 
-        <div class="text-start mt-3">
-            <label class="form-label">Ingrese correo electronico</label>
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese correo electronico</label>
             <input class="container-inputs form-control rounded-pill" type="text" name="email"  placeholder="E-mail">
         </div>
 
-        <div class="text-start mt-3">
-            <label class="form-label">Ingrese numero de telefono</label>
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese numero de telefono</label>
             <input class="container-inputs form-control rounded-pill" type="text" name="telefono"  placeholder="telefono">
         </div>
 
-        <div class="mt-3 mb-3">
+        <div class="mt-3">
             <button type="submit" class="btn-lg btn-success ">Registrar instructor</button>
 
         </div>
+    </form>
 </div>
 <style>
     body {
