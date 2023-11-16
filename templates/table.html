@@ -46,61 +46,62 @@
 
 <div class="container-fluid mt-lg-3">
     <h1 class="text-center">Aprendices con etapa lectiva <strong>aprobada</strong></h1>
-    <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
-        <thead>
-            <tr class="">
-                <th class="text-center">#</th>
-                <th class="text-center">Número de Documento</th>
-                <th class="text-center">Nombres</th>
-                <th class="text-center">Apellidos</th>
-                <th class="text-center">alternativa</th>
-                <th class="text-center">Seleccionar</th>
-                <!-- <th>Competencia</th>
-                <th>Juicio de Evaluación</th> -->
-                <!-- Agrega aquí las columnas adicionales que desees mostrar -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for index, row in aprendices_aprobados.iterrows() %}
-                <tr>
-                    <td>{{index + 1}}</td>
-                    <td>{{ row['Número de Documento'] }}</td>
-                    <td>{{ row['Nombre'] }}</td>
-                    <td>{{row['Apellidos']}}</td>
-                    <td><select name="alternativa" id="alternativa">
-                        <option value="practica">practica</option>
-                    </select></td>
-                    <td><input type="checkbox"></td>
-                    <!-- <td>{{row['Competencia']}}</td>
-                    <td>{{row['Juicio de Evaluación']}}</td> -->
-                    <!-- Agrega aquí las columnas adicionales que desees mostrar -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-<div class="d-flex justify-content-between container-fluid mt-2">
-    <ul>
-        <button class="btn btn-success">Descargar</button>
-    </ul>
 
-    <ul class="nav d-flex align-items-center">
-        <li class="mx-3">
-            <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
-                <option disabled selected value="">Selecciona un instructor</option>
-                {% for instructor in instructores %}
-                <option value="instructor" >{{instructor.nombre}}</option>
+    <form method="POST" action="{{ url_for('ruta_aprendices.guardar_aprendices') }}">
+        <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
+            <thead>
+                <tr class="">
+                    <th class="text-center">#</th>
+                    <th class="text-center">Número de Documento</th>
+                    <th class="text-center">Nombres</th>
+                    <th class="text-center">Apellidos</th>
+                    <th class="text-center">alternativa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, row in aprendices_aprobados.iterrows() %}
+                    <tr>
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ row['Número de Documento'] }}</td>
+                        <td>{{ row['Nombre'] }}</td>
+                        <td>{{ row['Apellidos'] }}</td>
+                        <td>
+                            <select name="alternativa{{ index }}" id="alternativa{{ index }}">
+                                <option value="Contrato de aprendizaje">Contrato de aprendizaje</option>
+                                <!-- Otras opciones del select -->
+                            </select>
+                        </td>
+                        <input type="hidden" name="documento{{ index }}" value="{{ row['Número de Documento'] }}">
+                        <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
+                        <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
+                    </tr>
                 {% endfor %}
-            </select>
-        </li>
-        <li>
-            <button type="submit" class="btn-lg btn-outline-success" id="asignarInstructor" disabled>
-                Asignar instructor
-            </button>
-        </li>
-        
-    </ul>
+            </tbody>
+        </table>
+        <ul class="nav d-flex align-items-center justify-content-end mt-2">
+            <li class="mx-3">
+                <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
+                    <option disabled selected value="">Selecciona un instructor</option>
+                    {% for instructor in instructores %}
+                    <option value="{{instructor.documento}}" >{{instructor.nombre}}</option>
+                    {% endfor %}
+                </select>
+            </li>
+            <li>
+                <button type="submit" class="btn-lg btn-outline-success" name="asignar_instructor" id="asignar_instructor" disabled>
+                    Asignar instructor
+                </button>
+            </li>  
+        </ul>
+    </form>
+    <div class="d-flex mt-2 justify-content-end mt-2">
+        <ul>
+            <button class="btn btn-warning">Descargar</button>
+        </ul> 
+    </div>
 </div>
+
+
 
     
 
@@ -191,11 +192,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
     <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
-    
+    <script src="/static/js/main.js"></script>
         <script>
               $(document).ready(function() {
             $('.table').DataTable({
-                
+                paging: false,
                 language: {
                     processing: "Tratamiento en curso...",
                     search: "Buscar&nbsp;:",
