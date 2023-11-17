@@ -74,6 +74,7 @@
                         <input type="hidden" name="documento{{ index }}" value="{{ row['Número de Documento'] }}">
                         <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
                         <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
+                        <input type="hidden" name="ficha{{ index }}" value="{{ ficha }}">
                     </tr>
                 {% endfor %}
             </tbody>
