@@ -7,8 +7,9 @@ def consultaraprendiz():
     titulo = "Consultar por aprendiz"
     rol = "Administrador"
     logo_redirect = "/consultaraprendiz"
-    logo = "/static/icons/icon.png"
-    return render_template("consultaraprendiz.html",titulo=titulo, rol=rol,logo_redirect=logo_redirect ,logo=logo)
+    logo = "/static/icons/user-icon.png"
+    title = "Consultar aprendiz"
+    return render_template("consultaraprendiz.html",titulo=titulo, rol=rol,logo_redirect=logo_redirect ,logo=logo,title=title)
 
 @consultar_aprendiz.route("/table2", methods=["GET", "POST"])
 def table2():
