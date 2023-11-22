@@ -4,76 +4,78 @@
     <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="instructores">Instructores</a>
-</button>
+    <a  class="nav-link active text-white" href="/consultar_fichas">Consultar fichas</a>
+</button> 
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/aprendiz">Aprendices</a>
+    <a  class="nav-link active text-white" href="instructores">Instructores</a>
 </button>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-2">
-    <h1 class="text-center mt-2">Aprendices</h1>
-    <table id="aprendices" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%">
+<h1 class="text-center mt-3">Aprendices</h1>
+<div class="container-fluid">
+    <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
         <thead>
-            <tr>
-                <th>N° de Documento</th>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Telefono</th>
-                <th>Email</th>
-                <th>Alternativa</th>
-                <th>Opciones</th>  
+            <tr class="">
+                <th class="text-center">#</th>
+                <th class="text-center">Número de Documento</th>
+                <th class="text-center">Nombres</th>
+                <th class="text-center">Apellidos</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Télefono</th>
+                <th class="text-center">Ficha</th>
+                <th class="text-center">Programa</th>
+                <th class="text-center">Alternativa</th>
             </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody>
             {% for aprendiz in aprendices %}
-            <tr>
-                <td>{{aprendiz.documento}}</td>
-                <td>{{aprendiz.nombre}}</td>
-                <td>{{aprendiz.apellido}}</td>
-                <td>null</td>
-                <td>null</td>
-                <td>{{aprendiz.alternativa}}</td>
-                <td>ELIMINAR</td>
-            </tr>
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{aprendiz.documento}}</td>
+                    <td>{{aprendiz.nombre}}</td>
+                    <td>{{aprendiz.apellido }}</td>
+                    <td>Sin actualizar</td>
+                    <td>Sin actualizar</td>
+                    <td>ficha</td>
+                    <td>Programa</td>
+                    <td>{{aprendiz.alternativa}}</td>
+                </tr>
             {% endfor %}
-      </tbody>
-   </table>
+        </tbody>
+    </table>
 </div>
-<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
-    <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
-    <script src="/static/js/main.js"></script>
-        <script>
-              $(document).ready(function() {
-            $('.table').DataTable({
-                language: {
-                    processing: "Tratamiento en curso...",
-                    search: "Buscar&nbsp;:",
-                    lengthMenu: "Agrupar de _MENU_ items",
-                    info: "Mostrando del item _START_ al _END_ de un total de _TOTAL_ items",
-                    infoEmpty: "No existen datos.",
-                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                    infoPostFix: "",
-                    loadingRecords: "Cargando...",
-                    zeroRecords: "No se encontraron datos con tu busqueda",
-                    emptyTable: "No hay datos disponibles en la tabla.",
-                    paginate: {
-                        first: "Primero",
-                        previous: "Anterior",
-                        next: "Siguiente",
-                        last: "Ultimo"
-                    },
-                    aria: {
-                        sortAscending: ": active para ordenar la columna en orden ascendente",
-                        sortDescending: ": active para ordenar la columna en orden descendente"
-                    }
-                },
-                
-            });
-        });
 
-        </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
+<script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#aprendices').DataTable({
+        language: {
+            processing: "Tratamiento en curso...",
+            search: "Buscar&nbsp;:",
+            lengthMenu: "Agrupar de _MENU_ items",
+            info: "Mostrando un total de _TOTAL_ aprendices",
+            infoEmpty: "No existen datos.",
+            infoFiltered: "(filtrado de _MAX_ elementos en total)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron datos con tu busqueda",
+            emptyTable: "No hay datos disponibles en la tabla.",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": active para ordenar la columna en orden ascendente",
+                sortDescending: ": active para ordenar la columna en orden descendente"
+            }
+        },
+    })})
+</script>
 {% endblock%}
