@@ -22,13 +22,15 @@ class Aprendiz(db.Model):
     apellido = db.Column(db.String(50))
     alternativa = db.Column(db.String(50))
     ficha_sin_decimal = db.Column(db.String(20))
+    programa = db.Column(db.String(100))
 
-    def __init__(self,documento,nombre,apellido,alternativa,ficha_sin_decimal):
+    def __init__(self,documento,nombre,apellido,alternativa,ficha_sin_decimal,programa):
         self.documento = documento
         self.nombre = nombre
         self.apellido = apellido
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
+        self.programa = programa
 
 class Asignacion(db.Model):
     id_asignacion = db.Column(db.Integer, primary_key=True)

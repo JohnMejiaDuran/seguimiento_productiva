@@ -40,6 +40,8 @@ def table():
             ficha = sheet.cell_value(2, 2)
             ficha_sin_decimal = str(int(ficha))
             
+            programa = sheet.cell_value(5, 2)
+
 
             if archivo:
                 if not archivo.filename.endswith(('.xls', '.xlsx')):
@@ -95,7 +97,7 @@ def table():
 
 
                 return render_template("table.html", aprendices_aprobados=aprendices_aprobados, evaluar=evaluar,
-                                       novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal)
+                                       novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal, programa=programa)
             
                 
 
