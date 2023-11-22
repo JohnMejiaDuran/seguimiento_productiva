@@ -14,7 +14,7 @@ def guardar_aprendices():
     if request.method == "POST" and 'asignar_instructor' in request.form:
         # Obtener todos los datos del formulario
         # Procesar los datos y guardarlos en la base de datos
-
+        ficha_sin_decimal = request.form.get("ficha_sin_decimal")
         # Ejemplo de cómo podrías recuperar los datos de la tabla
         cantidad_filas = len([key for key in request.form if key.startswith('documento')])
 
@@ -23,10 +23,11 @@ def guardar_aprendices():
             nombre = request.form.get(f"nombre{i}")
             apellido = request.form.get(f"apellido{i}")
             alternativa = request.form.get(f"alternativa{i}")
+           
 
             if documento and nombre and apellido and alternativa:
                 # Crear una instancia del modelo Aprendiz y guardar en la base de datos
-                aprendiz = Aprendiz(documento=documento, nombre=nombre, apellido=apellido, alternativa=alternativa)
+                aprendiz = Aprendiz(documento=documento, nombre=nombre, apellido=apellido, alternativa=alternativa,ficha_sin_decimal=ficha_sin_decimal)
                 db.session.add(aprendiz)
 
                 db.session.commit()  # Confirmar los cambios en la base de datos después de agregar todos los aprendices

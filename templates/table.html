@@ -48,6 +48,7 @@
     <h1 class="text-center" id="aprobados_h1">Aprendices con etapa lectiva <strong>aprobada</strong></h1>
 
     <form method="POST" action="{{ url_for('ruta_aprendices.guardar_aprendices') }}">
+        <input type="hidden" name="ficha_sin_decimal{{ index }}" value="{{ ficha_sin_decimal}}">
         <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
             <thead>
                 <tr class="">
@@ -56,6 +57,7 @@
                     <th class="text-center">Nombres</th>
                     <th class="text-center">Apellidos</th>
                     <th class="text-center">alternativa</th>
+                    <th class="text-center">Ficha</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,10 +73,11 @@
                                 <!-- Otras opciones del select -->
                             </select>
                         </td>
+                        <td>{{ ficha_sin_decimal }}</td>
                         <input type="hidden" name="documento{{ index }}" value="{{ row['Número de Documento'] }}">
                         <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
                         <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
-                        <input type="hidden" name="ficha{{ index }}" value="{{ ficha }}">
+                        
                     </tr>
                 {% endfor %}
             </tbody>

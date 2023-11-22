@@ -3,7 +3,12 @@ import pandas as pd
 from models.seguimientos import Instructor
 from datetime import datetime, timedelta
 import xlrd
-import io
+from werkzeug.utils import secure_filename
+from openpyxl import load_workbook
+import os
+import tempfile
+from io import BytesIO
+
 
 consultar_ficha = Blueprint("consultar_ficha", __name__)
 
@@ -26,6 +31,16 @@ def table():
 
         if "archivo" in request.files:
             archivo = request.files["archivo"]
+            
+            contenido_archivo = archivo.read()
+            memoria_archivo = BytesIO(contenido_archivo)
+            workbook_xls = xlrd.open_workbook(file_contents=memoria_archivo.read())
+
+            sheet = workbook_xls.sheet_by_index(0)
+            ficha = sheet.cell_value(2, 2)
+            ficha_sin_decimal = str(int(ficha))
+            
+
             if archivo:
                 if not archivo.filename.endswith(('.xls', '.xlsx')):
                     flash('El archivo debe ser de tipo .xls o .xlsx', 'error')
@@ -62,7 +77,7 @@ def table():
                         df["Número de Documento"].isin(
                             practicasporevaluar
                         )
-                    )].reset_index()
+                    )]
                 
             #########################################################################
                 #APRENDICES CON NOVEDADES
@@ -74,18 +89,13 @@ def table():
 
                 # Extracción de datos, ficha, fechas y validar si la ficha aun es vigente
 
-                archivo = request.files['archivo']
-                contenido = archivo.read()
-                stream = io.BytesIO(contenido)
-                from xlrd import open_workbook
-                workbook = open_workbook(file_contents=stream.read())
-                hoja = workbook.sheet_by_index(0)
-
-                ficha = hoja.cell_value(2,2)
-                ficha_sin_decimal = str(int(ficha))
+                
 
                 
-                return render_template("table.html", aprendices_aprobados=aprendices_aprobados,evaluar=evaluar, novedades=novedades, rol=rol, instructores=instructores, ficha=ficha_sin_decimal)
+
+
+                return render_template("table.html", aprendices_aprobados=aprendices_aprobados, evaluar=evaluar,
+                                       novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal)
             
                 
 
