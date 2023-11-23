@@ -3,19 +3,24 @@
 {% block content%}
 <div class="mt-5  container d-flex justify-content-center w-25">
 
-    <form action="" class="text-center  mx-0 card p-3">
+    <form action="/guardar_centro" class="text-center  mx-0 card p-3" method="POST">
         <h2>Registro centro de formación</h2>
         <div class="text-start p-0 mt-3">
-            <label for="" class="form-label">Código</label>
-            <input type="text" class="form-control">
+            <label for="codigo_centro" class="form-label">Código</label>
+            <input type="text" class="form-control" name="codigo_centro" id="codigo_centro">
         </div>
         <div class="text-start p-0 mt-3">
-            <label for="" class="form-label">Nombre de centro</label>
-            <input type="text" class="form-control">
+            <label for="nombre_centro" class="form-label">Nombre de centro</label>
+            <input type="text" class="form-control" name="nombre_centro" id="nombre_centro">
         </div>
         <div class="text-start p-0 mt-3">
-            <label for="" class="form-label">Regional</label>
-            <input type="text" class="form-control">
+            <label for="codigo_regional" class="form-label">Regional</label>
+            <select  class="form-select" name="codigo_regional" id="codigo_regional">
+                <option disabled selected value="">Selecciona regional</option>
+                {% for regional in regionales %}
+                <option value="{{regional.codigo_regional}}" >{{regional.nombre_regional}}</option>
+                {% endfor %}
+            </select>
         </div>
         <div>
             <button class="btn btn-success mt-3">Guardar</button>

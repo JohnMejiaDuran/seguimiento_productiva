@@ -18,6 +18,7 @@ def consultarficha():
     titulo = "Consultar por fichass"
     rol = "Empresario"
     logo = "/static/icons/icon.png"
+    
     return render_template("consultar_fichas.html",titulo=titulo, rol=rol,logo=logo)
 
 
@@ -42,6 +43,18 @@ def table():
             
             programa = sheet.cell_value(5, 2)
 
+            fecha_excel = sheet.cell_value(8,2)
+            if isinstance(fecha_excel, float):
+                fecha_python = xlrd.xldate_as_datetime(fecha_excel, 0)# El segundo argumento es el modo de fecha en Excel
+                fecha_sin_hora = fecha_python.date()
+                fecha_actual = datetime.now().date()
+                
+                ficha_en_vigencia = True
+                if fecha_sin_hora + timedelta(days=548) < fecha_actual:
+                    ficha_en_vigencia = False
+                
+            else:
+                print("No es un valor de fecha en Excel en la celda especificada.")
 
             if archivo:
                 if not archivo.filename.endswith(('.xls', '.xlsx')):
@@ -97,7 +110,7 @@ def table():
 
 
                 return render_template("table.html", aprendices_aprobados=aprendices_aprobados, evaluar=evaluar,
-                                       novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal, programa=programa)
+                                       novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal, programa=programa,ficha_en_vigencia=ficha_en_vigencia)
             
                 
 

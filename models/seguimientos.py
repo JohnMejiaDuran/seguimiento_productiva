@@ -54,4 +54,24 @@ class Asignacion(db.Model):
         self.fecha_asignacion = fecha_asignacion
         self.fecha_inicio_contrato = fecha_inicio_contrato
         self.fecha_fin_contrato = fecha_fin_contrato
-    
+
+
+class Regional(db.Model):
+    codigo_regional =db.Column(db.Integer,primary_key=True)
+    nombre_regional =db.Column(db.String(100))
+
+    def __init__(self,codigo_regional,nombre_regional):
+        self.codigo_regional= codigo_regional
+        self.nombre_regional= nombre_regional
+
+class Centro(db.Model):
+    codigo_centro=db.Column(db.Integer,primary_key= True)
+    nombre_centro=db.Column(db.String(100))
+    codigo_regional=db.Column(db.Integer,ForeignKey('regional.codigo_regional'))
+
+    regional = relationship("Regional",foreign_keys=[codigo_regional])
+
+    def __init__(self,codigo_centro,nombre_centro,codigo_regional):
+        self.codigo_regional= codigo_regional
+        self.nombre_centro= nombre_centro
+        self.codigo_centro=codigo_centro

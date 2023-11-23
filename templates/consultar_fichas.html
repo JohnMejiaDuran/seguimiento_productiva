@@ -6,12 +6,15 @@
         
             <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
         
-        <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+        <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
     </form>   
 </nav>
 {% endblock %}
 
 {% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+</button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
 </button>
@@ -31,4 +34,5 @@
         background-size: cover;
     }
 </style>
+
 {% endblock %}

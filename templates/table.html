@@ -192,5 +192,19 @@
     </div>
 
     
-
+    <script>
+        var fichaEnVigencia = {{ ficha_en_vigencia|lower }}; // Convierte a minúsculas para comparar en JavaScript
+        if (fichaEnVigencia === false) {
+            var confirmacion = confirm("La ficha está fuera de vigencia. ¿Deseas continuar?");
+            if (confirmacion) {
+                console.log("El usuario confirmó");
+                // Realizar acciones si el usuario confirma
+            } else {
+                console.log("El usuario canceló");
+                // Redirigir a la página de inicio inmediatamente al hacer clic en "cancelar"
+                window.location.replace("/consultar_fichas");
+            }
+        }
+    </script>
+    
 {%endblock%}
