@@ -7,7 +7,9 @@ ruta_aprendices = Blueprint("ruta_aprendices",__name__)
 def aprendices():
     title = "Aprendices"
     aprendices = Aprendiz.query.all()
-    return render_template("aprendiz.html", title=title,aprendices=aprendices)
+    rol = "Administrador"
+    logo = "/static/icons/user-icon.png"
+    return render_template("aprendiz.html", title=title,aprendices=aprendices,rol=rol,logo=logo)
 
 @ruta_aprendices.route("/guardar_aprendices", methods=['POST'])
 def guardar_aprendices():

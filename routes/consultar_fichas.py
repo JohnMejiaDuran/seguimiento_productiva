@@ -15,11 +15,11 @@ consultar_ficha = Blueprint("consultar_ficha", __name__)
 
 @consultar_ficha.route("/consultar_fichas", methods=["GET", "POST"])
 def consultarficha():
-    titulo = "Consultar por fichass"
+    titulo = "Consultar por fichas"
     rol = "Empresario"
-    logo = "/static/icons/icon.png"
-    
-    return render_template("consultar_fichas.html",titulo=titulo, rol=rol,logo=logo)
+    logo = "/static/icons/user-icon.png"
+    title = "Consultar fichas"
+    return render_template("consultar_fichas.html",titulo=titulo, rol=rol,logo=logo,title=title)
 
 
 @consultar_ficha.route("/table", methods=["GET", "POST"])
