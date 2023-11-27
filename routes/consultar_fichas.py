@@ -3,10 +3,6 @@ import pandas as pd
 from models.seguimientos import Instructor
 from datetime import datetime, timedelta
 import xlrd
-from werkzeug.utils import secure_filename
-from openpyxl import load_workbook
-import os
-import tempfile
 from io import BytesIO
 
 
