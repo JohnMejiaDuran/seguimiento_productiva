@@ -193,18 +193,30 @@
 
     
     <script>
-        var fichaEnVigencia = {{ ficha_en_vigencia|lower }}; // Convierte a minúsculas para comparar en JavaScript
-        if (fichaEnVigencia === false) {
-            var confirmacion = confirm("La ficha está fuera de vigencia. ¿Deseas continuar?");
-            if (confirmacion) {
-                console.log("El usuario confirmó");
-                // Realizar acciones si el usuario confirma
-            } else {
-                console.log("El usuario canceló");
-                // Redirigir a la página de inicio inmediatamente al hacer clic en "cancelar"
-                window.location.replace("/consultar_fichas");
-            }
+        var fichaEnVigencia = {{ ficha_en_vigencia|lower }}; // Esto asume que ficha_en_vigencia es una variable de tu contexto que tiene un valor booleano (true/false)
+
+if (fichaEnVigencia === false) {
+    swal({
+        title: "La ficha está fuera de vigencia. ¿Deseas continuar?",
+        icon: "warning",
+        dangerMode: true,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        buttons: {
+            cancel: "Cancelar", // Cambiar el texto del botón de cancelar
+            confirm: "Continuar" // Cambiar el texto del botón de confirmar
         }
+    }).then((willContinue) => {
+        if (willContinue) {
+            console.log("El usuario confirmó");
+            // Realizar acciones si el usuario confirma
+        } else {
+            console.log("El usuario canceló");
+            // Redirigir a la página de inicio inmediatamente al hacer clic en "cancelar"
+            window.location.replace("/consultar_fichas");
+        }
+    });
+}
     </script>
     
 {%endblock%}
