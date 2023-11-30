@@ -4,7 +4,7 @@
 <nav class="nav gris d-flex justify-content-between p-1 ">
     <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
         
-            <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
+            <input type="file" name="archivo" accept=".xls" class="form-control-file btn btn-success mx-3  ">
         
         <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
     </form>   
@@ -28,11 +28,42 @@
 
 
 {% block content %}
+
 <style>
     body {
         background-image: url('/static/img/sena.jpg');
         background-size: cover;
     }
 </style>
-
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if category == 'error' %}
+                <div class="alert alert-danger container-fluid" role="alert">
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endwith %} -->
+    <script>
+        function verificarArchivo(input) {
+            var botonEnviar = document.getElementById('botonEnviar');
+    
+            // Verificar si se seleccionó un archivo
+            if (input.files.length > 0) {
+                botonEnviar.disabled = false;
+            }
+        }
+    </script>
+    
+    {% if xls == False %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Error al cargar archivo Excel',
+            text: 'Debe ser un archivo Excel con e la extensión .xls',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
 {% endblock %}
