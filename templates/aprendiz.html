@@ -78,4 +78,15 @@
         },
     })})
 </script>
+{% if aprendiz_guardado == True %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Aprendices asignados',
+            text: 'Los aprendices han sido asignados con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
 {% endblock%}

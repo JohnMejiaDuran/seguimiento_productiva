@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, request, jsonify, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, jsonify, redirect, url_for,session
 from models.seguimientos import Aprendiz
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
@@ -10,7 +10,9 @@ def aprendices():
     aprendices = Aprendiz.query.all()
     rol = "Administrador"
     logo = "/static/icons/user-icon.png"
-    return render_template("aprendiz.html", title=title,aprendices=aprendices,rol=rol,logo=logo)
+    aprendiz_guardado = session.pop('aprendiz_guardado',False)
+
+    return render_template("aprendiz.html", title=title,aprendices=aprendices,rol=rol,logo=logo,aprendiz_guardado=aprendiz_guardado)
 
 @ruta_aprendices.route("/guardar_aprendices", methods=['POST'])
 def guardar_aprendices():
@@ -52,8 +54,10 @@ def guardar_aprendices():
             try:
                 db.session.add_all(aprendices_a_agregar)
                 db.session.commit()
-                mensaje = "Todos los aprendices fueron agregados correctamente"
-                return mensaje
+                aprendices_guardados = True
+                session['aprendiz_guardado'] = aprendices_guardados
+                return redirect(url_for('ruta_aprendices.aprendices',aprendices_guardados=aprendices_guardados))
+            
             except IntegrityError as e:
                 db.session.rollback()
                 mensaje = "Error: Al menos un aprendiz ya existe con un documento duplicado"
