@@ -5,7 +5,8 @@ from datetime import datetime, timedelta
 import xlrd
 from io import BytesIO
 from xlrd import XLRDError
-
+from models.seguimientos import Aprendiz
+from utils.db import db
 consultar_ficha = Blueprint("consultar_ficha", __name__)
 
 
@@ -17,8 +18,8 @@ def consultarficha():
     title = "Consultar fichas"
 
     xls = session.pop('xls_data', True)
-    print(xls)
-    return render_template("consultar_fichas.html",titulo=titulo, rol=rol,logo=logo,title=title,xls=xls)
+    not_data = session.pop('not_data', True)
+    return render_template("consultar_fichas.html",titulo=titulo, rol=rol,logo=logo,title=title,xls=xls, not_data=not_data)
 
 
 @consultar_ficha.route("/table", methods=["GET", "POST"])
@@ -81,7 +82,15 @@ def table():
                         documentos = en_formacion.groupby('Nombre')['Número de Documento'].size()-1 # Cuenta cuantos juicios tiene cada aprendiz mediante la cedula y le resta 1 que es la practica
 
                         aprendices_aprobados = conteo_por_persona_aprobada[conteo_por_persona_aprobada.eq(documentos)].reset_index() # conteo por persona aprobada debe ser igual al conteo de documentos -1 ya que no contamos el resultado de la etapa practica
+                        
+                        # Cargar los números de documento de la base de datos SQLAlchemy
+                        numeros_documento_bd = db.session.query(Aprendiz.documento).all()  # Suponiendo que 'session' es tu sesión SQLAlchemy y 'Aprendiz' es tu tabla
 
+                        # Convertir los números de documento a una lista
+                        numeros_documento_bd = [num[0] for num in numeros_documento_bd]
+
+                        # Filtrar los aprendices basados en si sus números de documento ya están en la base de datos SQLAlchemy
+                        aprendices_no_en_bd = aprendices_aprobados[~aprendices_aprobados['Número de Documento'].isin(numeros_documento_bd)]
                 #########################################################################
                 #APRENDICES CON JUICIOS PENDIENTES
 
@@ -116,11 +125,13 @@ def table():
                         
 
 
-                        return render_template("table.html", aprendices_aprobados=aprendices_aprobados, evaluar=evaluar,
+                        return render_template("table.html", aprendices_no_en_bd=aprendices_no_en_bd, evaluar=evaluar,
                                             novedades=novedades, rol=rol, instructores=instructores, ficha_sin_decimal=ficha_sin_decimal, programa=programa,ficha_en_vigencia=ficha_en_vigencia)
-                except (ValueError, KeyError) as e:
-                    flash(f'Error en los datos del archivo Excel: {str(e)}', 'error')
-                    return redirect(url_for('consultar_ficha.consultarficha'))
+                except (ValueError, KeyError,TypeError) :
+                    not_data = False
+                    flash('Error en los datos del archivo Excel','error')
+                    session['not_data'] = not_data
+                    return redirect(url_for('consultar_ficha.consultarficha',not_data=not_data))
 
                 
             

@@ -60,7 +60,18 @@
         // Mostrar alerta aquí
         swal({
             title: 'Error al cargar archivo Excel',
-            text: 'Debe ser un archivo Excel con e la extensión .xls',
+            text: 'Debe ser un archivo Excel con extensión .xls',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
+    {% if not_data == False %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Error al cargar archivo Excel',
+            text: 'El contenido del archivo no es correcto',
             icon: 'error',
             confirmButtonText: 'OK'
         });
