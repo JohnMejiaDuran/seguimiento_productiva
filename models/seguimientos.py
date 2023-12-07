@@ -23,14 +23,18 @@ class Aprendiz(db.Model):
     alternativa = db.Column(db.String(50))
     ficha_sin_decimal = db.Column(db.String(20))
     programa = db.Column(db.String(100))
+    documento_instructor = db.Column(db.Integer, ForeignKey('instructor.documento'))
 
-    def __init__(self,documento,nombre,apellido,alternativa,ficha_sin_decimal,programa):
+    instructor = relationship("Instructor", foreign_keys=[documento_instructor])
+    def __init__(self,documento,nombre,apellido,alternativa,ficha_sin_decimal,programa,documento_instructor):
         self.documento = documento
         self.nombre = nombre
         self.apellido = apellido
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
+        self.documento_instructor = documento_instructor
+
 
 class Asignacion(db.Model):
     id_asignacion = db.Column(db.Integer, primary_key=True)

@@ -59,7 +59,7 @@
                     <th class="text-center">Apellidos</th>
                     <th class="text-center">alternativa</th>
                 </tr>
-            </thead>
+            </thead>            
             <tbody>
                 {% for index, row in aprendices_no_en_bd.iterrows() %}
                     <tr>
@@ -83,12 +83,12 @@
         </table>
         <ul class="nav d-flex align-items-center justify-content-end mt-2">
             <li class="mx-3">
-                <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
-                    <option disabled selected value="">Selecciona un instructor</option>
-                    {% for instructor in instructores %}
-                    <option value="{{instructor.documento}}" >{{instructor.nombre}}</option>
-                    {% endfor %}
-                </select>
+                    <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
+                        <option disabled selected value="">Selecciona un instructor</option>
+                        {% for instructor in instructores %}
+                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }}</option>
+                        {% endfor %}
+                    </select>
             </li>
             <li>
                 <button type="submit" class="btn-lg btn-outline-success" name="asignar_instructor" id="asignar_instructor" disabled>
