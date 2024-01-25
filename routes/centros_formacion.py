@@ -7,8 +7,10 @@ centro_formacion = Blueprint("centro_formacion",__name__)
 @centro_formacion.route("/centros_formacion")
 def centros():
     title = "Centros de formacion"
+    logo = "/static/icons/user-icon.png"
+    rol = "Instructor"
     regionales = Regional.query.all()
-    return render_template("centros_formacion.html", title=title, regionales=regionales)
+    return render_template("centros_formacion.html", title=title, regionales=regionales, logo=logo, rol=rol)
 
 @centro_formacion.route("/guardar_centro", methods=['POST'])
 def guardar_centros():

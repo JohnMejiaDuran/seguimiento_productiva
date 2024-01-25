@@ -1,10 +1,17 @@
 {%extends "layout.html" %}
 
 {% block upload%}
-<nav class="nav gris d-flex justify-content-between p-1 ">
+<nav class="nav gris d-flex p-1 ">
+    <div class="">
+        <button class="atras-icono btn btn-success mt-1 mx-1">
+            <a href="">
+                <i class="bi bi-arrow-left-square-fill "></i>
+            </a>
+        </button>     
+    </div>
     <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
         
-            <input type="file" name="archivo" accept=".xls" class="form-control-file btn btn-success mx-3  ">
+        <input type="file" name="archivo" accept=".xls" class="form-control-file btn btn-success mx-3  ">
         
         <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
     </form>   
@@ -14,9 +21,6 @@
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
-</button>
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>

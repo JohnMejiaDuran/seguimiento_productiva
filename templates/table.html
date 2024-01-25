@@ -6,22 +6,35 @@
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>
 </button>
-<button type="button" class="btn btn-outline-success ">
+<button type="button" class="btn btn-outline-success " >
     <a   class="nav-link active text-white" href="aprendiz">Aprendices</a>
 </button>
 {% endblock %}
 {% block upload%}
-<nav class="nav gris d-flex justify-content-between p-1 ">
-    <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+<nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
+    <div class="d-flex">
+
+        <button class="atras-icono btn btn-success mx-1 mt-1 mb-1">
+            <a href="consultar_fichas">
+                <i class="bi bi-arrow-left-square-fill "></i>
+            </a>
+        </button> 
+       
         
-            <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
-        
-        <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
-    </form>   
+        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+                    
+           
+                <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
+            
+            <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+        </form>   
+    </div>
+    
+
     <ul class="nav">
         <li class="">
             <button type="button" class="btn btn-outline-secondary btn-sm mx-2">
-                <a  class="nav-link active text-white" href="#aprobados_h1">Etapa electiva aprobada</a>
+                <a  class="nav-link active text-white scroll-to-top" href="#">Etapa electiva aprobada</a>
             </button>
         </li>
         <li class="">
@@ -44,8 +57,8 @@
 
 
 
-<div class="container-fluid mt-lg-3">
-    <h1 class="text-center" id="aprobados_h1">Aprendices con etapa lectiva <strong>aprobada</strong></h1>
+<div class="container-fluid mt-lg-3" id="aprobados_h1">
+    <h1 class="text-center" >Aprendices con etapa lectiva <strong>aprobada</strong></h1>
 
     <form method="POST" action="{{ url_for('ruta_aprendices.guardar_aprendices') }}">
         <input type="hidden" name="ficha_sin_decimal{{ index }}" value="{{ ficha_sin_decimal}}">
@@ -111,8 +124,8 @@
 
     
 
-    <div class="container-fluid mt-lg-3">
-        <h1 class="text-center" id="juiciospendientes_h1">Aprendices con <strong>juicios pendientes</strong> </h1>
+    <div class="container-fluid mt-lg-3" id="juiciospendientes_h1">
+        <h1 class="text-center" >Aprendices con <strong>juicios pendientes</strong> </h1>
         <table id="juiciospendientes" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
             <thead>
                 <tr class="">

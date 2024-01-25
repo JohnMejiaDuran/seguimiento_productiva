@@ -28,4 +28,16 @@
 body {
   background-color: rgba(128, 128, 128, 0.137);
 }
+.atras-icono {
+  display: flex;
+  align-items: center;
+}
 
+.atras-icono > a {
+  font-size: 20px;
+  color: white;
+  
+}
+.atras-icono.btn:hover i {
+  color: white;
+}
