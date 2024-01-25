@@ -79,3 +79,42 @@ class Centro(db.Model):
         self.codigo_regional= codigo_regional
         self.nombre_centro= nombre_centro
         self.codigo_centro=codigo_centro
+
+class Variable(db.Model):
+    id_variable=db.Column(db.Integer,primary_key= True)
+    nombre=db.Column(db.String(100))
+    tipo=db.Column(db.String(100))
+    descripcion=db.Column(db.String(100))
+    
+    def __init__(self,id_variable,nombre,tipo,descripcion):
+        self.id_variable=id_variable
+        self.nombre = nombre
+        self.tipo=tipo
+        self.descripcion=descripcion
+        
+    # class Valoracion(db.Model):
+    #  id_valoracion=db.Column(db.Integer,primary_key= True)
+    #  id_variable=db.Column(db.Integer,ForeignKey('variable.id_variable'))
+    #  id_seguimiento=db.Column(db.Integer,ForeignKey('seguimiento.id_seguimiento'))
+    #  valoracion=db.Column(db.String(100))
+    #  observacion=db.Column(db.String(100))
+     
+    #  variable = relationship("Variable", foreign_keys=[id_variable])
+     
+    #  def __init__(self,id_valoracion,id_variable,id_seguimiento,valoracion,observacion):
+    #      self.id_valoracion=id_valoracion
+    #      self.id_variable=id_variable
+    #      self.id_seguimiento=id_seguimiento
+    #      self.valoracion=valoracion
+    #      self.observacion=observacion
+     
+     
+     
+     
+     
+      
+          
+        
+    
+  
+    
