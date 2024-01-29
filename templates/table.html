@@ -12,25 +12,20 @@
 {% endblock %}
 {% block upload%}
 <nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
-    <div class="d-flex">
 
+    <div class="d-flex">
         <button class="atras-icono btn btn-success mx-1 mt-1 mb-1">
             <a href="consultar_fichas">
                 <i class="bi bi-arrow-left"></i>
             </a>
         </button> 
-       
-        
-        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
-                    
-           
-                <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
+        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data"> 
+            <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
             
             <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
         </form>   
     </div>
     
-
     <ul class="nav">
         <li class="">
             <button type="button" class="btn btn-outline-secondary btn-sm mx-2">

@@ -93,3 +93,16 @@ $(document).ready(function() {
         
     });
 });
+
+let isFirstClick = true;
+
+function scrollOrBack() {
+    // Verifica la posición actual del scroll
+    if (window.scrollY === 0) {
+        // Desplaza al inicio del scroll si está en la parte superior
+        window.scrollTo(0, 0);
+    } else {
+        // Vuelve atrás en la historia si no está en la parte superior
+        window.history.back();
+    }
+}

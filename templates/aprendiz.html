@@ -8,8 +8,16 @@
 </button>
 {% endblock %}
 
+{% block upload%}
+<div class="d-flex sticky-top container-fluid ">
+    <button class="atras-icono btn btn-success mx-1 mt-1 mb-1" onclick="scrollOrBack()">
+            <i class="bi bi-arrow-left"></i>
+    </button>
+</div> 
+{% endblock %}
+
 {% block content %}
-<h1 class="text-center mt-3">Aprendices</h1>
+<h1 class="text-center ">Aprendices</h1>
 <div class="container-fluid">
     <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
         <thead>
@@ -77,6 +85,7 @@
         },
     })})
 </script>
+
 {% if aprendiz_guardado == True %}
     <script>
         // Mostrar alerta aquí
