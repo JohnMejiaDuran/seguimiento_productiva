@@ -91,22 +91,6 @@ class Variable(db.Model):
         self.nombre = nombre
         self.tipo=tipo
         self.descripcion=descripcion
-        
-    # class Valoracion(db.Model):
-    #  id_valoracion=db.Column(db.Integer,primary_key= True)
-    #  id_variable=db.Column(db.Integer,ForeignKey('variable.id_variable'))
-    #  id_seguimiento=db.Column(db.Integer,ForeignKey('seguimiento.id_seguimiento'))
-    #  valoracion=db.Column(db.String(100))
-    #  observacion=db.Column(db.String(100))
-     
-    #  variable = relationship("Variable", foreign_keys=[id_variable])
-     
-    #  def __init__(self,id_valoracion,id_variable,id_seguimiento,valoracion,observacion):
-    #      self.id_valoracion=id_valoracion
-    #      self.id_variable=id_variable
-    #      self.id_seguimiento=id_seguimiento
-    #      self.valoracion=valoracion
-    #      self.observacion=observacion
      
      
      
