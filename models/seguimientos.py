@@ -109,35 +109,47 @@ class Variable(db.Model):
          self.observacion=observacion
          
          
-    class Seguimiento(db.Model):
-        id_seguimiento=db.Column(db.Integer,primary_key=True)
-        tipo_seguimiento=db.Column(db.String(100))
-        observacion=db.Column(db.String(100))
-        periodo=db.Column(db.String(100))
-        tipo=db.Column(db.String(100))
-        nit = db.Column(db.Integer, ForeignKey('aprendiz.documento'))
-        codigo_centro = db.Column(db.Integer, ForeignKey('centro.codigo_centro'))
-        id_aprendiz = db.Column(db.Integer, ForeignKey('aprendiz.documento'))
-        id_instructor = db.Column(db.Integer, ForeignKey('instructor.documento'))
-        reconocimiento = db.Column(db.String(50))
-        
-        aprendiz = relationship("Aprendiz", foreign_keys=[nit, id_aprendiz])
-        centro = relationship("Centro", foreign_keys=[codigo_centro])
-        instructor = relationship("Instructor", foreign_keys=[id_instructor])
-
-        def __init__(self, id_seguimiento, tipo_seguimiento, observacion, periodo, tipo, nit, codigo_centro, id_aprendiz, id_instructor, reconocimiento):
-         self.id_seguimiento = id_seguimiento
-         self.tipo_seguimiento = tipo_seguimiento
-         self.observacion = observacion
-         self.periodo = periodo
-         self.tipo = tipo
-         self.nit = nit
-         self.codigo_centro = codigo_centro
-         self.id_aprendiz = id_aprendiz
-         self.id_instructor = id_instructor
-         self.reconocimiento = reconocimiento
-        
+class Seguimiento(db.Model):
+    id_seguimiento = db.Column(db.Integer, primary_key=True)
+    tipo_seguimiento = db.Column(db.String(100))
+    observacion = db.Column(db.String(100))
+    periodo = db.Column(db.String(100))
+    tipo = db.Column(db.String(100))
+    nit = db.Column(db.Integer, ForeignKey('empresa.nit'))
+    codigo_centro = db.Column(db.Integer, ForeignKey('centro.codigo_centro'))
+    id_aprendiz = db.Column(db.Integer, ForeignKey('aprendiz.documento'))
+    id_instructor = db.Column(db.Integer, ForeignKey('instructor.documento'))
+    reconocimiento = db.Column(db.String(50))
     
+    aprendiz = relationship("Aprendiz", foreign_keys=[id_aprendiz])
+    empresa = relationship("Empresa", foreign_keys=[nit])
+    centro = relationship("Centro", foreign_keys=[codigo_centro])
+    instructor = relationship("Instructor", foreign_keys=[id_instructor])
+
+    def __init__(self, id_seguimiento, tipo_seguimiento, observacion, periodo, tipo, nit, codigo_centro, id_aprendiz, id_instructor, reconocimiento):
+        self.id_seguimiento = id_seguimiento
+        self.tipo_seguimiento = tipo_seguimiento
+        self.observacion = observacion
+        self.periodo = periodo
+        self.tipo = tipo
+        self.nit = nit
+        self.codigo_centro = codigo_centro
+        self.id_aprendiz = id_aprendiz
+        self.id_instructor = id_instructor
+        self.reconocimiento = reconocimiento
+        
+        
+class Empresa(db.Model):
+    nit=db.Column(db.Integer,primary_key=True)
+    razon_social = db.Column(db.String(100))
+    direccion =db.Column(db.String(100))
+            
+    def __init__(self,nit,razon_social,direccion):
+        self.nit = nit
+        self.razon_social = razon_social
+        self .direccion = direccion
+
+        
         
      
      
