@@ -9,8 +9,12 @@ from routes.aprendices import ruta_aprendices
 from routes.error import pagina_error
 from flask_login import LoginManager, login_user, logout_user, login_required
 from models.ModelUser import ModelUser
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
+
+csrf = CSRFProtect()
+
 login_manager_app = LoginManager(app)
 
 
