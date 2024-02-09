@@ -1,20 +1,37 @@
-from flask import Flask, Blueprint, render_template,request,redirect,url_for
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, login_user, logout_user, login_required
+from routes.consultar_fichas import consultarficha
+from models.ModelUser import ModelUser
+from models.seguimientos import User
 
-pagina_inicio = Blueprint("pagina_inicio",__name__)
+
+pagina_inicio = Blueprint("pagina_inicio", __name__)
+
+
 
 @pagina_inicio.route("/")
 def index():
-    return redirect(url_for('pagina_inicio.inicio'))
+    return redirect(url_for("pagina_inicio.inicio"))
 
 
-@pagina_inicio.route("/login", methods=['GET','POST'])
+@pagina_inicio.route("/login", methods=["GET", "POST"])
 def inicio():
     title = "Página de inicio"
-    
-    if request.method=='POST':
-        print(request.form['username'])
-        print(request.form['password'])
-        return render_template("auth/paginainicio.html", title=title)
+
+    if request.method == "POST":
+        documento = request.form["documento"]
+        password = request.form["password"]
+        logged_user = ModelUser.login(documento, password)
+        if logged_user:
+            login_user(logged_user)
+            return redirect(url_for("consultar_ficha.consultarficha"))
+        else:
+            flash("Usuario o contraseña no válidos")
+            return render_template("auth/paginainicio.html", title=title)
     else:
         return render_template("auth/paginainicio.html", title=title)
 
+
+@pagina_inicio.route("/home")
+def home():
+    return render_template("home.html")

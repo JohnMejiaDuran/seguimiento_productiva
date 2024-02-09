@@ -1,6 +1,8 @@
 from utils.db import db
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import UserMixin
 
 class Instructor(db.Model):
     documento = db.Column(db.Integer, primary_key=True)
@@ -113,7 +115,8 @@ class Seguimiento(db.Model):
     id_seguimiento = db.Column(db.Integer, primary_key=True)
     tipo_seguimiento = db.Column(db.String(100))
     observacion = db.Column(db.String(100))
-    periodo = db.Column(db.String(100))
+    fecha_inicio = db.Column(db.String(15))
+    fecha_fin = db.Column(db.String(15))
     tipo = db.Column(db.String(100))
     nit = db.Column(db.Integer, ForeignKey('empresa.nit'))
     codigo_centro = db.Column(db.Integer, ForeignKey('centro.codigo_centro'))
@@ -126,11 +129,12 @@ class Seguimiento(db.Model):
     centro = relationship("Centro", foreign_keys=[codigo_centro])
     instructor = relationship("Instructor", foreign_keys=[id_instructor])
 
-    def __init__(self, id_seguimiento, tipo_seguimiento, observacion, periodo, tipo, nit, codigo_centro, id_aprendiz, id_instructor, reconocimiento):
+    def __init__(self, id_seguimiento, tipo_seguimiento, observacion, fecha_inicio,fecha_fin, tipo, nit, codigo_centro, id_aprendiz, id_instructor, reconocimiento):
         self.id_seguimiento = id_seguimiento
         self.tipo_seguimiento = tipo_seguimiento
         self.observacion = observacion
-        self.periodo = periodo
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
         self.tipo = tipo
         self.nit = nit
         self.codigo_centro = codigo_centro
@@ -151,8 +155,30 @@ class Empresa(db.Model):
 
         
         
-     
-     
+class User(db.Model, UserMixin):
+
+    id = db.Column(db.Integer, primary_key=True)
+    documento = db.Column(db.String(15))
+    nombre = db.Column(db.String(100))
+    apellido = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    password = db.Column(db.String(162))
+    telefono = db.Column(db.String(10))
+
+    def __init__(self, id,documento, nombre, apellido, email, password, telefono) -> None:
+        self.id = id
+        self.documento = documento
+        self.nombre = nombre
+        self.apellido = apellido
+        self.email = email
+        self.password = password
+        self.telefono = telefono
+
+    @classmethod
+    def check_password(self, hashed_password, password):
+        return check_password_hash(hashed_password, password)
+
+print(generate_password_hash("1098789300"))
      
      
      

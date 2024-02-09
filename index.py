@@ -1,9 +1,10 @@
 from app import app
 from utils.db import db
+from flask_login import LoginManager
 
 with app.app_context():
     db.init_app(app)
     db.create_all()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)

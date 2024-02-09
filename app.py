@@ -7,10 +7,19 @@ from routes.instructores import instructores
 from routes.centros_formacion import centro_formacion
 from routes.aprendices import ruta_aprendices
 from routes.error import pagina_error
+from flask_login import LoginManager, login_user, logout_user, login_required
+from models.ModelUser import ModelUser
+
 app = Flask(__name__)
+login_manager_app = LoginManager(app)
 
 
-app.secret_key = 'your_secret_key_here'
+@login_manager_app.user_loader
+def load_user(id):
+    return ModelUser.get_by_id(id)
+
+
+app.secret_key = "your_secret_key_here"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/seguimientos"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
