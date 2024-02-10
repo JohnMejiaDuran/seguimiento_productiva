@@ -1,0 +1,59 @@
+{%extends "layout.html"%}
+
+{%block head %}
+  <link rel="stylesheet" href="/static/src/paginainicio.css">
+  <title>{{title}}</title>
+{% endblock%}
+
+{% block login %}
+<body>
+  
+  <div class="fondo">
+    
+    <form class="form-container" action="/login" method="POST"  >
+      
+      <h1>Iniciar sesión</h1>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label>Seleccione su rol</label>
+          <select name="select">
+            <option>Administrador</option>
+            <option>Coordinador</option>
+            <option>Instructor</option>
+            <option>Aprendiz</option>
+            <option value="">Empresario</option>
+          </select>
+          <label>Número de documento</label>              
+          <div class="form-group form-div">   
+            <span><i class="fa-solid fa-user"></i></span>
+            <input type="text" id="documento" name="documento" placeholder=" Ingrese documento">  
+          </div>
+          <label>Contraseña</label>
+          <div class="form-group form-div">
+            <span><i class="fa-solid fa-lock"></i></span>
+            <input  type="password" id="password" name="password" placeholder=" Ingrese contraseña">
+            
+          </div>
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          {% for message in messages %}
+            <strong class="text-center color-red">
+              {{message}}
+            </strong>
+          {% endfor %}
+          {% endif%}
+          {% endwith %}   
+          <button type="submit" class="btn btn-success"> Iniciar sesión</button>
+    </div>  
+  </form>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  var messageElement = document.querySelector('.color-red');
+  if (messageElement) {
+    setTimeout(function() {
+      messageElement.classList.add('fade-out');
+    }, 3000); // Agregar clase después de 3000 milisegundos (3 segundos)
+  }
+});
+
+</script>
+{% endblock %}

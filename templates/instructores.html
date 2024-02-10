@@ -2,9 +2,6 @@
 
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
-</button>
-<button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/consultar_fichas">Consultar fichas</a>
 </button> 
 <button type="button" class="btn btn-outline-success ">
@@ -12,9 +9,18 @@
 </button>
 {% endblock%}
 
+{% block upload%}
+
+    <div class="d-flex container-fluid">
+        <button class="atras-icono btn btn-success mx-1 mt-1 mb-1" onclick="goBack()">
+                <i class="bi bi-arrow-left"></i>
+        </button>
+    </div> 
+
+{% endblock %}
 
 {% block content%}
-<div class="container-fluid mt-lg-3">
+<div class="container-fluid ">
     <h1 class="text-center">Instructores</h1>
     <table class= "text-center table table-success table-bordered table-striped table-hover style="width:100%">
         <thead>

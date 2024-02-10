@@ -28,4 +28,26 @@
 body {
   background-color: rgba(128, 128, 128, 0.137);
 }
+.atras-icono {
+  display: flex;
+  align-items: center;
+}
+
+.atras-icono > a {
+  font-size: 20px;
+  color: white;
+  
+}
+.atras-icono.btn:hover i {
+  color: white;
+}
+
+.color-red {
+  color: red;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 1s ease-out; /* Transición de opacidad durante 1 segundo */
+}
 

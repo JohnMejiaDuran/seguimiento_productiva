@@ -7,14 +7,15 @@ from io import BytesIO
 from xlrd import XLRDError
 from models.seguimientos import Aprendiz
 from utils.db import db
+from flask_login import login_required
 
 consultar_ficha = Blueprint("consultar_ficha", __name__)
 
 
 @consultar_ficha.route("/consultar_fichas", methods=["GET", "POST"])
+@login_required
 def consultarficha():
     titulo = "Consultar por fichas"
-    rol = "Empresario"
     logo = "/static/icons/user-icon.png"
     title = "Consultar fichas"
 
@@ -23,15 +24,18 @@ def consultarficha():
     return render_template(
         "consultar_fichas.html",
         titulo=titulo,
-        rol=rol,
         logo=logo,
         title=title,
         xls=xls,
         not_data=not_data,
     )
+
+
 # debo hacer otra ruta donde este solo la tabla y esta extraiga los datos  de la ruta llamada table que deberia llamarse validacion datos para observarlos
 
+
 @consultar_ficha.route("/table", methods=["GET", "POST"])
+@login_required
 def table():
     rol = "Empresario"
     instructores = Instructor.query.all()

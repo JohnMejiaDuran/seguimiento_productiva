@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template,request,redirect, url_for, flash
 from models.seguimientos import Instructor
 from utils.db import db
-
+from flask_login import login_required
 instructores = Blueprint("instructores",__name__)
 
 @instructores.route("/instructores")
+@login_required
 def instructor():
     rol = "Administrador"
     title = "Registro de instructores"
@@ -15,6 +16,7 @@ def instructor():
 
 
 @instructores.route("/registro_instructor")
+@login_required
 def registro_instructor():
     rol = "Administrador"
     
@@ -23,6 +25,7 @@ def registro_instructor():
     return render_template("registro_instructor.html", title=title,rol=rol,logo=logo)
 
 @instructores.route("/nuevo_instructor", methods=["POST"])
+@login_required
 def nuevo_instructor():
     documento = request.form['documento']
     estado = request.form['estado']

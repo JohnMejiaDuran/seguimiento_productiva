@@ -3,9 +3,6 @@
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/consultar_fichas">Consultar fichas</a>
 </button> 
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
-</button> 
 {% endblock%}
 
 {% block instructores %}
@@ -23,6 +20,7 @@
 
 <div class="container col-5 mt-3  pb-3 card rounded-3 mx-auto" style="height: 80vh;">
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1 class="">Registro instructor</h1>
         <div class="text-start mt-4">
             <label class="form-label">Tipo de vinculación</label>
