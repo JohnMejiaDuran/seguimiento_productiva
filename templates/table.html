@@ -19,7 +19,8 @@
                 <i class="bi bi-arrow-left"></i>
             </a>
         </button> 
-        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data"> 
+        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
             
             <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
@@ -56,6 +57,7 @@
     <h1 class="text-center" >Aprendices con etapa lectiva <strong>aprobada</strong></h1>
 
     <form method="POST" action="{{ url_for('ruta_aprendices.guardar_aprendices') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="ficha_sin_decimal{{ index }}" value="{{ ficha_sin_decimal}}">
         <input type="hidden" name="programa{{ index }}" value="{{ programa}}">
         <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >

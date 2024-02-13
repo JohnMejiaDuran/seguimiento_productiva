@@ -23,7 +23,7 @@ def aprendices():
             aprendiz.nombre_instructor = "No asignado"
     return render_template("aprendiz.html", title=title,aprendices=aprendices,rol=rol,logo=logo,aprendiz_guardado=aprendiz_guardado, )
 
-@ruta_aprendices.route("/guardar_aprendices", methods=['POST'])
+@ruta_aprendices.route("/guardar_aprendices", methods=['POST','GET'])
 def guardar_aprendices():
     if request.method == "POST" and 'asignar_instructor' in request.form:
         ficha_sin_decimal = request.form.get("ficha_sin_decimal")
@@ -49,12 +49,13 @@ def guardar_aprendices():
                     if not aprendiz_existente:
                         hay_aprendices = True
                         aprendiz = Aprendiz(
+                            documento_instructor=document_instructor,
                             documento=documento,
                             nombre=nombre,
                             apellido=apellido,
                             alternativa=alternativa,
                             ficha_sin_decimal=ficha_sin_decimal,
-                            programa=programa,documento_instructor=document_instructor
+                            programa=programa,
                         )
                         aprendices_a_agregar.append(aprendiz)
                     else:

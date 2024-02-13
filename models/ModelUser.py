@@ -1,15 +1,20 @@
-from models.seguimientos import User
+from models.seguimientos import Aprendiz, Instructor, BaseUser
 
 
 class ModelUser:
     @classmethod
-    def login(cls, documento, password):
+    def login(cls, documento, password, rol):
         try:
             # Realiza la consulta utilizando SQLAlchemy
-            user_from_db = User.query.filter_by(documento=documento).first()
+            user_from_db = None
+            if rol == "Aprendiz":
+                user_from_db = Aprendiz.query.filter_by(documento=documento).first()
+            elif rol == "Instructor":
+                user_from_db = Instructor.query.filter_by(documento=documento).first()
+
             if user_from_db is not None:
                 # Comprueba la contraseña utilizando el método de la clase User
-                if User.check_password(user_from_db.password, password):
+                if BaseUser.check_password(user_from_db.password, password):
                     return user_from_db
             return None
 
@@ -20,7 +25,7 @@ class ModelUser:
     def get_by_id(cls, id_usuario):
         try:
             # Realiza la consulta utilizando SQLAlchemy
-            user_from_db = User.query.get(id_usuario)
+            user_from_db = BaseUser.query.get(id_usuario)
             return user_from_db
 
         except Exception as ex:
