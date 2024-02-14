@@ -7,13 +7,26 @@ from io import BytesIO
 from xlrd import XLRDError
 from models.seguimientos import Aprendiz
 from utils.db import db
-from flask_login import login_required
+from flask_login import login_required, current_user
+from functools import wraps
 
 consultar_ficha = Blueprint("consultar_ficha", __name__)
+
+def admin_required(fn):
+    @wraps(fn)
+    def decorated_view(*args, **kwargs):
+        if current_user.is_authenticated and any(role.name == "Administrador" for role in current_user.roles):
+            return fn(*args, **kwargs)
+        else:
+            flash("Solo los Administradores tienen acceso a esta página.")
+            return redirect(url_for("pagina_inicio.index"))
+
+    return decorated_view
 
 
 @consultar_ficha.route("/consultar_fichas", methods=["GET", "POST"])
 @login_required
+@admin_required
 def consultarficha():
     titulo = "Consultar por fichas"
     logo = "/static/icons/user-icon.png"
@@ -35,6 +48,8 @@ def consultarficha():
 
 
 @consultar_ficha.route("/table", methods=["GET", "POST"])
+@login_required
+@admin_required
 def table():
     rol = "Empresario"
     instructores = Instructor.query.all()

@@ -47,6 +47,39 @@ class BaseUser(db.Model, UserMixin):
 
 print(generate_password_hash("1098789300"))
 
+class Administrador(BaseUser):
+    __tablename__ = "administrador"
+
+    documento = db.Column(
+        db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
+    )
+    cargo = db.Column(db.String(50))
+
+    __mapper_args__ = {
+        "polymorphic_identity": "administrador",
+    }
+
+    def __init__(self, documento, nombre, apellido, email, password, cargo = None) -> None:
+        super().__init__(documento, nombre, apellido, email, password)
+        self.cargo = cargo
+
+
+class Coordinador(BaseUser):
+    __tablename__ = "coordinador"
+
+    documento = db.Column(
+        db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
+    )
+    area = db.Column(db.String(50))
+
+    __mapper_args__ = {
+        "polymorphic_identity": "coordinador",
+    }
+
+    def __init__(self, documento, nombre, apellido, email, password, area = None) -> None:
+        super().__init__(documento, nombre, apellido, email, password)
+        self.area = area
+
 
 class Instructor(BaseUser):
     __tablename__ = "instructor"
@@ -85,7 +118,18 @@ class Aprendiz(BaseUser):
         "polymorphic_identity": "aprendiz",
     }
 
-    def __init__(self,documento,nombre,apellido,alternativa,ficha_sin_decimal,programa,documento_instructor,email = None,password = None,) -> None:
+    def __init__(
+        self,
+        documento,
+        nombre,
+        apellido,
+        alternativa,
+        ficha_sin_decimal,
+        programa,
+        documento_instructor,
+        email=None,
+        password=None,
+    ) -> None:
         super().__init__(documento, nombre, apellido, email, password)
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal

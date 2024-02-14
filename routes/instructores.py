@@ -2,10 +2,12 @@ from flask import Blueprint, render_template,request,redirect, url_for, flash
 from models.seguimientos import Instructor
 from utils.db import db
 from flask_login import login_required
+from routes.consultar_fichas import admin_required
 instructores = Blueprint("instructores",__name__)
 
 @instructores.route("/instructores")
 @login_required
+@admin_required
 def instructor():
     rol = "Administrador"
     title = "Registro de instructores"

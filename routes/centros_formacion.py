@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template,url_for,redirect,request
 from models.seguimientos import Regional, Centro
 from utils.db import db
-
+from routes.consultar_fichas import admin_required
+from flask_login import login_required
 centro_formacion = Blueprint("centro_formacion",__name__)
 
 @centro_formacion.route("/centros_formacion")
-
+@login_required
+@admin_required
 def centros():
     title = "Centros de formacion"
     logo = "/static/icons/user-icon.png"

@@ -3,10 +3,13 @@ from models.seguimientos import Aprendiz,Instructor
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
+from routes.consultar_fichas import admin_required
+
 ruta_aprendices = Blueprint("ruta_aprendices",__name__)
 
 @ruta_aprendices.route("/aprendiz")
 @login_required
+@admin_required
 def aprendices():
     title = "Aprendices"
     aprendices = Aprendiz.query.all()

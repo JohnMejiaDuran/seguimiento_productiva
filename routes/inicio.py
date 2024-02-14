@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from routes.consultar_fichas import consultarficha
 from routes.aprendices import aprendices
 from models.ModelUser import ModelUser
@@ -29,13 +29,12 @@ def inicio():
                 login_user(user, remember=True)
         if user is not None and "Instructor" in [role.name for role in user.roles]:
             return redirect(url_for("consultar_ficha.consultarficha"))
-        if user is not None and "Aprendiz" in [role.name for role in user.roles]:
+        elif user is not None and "Aprendiz" in [role.name for role in user.roles]:
             return redirect(url_for("ruta_aprendices.aprendices"))
-
-        # logged_user = ModelUser.login(documento, password)
-        # if logged_user:
-        #     login_user(logged_user)
-        #     return redirect(url_for("consultar_ficha.consultarficha"))
+        elif user is not None and "Administrador" in [role.name for role in user.roles]:
+            return redirect(url_for("consultar_ficha.consultarficha"))
+        elif user is not None and "Coordinador" in [role.name for role in user.roles]:
+            return redirect(url_for("consultar_ficha.consultarficha"))
 
         else:
             flash("Usuario o contraseña no válidos")
@@ -58,3 +57,6 @@ def unauthorized(error):
 @pagina_inicio.errorhandler(404)
 def status_404(error):
     return "<h1>Página no encontrada</h1>"
+
+
+

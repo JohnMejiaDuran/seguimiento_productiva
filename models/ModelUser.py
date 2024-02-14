@@ -1,4 +1,4 @@
-from models.seguimientos import Aprendiz, Instructor, BaseUser
+from models.seguimientos import Aprendiz, Instructor, BaseUser, Administrador, Coordinador
 
 
 class ModelUser:
@@ -11,6 +11,10 @@ class ModelUser:
                 user_from_db = Aprendiz.query.filter_by(documento=documento).first()
             elif rol == "Instructor":
                 user_from_db = Instructor.query.filter_by(documento=documento).first()
+            elif rol == "Administrador":
+                user_from_db = Administrador.query.filter_by(documento=documento).first()
+            elif rol == "Coordinador":
+                user_from_db = Coordinador.query.filter_by(documento=documento).first()   
 
             if user_from_db is not None:
                 # Comprueba la contraseña utilizando el método de la clase User
