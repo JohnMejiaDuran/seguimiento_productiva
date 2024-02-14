@@ -1,1 +1,15 @@
 {% extends "layout.html" %}
+{% block logout%}
+<a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary text-lg">Cerrar sesión</a>    
+{% endblock %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="instructores">Instructores</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
+</button>
+{% endblock%}
