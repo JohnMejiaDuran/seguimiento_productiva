@@ -5,10 +5,10 @@ from routes.instructores import instructores
 from routes.centros_formacion import centro_formacion
 from routes.aprendices import ruta_aprendices
 from routes.error import pagina_error
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager
 from models.ModelUser import ModelUser
 from flask_wtf.csrf import CSRFProtect
-
+from routes.pagina_instructor import pagina_instructor
 app = Flask(__name__)
 
 csrf = CSRFProtect()
@@ -32,3 +32,4 @@ app.register_blueprint(instructores)
 app.register_blueprint(centro_formacion)
 app.register_blueprint(ruta_aprendices)
 app.register_blueprint(pagina_error)
+app.register_blueprint(pagina_instructor)
