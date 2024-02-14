@@ -5,6 +5,7 @@ from utils.db import db
 centro_formacion = Blueprint("centro_formacion",__name__)
 
 @centro_formacion.route("/centros_formacion")
+
 def centros():
     title = "Centros de formacion"
     logo = "/static/icons/user-icon.png"

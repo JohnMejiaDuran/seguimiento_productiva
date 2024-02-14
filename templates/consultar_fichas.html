@@ -12,7 +12,7 @@
         </button>     
     </div>
     <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
         <input type="file" name="archivo" accept=".xls" class="form-control-file btn btn-success mx-3  ">
         
         <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>

@@ -26,6 +26,7 @@
 <div class="mt-5  container d-flex justify-content-center w-25">
 
     <form action="/guardar_centro" class="text-center  mx-0 card p-3" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h2>Registro centro de formación</h2>
         <div class="text-start p-0 mt-3">
             <label for="codigo_centro" class="form-label">Código</label>

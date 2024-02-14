@@ -35,6 +35,7 @@ def consultarficha():
 
 
 @consultar_ficha.route("/table", methods=["GET", "POST"])
+@login_required
 def table():
     rol = "Empresario"
     instructores = Instructor.query.all()

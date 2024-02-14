@@ -2,9 +2,11 @@ from flask import Flask, Blueprint, render_template, request, jsonify, redirect,
 from models.seguimientos import Aprendiz,Instructor
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
+from flask_login import login_required
 ruta_aprendices = Blueprint("ruta_aprendices",__name__)
 
 @ruta_aprendices.route("/aprendiz")
+@login_required
 def aprendices():
     title = "Aprendices"
     aprendices = Aprendiz.query.all()
@@ -23,7 +25,8 @@ def aprendices():
             aprendiz.nombre_instructor = "No asignado"
     return render_template("aprendiz.html", title=title,aprendices=aprendices,rol=rol,logo=logo,aprendiz_guardado=aprendiz_guardado, )
 
-@ruta_aprendices.route("/guardar_aprendices", methods=['POST','GET'])
+@ruta_aprendices.route("/guardar_aprendices", methods=['POST'])
+@login_required
 def guardar_aprendices():
     if request.method == "POST" and 'asignar_instructor' in request.form:
         ficha_sin_decimal = request.form.get("ficha_sin_decimal")
