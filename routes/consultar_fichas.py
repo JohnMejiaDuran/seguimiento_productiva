@@ -35,7 +35,6 @@ def consultarficha():
 
 
 @consultar_ficha.route("/table", methods=["GET", "POST"])
-@login_required
 def table():
     rol = "Empresario"
     instructores = Instructor.query.all()
@@ -115,17 +114,18 @@ def table():
                     numeros_documento_bd = db.session.query(
                         Aprendiz.documento
                     ).all()  # Suponiendo que 'session' es tu sesión SQLAlchemy y 'Aprendiz' es tu tabla
-                    
+
                     # Convertir los números de documento a una lista
-                    numeros_documento_bd_str = [(num[0]) for num in numeros_documento_bd]
-                    print(numeros_documento_bd)
+                    numeros_documento_bd_str = [
+                        str(num[0]) for num in numeros_documento_bd
+                    ]
                     # Filtrar los aprendices basados en si sus números de documento ya están en la base de datos SQLAlchemy
                     aprendices_no_en_bd = aprendices_aprobados[
-                        ~aprendices_aprobados["Número de Documento"].isin(
-                            numeros_documento_bd_str
-                        )
+                        ~aprendices_aprobados["Número de Documento"]
+                        .astype(str)
+                        .isin(numeros_documento_bd_str)
                     ]
-                
+
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
 
