@@ -9,6 +9,7 @@ from flask_login import LoginManager
 from models.ModelUser import ModelUser
 from flask_wtf.csrf import CSRFProtect
 from routes.pagina_instructor import pagina_instructor
+from routes.pagina_aprendiz import pagina_aprendiz
 app = Flask(__name__)
 
 csrf = CSRFProtect()
@@ -33,3 +34,4 @@ app.register_blueprint(centro_formacion)
 app.register_blueprint(ruta_aprendices)
 app.register_blueprint(pagina_error)
 app.register_blueprint(pagina_instructor)
+app.register_blueprint(pagina_aprendiz)

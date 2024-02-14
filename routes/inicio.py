@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from routes.consultar_fichas import consultarficha
+from routes.pagina_instructor import pagina_instructor
 from routes.aprendices import aprendices
 from models.ModelUser import ModelUser
 from models.seguimientos import BaseUser, Role
@@ -17,7 +18,17 @@ def index():
 @pagina_inicio.route("/login", methods=["GET", "POST"])
 def inicio():
     title = "Página de inicio"
-
+    if current_user.is_authenticated:  # Verificar si el usuario ya está autenticado
+        # Redirigir al usuario a la página correspondiente según su rol
+        if "Instructor" in [role.name for role in current_user.roles]:
+            return redirect(url_for("pagina_instructor.inicioinstructor"))
+        elif "Aprendiz" in [role.name for role in current_user.roles]:
+            return redirect(url_for("pagina_aprendiz.inicioaprendiz"))
+        elif "Administrador" in [role.name for role in current_user.roles]:
+            return redirect(url_for("consultar_ficha.consultarficha"))
+        elif "Coordinador" in [role.name for role in current_user.roles]:
+            return redirect(url_for("pagina_coordinador.iniciocoordinador"))
+        
     if request.method == "POST":
         documento = request.form["documento"]
         password = request.form["password"]
@@ -28,13 +39,13 @@ def inicio():
             for role in user.roles:
                 login_user(user, remember=True)
         if user is not None and "Instructor" in [role.name for role in user.roles]:
-            return redirect(url_for("consultar_ficha.consultarficha"))
+            return redirect(url_for("pagina_instructor.inicioinstructor"))
         elif user is not None and "Aprendiz" in [role.name for role in user.roles]:
-            return redirect(url_for("ruta_aprendices.aprendices"))
+            return redirect(url_for("pagina_aprendiz.inicioaprendiz"))
         elif user is not None and "Administrador" in [role.name for role in user.roles]:
             return redirect(url_for("consultar_ficha.consultarficha"))
         elif user is not None and "Coordinador" in [role.name for role in user.roles]:
-            return redirect(url_for("consultar_ficha.consultarficha"))
+            return redirect(url_for("pagina_coordinador.iniciocoordinador"))
 
         else:
             flash("Usuario o contraseña no válidos")
