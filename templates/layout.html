@@ -25,16 +25,15 @@
 
             <ul class="nav align-content-around">
                 <li class="text-center">
-                    <a href="#">
-                        <img src={{logo}} class="logo " alt="">
-            
-                    </a>
+                    {% block logo %}
+
+                    {% endblock %}
                 </li>
                 <li class="align-items-center mx-4">
                     <h5 class="ms-1 text-white">{{ current_user.nombre }} {{ current_user.apellido }}</h5>
                     <div class="ml-auto">
                         {% block logout %}
-                            <!-- Contenido del bloque logout -->
+                            
                         {% endblock %}
                     </div>
                 </li>
@@ -46,7 +45,7 @@
                     {% endblock %}
                 </li>
                 <li class="">
-                    <a href={{logo_redirect}}>
+                    <a href="">
                         <img src="/static/img/Logo-sena-blanco-sin-fondo.png" class="logo" alt="">
                     </a>
                 </li>
@@ -54,6 +53,7 @@
 
         </nav>
     </header>
+    
 
     {%block upload%}{% endblock%}
     

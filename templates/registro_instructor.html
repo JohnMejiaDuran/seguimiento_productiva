@@ -20,11 +20,12 @@
 
 <div class="container col-5 mt-3  pb-3 card rounded-3 mx-auto" style="height: 80vh;">
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
+
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h1 class="">Registro instructor</h1>
         <div class="text-start mt-4">
             <label class="form-label">Tipo de vinculación</label>
-            <select name="estado" class="form-control form-select rounded-pill">
+            <select name="vinculacion" class="form-control form-select rounded-pill" required>
                 <option disabled selected value="">Seleccione su vinculación</option>
                 <option>Contratista</optio>
                 <option>Funcionario</option>
@@ -33,16 +34,19 @@
 
         <div class="text-start mt-2">
             <label class="form-label mb-0">Ingrese numero de cedula</label> 
-            <input class="container-inputs form-control rounded-pill" type="text" name="documento" placeholder="numero de cedula">
+            <input class="container-inputs form-control rounded-pill" type="text" name="documento" placeholder="numero de cedula" required> 
         </div>
         <div class="text-start mt-2">
-            <label class="form-label mb-0">Ingrese nombre completo</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="nombre"  placeholder="nombre completo">
+            <label class="form-label mb-0">Ingrese nombres</label>
+            <input class="container-inputs form-control rounded-pill" type="text" name="nombre"  placeholder="nombre completo" required>
         </div>
-
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese apelidos</label>
+            <input class="container-inputs form-control rounded-pill" type="text" name="apellido"  placeholder="apellido completo" required>
+        </div>
         <div class="text-start mt-2">
             <label class="form-label mb-0">Ingrese correo electronico</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="email"  placeholder="E-mail">
+            <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail">
         </div>
 
         <div class="text-start mt-2">

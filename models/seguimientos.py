@@ -9,37 +9,37 @@ from sqlalchemy.orm import relationship
 
 class UserRole(db.Model):
     __tablename__ = "user_role"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     user_id = db.Column(db.Integer, db.ForeignKey("base_user.id"), primary_key=True)
     role_id = db.Column(db.Integer, db.ForeignKey("role.id"), primary_key=True)
 
 
 class Role(db.Model):
     __tablename__ = "role"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
 
 
 class BaseUser(db.Model, UserMixin):
     __tablename__ = "base_user"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     id = db.Column(db.Integer, primary_key=True)
     documento = db.Column(db.String(15), unique=True)
     nombre = db.Column(db.String(100))
     apellido = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(162))
-
+    telefono = db.Column(db.String(50))
     roles = db.relationship("Role", secondary="user_role", backref="users")
 
-    def __init__(self, documento, nombre, apellido, email, password) -> None:
+    def __init__(self, documento, nombre, apellido, email, password, telefono) -> None:
         self.documento = documento
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
         self.password = password
-
+        self.telefono = telefono
     @classmethod
     def check_password(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
@@ -47,9 +47,10 @@ class BaseUser(db.Model, UserMixin):
 
 print(generate_password_hash("1098789300"))
 
+
 class Administrador(BaseUser):
     __tablename__ = "administrador"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     documento = db.Column(
         db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
     )
@@ -59,14 +60,17 @@ class Administrador(BaseUser):
         "polymorphic_identity": "administrador",
     }
 
-    def __init__(self, documento, nombre, apellido, email, password, cargo = None) -> None:
+    def __init__(
+        self, documento, nombre, apellido, email, password, cargo=None
+    ) -> None:
         super().__init__(documento, nombre, apellido, email, password)
         self.cargo = cargo
 
 
 class Coordinador(BaseUser):
     __tablename__ = "coordinador"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
+
     documento = db.Column(
         db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
     )
@@ -76,35 +80,34 @@ class Coordinador(BaseUser):
         "polymorphic_identity": "coordinador",
     }
 
-    def __init__(self, documento, nombre, apellido, email, password, area = None) -> None:
+    def __init__(self, documento, nombre, apellido, email, password, area=None) -> None:
         super().__init__(documento, nombre, apellido, email, password)
         self.area = area
 
 
 class Instructor(BaseUser):
     __tablename__ = "instructor"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
+
     documento = db.Column(
         db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
     )
-    estado = db.Column(db.String(15), nullable=True)
-    telefono = db.Column(db.String(50), nullable=True)
+    vinculacion = db.Column(db.String(15), nullable=True)
 
     __mapper_args__ = {
         "polymorphic_identity": "instructor",
     }
 
     def __init__(
-        self, documento, nombre, apellido, email, password, estado, telefono
+        self, documento, nombre, apellido, email, password, telefono, vinculacion
     ) -> None:
-        super().__init__(documento, nombre, apellido, email, password)
-        self.estado = estado
-        self.telefono = telefono
-
+        super().__init__(documento, nombre, apellido, email, password, telefono)
+        self.vinculacion = vinculacion
 
 class Aprendiz(BaseUser):
     __tablename__ = "aprendiz"
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
+
     documento = db.Column(
         db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
     )
@@ -140,7 +143,7 @@ class Aprendiz(BaseUser):
 
 class Asignacion(db.Model):
 
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
 
     id_asignacion = db.Column(db.Integer, primary_key=True)
     documento_aprendiz = db.Column(db.String(15), ForeignKey("aprendiz.documento"))
@@ -176,7 +179,7 @@ class Asignacion(db.Model):
 
 
 class Regional(db.Model):
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     codigo_regional = db.Column(db.Integer, primary_key=True)
     nombre_regional = db.Column(db.String(100))
 
@@ -186,7 +189,7 @@ class Regional(db.Model):
 
 
 class Centro(db.Model):
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     codigo_centro = db.Column(db.Integer, primary_key=True)
     nombre_centro = db.Column(db.String(100))
     codigo_regional = db.Column(db.Integer, ForeignKey("regional.codigo_regional"))
@@ -200,7 +203,7 @@ class Centro(db.Model):
 
 
 class Variable(db.Model):
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     id_variable = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100))
     tipo = db.Column(db.String(100))
@@ -213,7 +216,7 @@ class Variable(db.Model):
         self.descripcion = descripcion
 
     class Valoracion(db.Model):
-        __table_args__ = {'mysql_engine': 'InnoDB'}
+        __table_args__ = {"mysql_engine": "InnoDB"}
         id_valoracion = db.Column(db.Integer, primary_key=True)
         id_variable = db.Column(db.Integer, ForeignKey("variable.id_variable"))
         id_seguimiento = db.Column(db.Integer, ForeignKey("seguimiento.id_seguimiento"))
@@ -233,7 +236,7 @@ class Variable(db.Model):
 
 
 class Seguimiento(db.Model):
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     id_seguimiento = db.Column(db.Integer, primary_key=True)
     tipo_seguimiento = db.Column(db.String(100))
     observacion = db.Column(db.String(100))
@@ -281,7 +284,7 @@ class Seguimiento(db.Model):
 
 
 class Empresa(db.Model):
-    __table_args__ = {'mysql_engine': 'InnoDB'}
+    __table_args__ = {"mysql_engine": "InnoDB"}
     nit = db.Column(db.Integer, primary_key=True)
     razon_social = db.Column(db.String(100))
     direccion = db.Column(db.String(100))
