@@ -22,7 +22,7 @@
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
 
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <h1 class="">Registro instructor</h1>
+        <h1 class="">Registrar instructor</h1>
         <div class="text-start mt-4">
             <label class="form-label">Tipo de vinculación</label>
             <select name="vinculacion" class="form-control form-select rounded-pill" required>
@@ -48,12 +48,6 @@
             <label class="form-label mb-0">Ingrese correo electronico</label>
             <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail">
         </div>
-
-        <div class="text-start mt-2">
-            <label class="form-label mb-0">Ingrese numero de telefono</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="telefono"  placeholder="telefono">
-        </div>
-
         <div class="mt-3">
             <button type="submit" class="btn-lg btn-success ">Registrar instructor</button>
 
