@@ -28,7 +28,8 @@
                 <th>N°</th>
                 <th>VINCULACIÓN</th>
                 <th>DOCUMENTO</th>
-                <th>NOMBRE COMPLETO</th>
+                <th>NOMBRES</th>
+                <th>APELLIDO</th>
                 <th>CORREO ELECTRONICO</th>
                 <th>NUMERO DE CELULAR</th>   
             </tr>
@@ -37,9 +38,10 @@
             {% for instructor in instructores %}
             <tr>
                 <td>{{loop.index}}</td>
-                <td>{{instructor.estado}}</td>
+                <td>{{instructor.vinculacion}}</td>
                 <td>{{instructor.documento}}</td>
                 <td>{{instructor.nombre}}</td>
+                <td>{{instructor.apellido}}</td>
                 <td>{{instructor.email}}</td>
                 <td>{{instructor.telefono}}</td>     
             </tr>
