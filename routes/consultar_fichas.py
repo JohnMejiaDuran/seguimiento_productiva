@@ -18,7 +18,7 @@ def admin_required(fn):
         if current_user.is_authenticated and any(role.name == "Administrador" for role in current_user.roles):
             return fn(*args, **kwargs)
         else:
-            flash("Solo los Administradores tienen acceso a esta página.")
+            flash("No tienes acceso a esta página.")
             return redirect(url_for("pagina_inicio.index"))
 
     return decorated_view

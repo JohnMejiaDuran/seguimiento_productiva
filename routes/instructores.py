@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models.seguimientos import Instructor, Role, UserRole
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from models.seguimientos import Instructor, Role, UserRole, BaseUser
 from utils.db import db
 from flask_login import login_required
 from routes.consultar_fichas import admin_required
@@ -36,6 +36,14 @@ def registro_instructor():
 @login_required
 def nuevo_instructor():
     documento = request.form["documento"]
+    instructor_existente = BaseUser.query.filter_by(documento=documento).first()
+    if instructor_existente:
+        no_existe = True
+        session["no_existe"] = no_existe
+        return redirect(
+            url_for("instructores.registro_instructor", no_existe=no_existe)
+        )
+
     vinculacion = request.form["vinculacion"]
     nombres = request.form["nombre"]
     apellidos = request.form["apellido"]

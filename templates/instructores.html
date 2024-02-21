@@ -23,15 +23,14 @@
 <div class="container-fluid ">
     <h1 class="text-center">Instructores</h1>
     <table class= "text-center table table-success table-bordered table-striped table-hover style="width:100%">
-        <thead>
-            <tr>
-                <th>N°</th>
-                <th>VINCULACIÓN</th>
-                <th>DOCUMENTO</th>
-                <th>NOMBRES</th>
-                <th>APELLIDO</th>
-                <th>CORREO ELECTRONICO</th>
-                <th>NUMERO DE CELULAR</th>   
+        <thead class="">
+            <tr >
+                <th class="text-center">N°</th>
+                <th class="text-center">VINCULACIÓN</th>
+                <th class="text-center">DOCUMENTO</th>
+                <th class="text-center">NOMBRES</th>
+                <th class="text-center">APELLIDO</th>
+                <th class="text-center">CORREO ELECTRONICO</th>   
             </tr>
         </thead>
         <tbody>
@@ -42,8 +41,7 @@
                 <td>{{instructor.documento}}</td>
                 <td>{{instructor.nombre}}</td>
                 <td>{{instructor.apellido}}</td>
-                <td>{{instructor.email}}</td>
-                <td>{{instructor.telefono}}</td>     
+                <td>{{instructor.email}}</td>    
             </tr>
             {% endfor %}
     </table>

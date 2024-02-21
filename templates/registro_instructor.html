@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/consultar_fichas">Consultar fichas</a>
@@ -17,7 +18,17 @@
 </button>
 {% endblock %}
 {% block content %}
-
+{% if session.no_existe %}
+<script>
+     // Mostrar alerta aquí
+    swal({
+        title: 'Ya existe este documento',
+        text: 'El número de documento ya se encuentra en la base de datos',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
 <div class="container col-5 mt-3  pb-3 card rounded-3 mx-auto" style="height: 80vh;">
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
 
@@ -46,7 +57,7 @@
         </div>
         <div class="text-start mt-2">
             <label class="form-label mb-0">Ingrese correo electronico</label>
-            <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail">
+            <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail" required>
         </div>
         <div class="mt-3">
             <button type="submit" class="btn-lg btn-success ">Registrar instructor</button>
@@ -61,4 +72,37 @@
 </style>
     
         <script src="js/registroinstructor.js"></script>
+
+        {% if xls == False %}
+        <script>
+            // Mostrar alerta aquí
+            swal({
+                title: 'Error al cargar archivo Excel',
+                text: 'Debe ser un archivo Excel con extensión .xls',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        </script>
+        {% endif %} 
+        <script>
+            // Almacenar valores del formulario en el almacenamiento local antes de enviar
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function() {
+                    const inputs = form.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        localStorage.setItem(input.name, input.value);
+                    });
+                });
+        
+                // Restaurar valores del formulario cuando la página se vuelva a cargar
+                const storedInputs = document.querySelectorAll('input');
+                storedInputs.forEach(input => {
+                    const storedValue = localStorage.getItem(input.name);
+                    if (storedValue) {
+                        input.value = storedValue;
+                    }
+                });
+            });
+        </script>  
 {% endblock %}
