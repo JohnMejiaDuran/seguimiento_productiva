@@ -60,7 +60,7 @@
             <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail" required>
         </div>
         <div class="mt-3">
-            <button type="submit" class="btn-lg btn-success ">Registrar instructor</button>
+            <button type="submit" class="btn btn-lg btn-success ">Registrar instructor</button>
 
         </div>
     </form>
@@ -72,19 +72,9 @@
 </style>
     
         <script src="js/registroinstructor.js"></script>
+        
 
-        {% if xls == False %}
-        <script>
-            // Mostrar alerta aquí
-            swal({
-                title: 'Error al cargar archivo Excel',
-                text: 'Debe ser un archivo Excel con extensión .xls',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        </script>
-        {% endif %} 
-        <script>
+        <!-- <script>
             // Almacenar valores del formulario en el almacenamiento local antes de enviar
             document.addEventListener('DOMContentLoaded', function() {
                 const form = document.querySelector('form');
@@ -104,5 +94,5 @@
                     }
                 });
             });
-        </script>  
+        </script>   -->
 {% endblock %}

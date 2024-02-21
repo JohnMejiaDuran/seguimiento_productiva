@@ -94,6 +94,17 @@
         });
 
         </script>
+        {% if session.instructor_guardado_satisfactoriamente %}
+        <script>
+             // Mostrar alerta aquí
+            swal({
+                title: 'Instructor registrado',
+                text: 'El instructor ha sido registrado satisfactoriamente.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        </script>
+        {% endif %}
 {% endblock %}
 
 

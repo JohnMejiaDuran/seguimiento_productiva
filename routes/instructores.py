@@ -4,6 +4,9 @@ from utils.db import db
 from flask_login import login_required
 from routes.consultar_fichas import admin_required
 from werkzeug.security import generate_password_hash
+import smtplib
+import random
+import string
 
 instructores = Blueprint("instructores", __name__)
 
@@ -32,6 +35,11 @@ def registro_instructor():
     return render_template("registro_instructor.html", title=title, rol=rol, logo=logo)
 
 
+def generar_passwords_aleatorias(longitud):
+    caracteres = string.ascii_letters + string.digits
+    return "".join(random.choice(caracteres) for _ in range(longitud))
+
+
 @instructores.route("/nuevo_instructor", methods=["POST"])
 @login_required
 def nuevo_instructor():
@@ -50,8 +58,16 @@ def nuevo_instructor():
     email = request.form.get("email")
     telefono = request.form.get("telefono")
 
-    password = documento
+    password = generar_passwords_aleatorias(8)
     hashed_password = generate_password_hash(password)
+    password = str(password)
+    messagge = "Hola, su contraseña es {}".format(password)
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login("jhonmariomejiaduran@gmail.com", "zqpp mszz oufk btbg")
+    server.sendmail("jhonmariomejiaduran@gmail.com", email, messagge.encode("utf-8"))
+    server.quit()
+    print("Correo enviado satisfactoriamente")
 
     # Crea una nueva instancia de Instructor
     instructor_nuevo = Instructor(
@@ -80,7 +96,10 @@ def nuevo_instructor():
     db.session.add(user_role)
     db.session.commit()
 
+    instructor_guardado_satisfactoriamente = True
+    session["instructor_guardado_satisfactoriamente"] = instructor_guardado_satisfactoriamente
+
     flash("Instructor guardado satisfactoriamente", "success")
 
     # Redirige a la página de lista de clientes después de registrar uno nuevo
-    return redirect(url_for("instructores.instructor"))
+    return redirect(url_for("instructores.instructor", instructor_guardado_satisfactoriamente=instructor_guardado_satisfactoriamente))
