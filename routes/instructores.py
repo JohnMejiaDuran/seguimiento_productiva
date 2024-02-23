@@ -20,8 +20,21 @@ def instructor():
     logo = "/static/icons/user-icon.png"
 
     instructores = Instructor.query.all()
+
+    # Obtener el valor de instructor_guardado_satisfactoriamente de la sesión
+    instructor_guardado_satisfactoriamente = session.get(
+        "instructor_guardado_satisfactoriamente", False
+    )
+
+    # Limpiar la sesión
+    session["instructor_guardado_satisfactoriamente"] = False
     return render_template(
-        "instructores.html", title=title, rol=rol, logo=logo, instructores=instructores
+        "instructores.html",
+        title=title,
+        rol=rol,
+        logo=logo,
+        instructores=instructores,
+        instructor_guardado_satisfactoriamente=instructor_guardado_satisfactoriamente,
     )
 
 
@@ -32,7 +45,10 @@ def registro_instructor():
 
     logo = "/static/icons/user-icon.png"
     title = "Registro de instructores"
-    return render_template("registro_instructor.html", title=title, rol=rol, logo=logo)
+    ya_existe = session.pop("ya_existe", False)
+    return render_template(
+        "registro_instructor.html", title=title, rol=rol, logo=logo, ya_existe=ya_existe
+    )
 
 
 def generar_passwords_aleatorias(longitud):
@@ -46,11 +62,9 @@ def nuevo_instructor():
     documento = request.form["documento"]
     instructor_existente = BaseUser.query.filter_by(documento=documento).first()
     if instructor_existente:
-        no_existe = True
-        session["no_existe"] = no_existe
-        return redirect(
-            url_for("instructores.registro_instructor", no_existe=no_existe)
-        )
+        ya_existe = True
+        session["ya_existe"] = ya_existe
+        return redirect(url_for("instructores.registro_instructor"))
 
     vinculacion = request.form["vinculacion"]
     nombres = request.form["nombre"]
@@ -97,9 +111,14 @@ def nuevo_instructor():
     db.session.commit()
 
     instructor_guardado_satisfactoriamente = True
-    session["instructor_guardado_satisfactoriamente"] = instructor_guardado_satisfactoriamente
-
-    flash("Instructor guardado satisfactoriamente", "success")
+    session["instructor_guardado_satisfactoriamente"] = (
+        instructor_guardado_satisfactoriamente
+    )
 
     # Redirige a la página de lista de clientes después de registrar uno nuevo
-    return redirect(url_for("instructores.instructor", instructor_guardado_satisfactoriamente=instructor_guardado_satisfactoriamente))
+    return redirect(
+        url_for(
+            "instructores.instructor",
+            instructor_guardado_satisfactoriamente=instructor_guardado_satisfactoriamente,
+        )
+    )
