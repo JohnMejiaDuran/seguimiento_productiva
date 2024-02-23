@@ -2,8 +2,11 @@
 
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultar_fichas">Consultar ficha</a>
-</button> 
+    <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+</button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>
 </button>
@@ -12,33 +15,24 @@
 </button>
 {% endblock%}
 
-{% block upload%}
-<nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark ">
-    <div class="d-flex">
-        <button class="atras-icono btn btn-success mx-1 mt-1 mb-1" onclick="goBack()">
-                <i class="bi bi-arrow-left"></i>
-        </button>
-    </div> 
-</nav>
-{% endblock %}
 
 {% block content%}
-<div class="mt-5  container d-flex justify-content-center w-25">
+<div class="mt-5  container d-flex justify-content-center w-40  ">
 
-    <form action="/guardar_centro" class="text-center  mx-0 card p-3" method="POST">
+    <form action="/guardar_centro" class="text-center form-container mx-0 card p-3 rounded-4 " method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h2>Registro centro de formación</h2>
         <div class="text-start p-0 mt-3">
             <label for="codigo_centro" class="form-label">Código</label>
-            <input type="text" class="form-control" name="codigo_centro" id="codigo_centro">
+            <input type="text" class="form-control rounded-pill" name="codigo_centro" id="codigo_centro" placeholder="Código del centro">
         </div>
         <div class="text-start p-0 mt-3">
             <label for="nombre_centro" class="form-label">Nombre de centro</label>
-            <input type="text" class="form-control" name="nombre_centro" id="nombre_centro">
+            <input type="text" class="form-control rounded-pill" name="nombre_centro" id="nombre_centro" placeholder="Nombre del centro">
         </div>
         <div class="text-start p-0 mt-3">
             <label for="codigo_regional" class="form-label">Regional</label>
-            <select  class="form-select" name="codigo_regional" id="codigo_regional">
+            <select  class="form-select rounded-pill" name="codigo_regional" id="codigo_regional">
                 <option disabled selected value="">Selecciona regional</option>
                 {% for regional in regionales %}
                 <option value="{{regional.codigo_regional}}" >{{regional.nombre_regional}}</option>

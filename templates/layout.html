@@ -21,48 +21,56 @@
 
 <body>
     <header class="">
-        <nav class=" color-custom d-flex justify-content-between p-3 border-dark border-topx">
+        <nav class=" color-custom d-flex justify-content-between border-dark border-topx">
 
             <ul class="nav align-content-around">
                 <li class="text-center">
-                    {% block logo %}
-
-                    {% endblock %}
+                   
                 </li>
-                <li class="align-items-center mx-4">
-                    <h5 class="ms-1 text-white">{{ current_user.nombre }} {{ current_user.apellido }}</h5>
+                <li class="d-flex align-items-center ">
+                    <div class="btn-menu mx-3">
+                        <label for="btn-menu" class="fa-solid fa-bars""></label>
+                        <!--     -->
+                    </div>
+                    <h5 class="ms-1 text-white usuario_actual">{{ current_user.nombre }} {{ current_user.apellido }}</h5>
                     <div class="ml-auto">
-                        {% block logout %}
-                            
-                        {% endblock %}
+                        
                     </div>
                 </li>
             </ul>
             <ul class="nav align-content-around">
                 <li class=" mx-2">
-                    {% block consultar%}
-                    
-                    {% endblock %}
+                    {% block consultar%}{% endblock %}
                 </li>
-                <li class="">
-                    <a href="">
-                        <img src="/static/img/Logo-sena-blanco-sin-fondo.png" class="logo" alt="">
-                    </a>
+                <li class="mx-3">
+                        <img src="/static/img/Logo-sena-blanco-sin-fondo.png" class="logo" alt="logo">
                 </li>
             </ul>
 
         </nav>
     </header>
-    
-
-    {%block upload%}{% endblock%}
-    
-
+        {%block upload%}{% endblock%}
     <main>
         {% block content %}{% endblock %}
-        {% block login %}{% endblock %}
     </main>
     
+    <input type="checkbox" id="btn-menu">
+    <div class="container-menu">
+        <div class="cont-menu">
+            <nav>
+                <a href="">Editar perfil</a>
+                <a href="{{url_for("pagina_inicio.logout")}}" class="">Cerrar sesión</a>
+            </nav>
+            <label for="btn-menu" class="equis-menu fa-regular fa-circle-xmark"></label>
+        </div>
+    </div>
+
+
+
+
+
+
+
     <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
@@ -71,6 +79,9 @@
     <script src="/static/js/consultaraprendiz.js"></script>
     <script src="/static/js/main.js"></script>
 
+    <script>
+        
+    </script>
 </body>
 
 </html>
