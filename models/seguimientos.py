@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
+from sqlalchemy import event
 
 
 class UserRole(db.Model):
@@ -26,20 +27,21 @@ class BaseUser(db.Model, UserMixin):
     __table_args__ = {"mysql_engine": "InnoDB"}
     id = db.Column(db.Integer, primary_key=True)
     documento = db.Column(db.String(15), unique=True)
-    nombre = db.Column(db.String(100))
+    nombre_regional = db.Column(db.String(100))
     apellido = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(162))
     telefono = db.Column(db.String(50))
     roles = db.relationship("Role", secondary="user_role", backref="users")
 
-    def __init__(self, documento, nombre, apellido, email, password, telefono) -> None:
+    def __init__(self, documento, nombre_regional, apellido, email, password, telefono) -> None:
         self.documento = documento
-        self.nombre = nombre
+        self.nombre_regional = nombre_regional
         self.apellido = apellido
         self.email = email
         self.password = password
         self.telefono = telefono
+
     @classmethod
     def check_password(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
@@ -61,9 +63,9 @@ class Administrador(BaseUser):
     }
 
     def __init__(
-        self, documento, nombre, apellido, email, password, cargo=None
+        self, documento, nombre_regional, apellido, email, password, cargo=None
     ) -> None:
-        super().__init__(documento, nombre, apellido, email, password)
+        super().__init__(documento, nombre_regional, apellido, email, password)
         self.cargo = cargo
 
 
@@ -80,8 +82,8 @@ class Coordinador(BaseUser):
         "polymorphic_identity": "coordinador",
     }
 
-    def __init__(self, documento, nombre, apellido, email, password, area=None) -> None:
-        super().__init__(documento, nombre, apellido, email, password)
+    def __init__(self, documento, nombre_regional, apellido, email, password, area=None) -> None:
+        super().__init__(documento, nombre_regional, apellido, email, password)
         self.area = area
 
 
@@ -99,10 +101,11 @@ class Instructor(BaseUser):
     }
 
     def __init__(
-        self, documento, nombre, apellido, email, password, telefono, vinculacion
+        self, documento, nombre_regional, apellido, email, password, telefono, vinculacion
     ) -> None:
-        super().__init__(documento, nombre, apellido, email, password, telefono)
+        super().__init__(documento, nombre_regional, apellido, email, password, telefono)
         self.vinculacion = vinculacion
+
 
 class Aprendiz(BaseUser):
     __tablename__ = "aprendiz"
@@ -125,7 +128,7 @@ class Aprendiz(BaseUser):
     def __init__(
         self,
         documento,
-        nombre,
+        nombre_regional,
         apellido,
         alternativa,
         ficha_sin_decimal,
@@ -134,7 +137,7 @@ class Aprendiz(BaseUser):
         email=None,
         password=None,
     ) -> None:
-        super().__init__(documento, nombre, apellido, email, password)
+        super().__init__(documento, nombre_regional, apellido, email, password)
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
@@ -205,13 +208,13 @@ class Centro(db.Model):
 class Variable(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB"}
     id_variable = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(100))
+    nombre_regional = db.Column(db.String(100))
     tipo = db.Column(db.String(100))
     descripcion = db.Column(db.String(100))
 
-    def __init__(self, id_variable, nombre, tipo, descripcion):
+    def __init__(self, id_variable, nombre_regional, tipo, descripcion):
         self.id_variable = id_variable
-        self.nombre = nombre
+        self.nombre_regional = nombre_regional
         self.tipo = tipo
         self.descripcion = descripcion
 
@@ -293,3 +296,95 @@ class Empresa(db.Model):
         self.nit = nit
         self.razon_social = razon_social
         self.direccion = direccion
+
+
+def insert_regionales(*args, **kwargs):
+    regionales = [
+        {"codigo_regional": "5", "nombre_regional": "Regional Antioquia"},
+        {"codigo_regional": "8", "nombre_regional": "Regional Atlantico"},
+        {"codigo_regional": "11", "nombre_regional": "Regional Distrito Capital"},
+        {"codigo_regional": "13", "nombre_regional": "Regional Bolívar"},
+        {"codigo_regional": "15", "nombre_regional": "Regional Boyacá"},
+        {"codigo_regional": "17", "nombre_regional": "Regional Caldas"},
+        {"codigo_regional": "18", "nombre_regional": "Regional Caquetá"},
+        {"codigo_regional": "19", "nombre_regional": "Regional Cauca"},
+        {"codigo_regional": "20", "nombre_regional": "Regional Cesar"},
+        {"codigo_regional": "23", "nombre_regional": "Regional Córdoba"},
+        {"codigo_regional": "25", "nombre_regional": "Regional Cundinamarca"},
+        {"codigo_regional": "27", "nombre_regional": "Regional Chocó"},
+        {"codigo_regional": "41", "nombre_regional": "Regional Huila"},
+        {"codigo_regional": "44", "nombre_regional": "Regional Guajira"},
+        {"codigo_regional": "47", "nombre_regional": "Regional Magdalena"},
+        {"codigo_regional": "50", "nombre_regional": "Regional Meta"},
+        {"codigo_regional": "52", "nombre_regional": "Regional Nariño"},
+        {"codigo_regional": "54", "nombre_regional": "Regional Norte de Satander"},
+        {"codigo_regional": "63", "nombre_regional": "Regional Quindío"},
+        {"codigo_regional": "66", "nombre_regional": "Regional Risaralda"},
+        {"codigo_regional": "68", "nombre_regional": "Regional Santander"},
+        {"codigo_regional": "70", "nombre_regional": "Regional Sucre"},
+        {"codigo_regional": "73", "nombre_regional": "Regional Tolima"},
+        {"codigo_regional": "76", "nombre_regional": "Regional Valle"},
+        {"codigo_regional": "81", "nombre_regional": "Regional Arauca"},
+        {"codigo_regional": "85", "nombre_regional": "Regional Casanare"},
+        {"codigo_regional": "86", "nombre_regional": "Regional Putumayo"},
+        {"codigo_regional": "88", "nombre_regional": "Regional San Andres"},
+        {"codigo_regional": "91", "nombre_regional": "Regional Amazonas"},
+        {"codigo_regional": "94", "nombre_regional": "Regional Guainía"},
+        {"codigo_regional": "95", "nombre_regional": "Regional Guaviare"},
+        {"codigo_regional": "97", "nombre_regional": "Regional Vaupés"},
+        {"codigo_regional": "99", "nombre_regional": "Regional Vichada"},
+    ]
+
+    for regiones in regionales:
+        regional = Regional(**regiones)
+        db.session.add(regional)
+    db.session.commit()
+
+
+event.listen(Regional.__table__, "after_create", insert_regionales)
+
+def insert_centros (*args, **kwargs):
+    centros = [{"codigo_centro":"9101","nombre_centro":"CENTRO DE LOS RECURSOS NATURALES RENOVABLES - LA SALADA","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9127","CENTRO DE FORMACION MINERO AMBIENTAL":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9201","CENTRO DEL DISEÑO Y MANUFACTURA DEL CUERO":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9202","CENTRO DE FORMACION EN DISEÑO, CONFECCION Y MODA":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9203","CENTRO PARA EL DESARROLLO DEL HABITAT Y LA CONSTRUCCION":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9204","CENTRO DE TEGNOLOGIA DE LA MANUFACTURA AVANZADA":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9205","CENTRO TEGNOLOGICO DEL MOBILIARIO":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9206","CENTRO TEXTIL Y DE GESTION INDUSTRIAL":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9301","CENTRO DE COMERCIO":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9401","CENTRO DE SERVICIOS DE SALUD":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9402","CENTRO DE SERVICIOS Y GESTION EMPRESARIAL":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9501","COMPLEJO TECNOLOGICO PARA LA GESTION AGROEMPRESARIAL":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9502","COMPLEJO TECNOLOGICO MINERO AGROEMPRESARIAL":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9503","CENTRO DE LA INNOVACION, LA AGROINDUSTRIA Y LA AVIACION":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9504","COMPLEJO TECNOLOGICO AGROINDUSTRIAL, PECUARIO Y TURISTICO":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9549","COMPLEJO TECNOLOGICO, TURISTICO Y AGROINDUSTRIAL DEL OCCIDENTE ANTIOQUEÑO":"","codigo_regional":"5"},]
+    centros = [{"codigo_centro":"9103","CENTRO PARA EL DESARROLLO AGROECOLOGICO Y AGROINDUSTRIAL":"","codigo_regional":"8"},]
+    centros = [{"codigo_centro":"9207","CENTRO NACIONAL COLOMBO ALEMAN":"","codigo_regional":"8"},]
+    centros = [{"codigo_centro":"9208","CENTRO NACIONAL DE AVIACION":"","codigo_regional":"8"},]
+    centros = [{"codigo_centro":"9302","CENTRO DE COMERCIO Y SERVICIOS":"","codigo_regional":"8"},]
+    centros = [{"codigo_centro":"9209","CENTRO DE TECNOLOGIAS PARA LA CONSTRUCCION DE MADERA":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9210","CENTRO DE ELECTRICIDAD, ELECTRONICA Y TELECOMUNICACIONES":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9211","CENTRO DE GESTION INDUSTRIAL":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9212","CENTRO DE MANUFACTURAS EN TEXTILES Y CUERO":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9213","CENTRO DE TECNOLOGIAS DE TRANSPORTE ":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9214","CENTRO METALMECANICO":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9215","CENTRO DE MATERIALES Y ENSAYOS":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9216","CENTRO DE DISEÑO Y METROLOGIA":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9217","CENTRO PARA LA INDUSTRIA DE LA COMUNICACION GRAFICA":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9303","CENTRO DE GESTION DE MERCADOS,LOGISTICA Y TECNOLOGIAS DE LA INFORMACION":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9403","CENTRO DE FORMACION DE TALENTO HUMANO EN SALUD":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9404","CENTRO DE GESTION ADMINISTRATIVA":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9405","CENTRO DE SERVICIOS FINANCIEROS":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9406","CENTRO NACIONAL DE HOTELERIA,TURISMO Y ALIMENTOS":"","codigo_regional":"11"},]
+    centros = [{"codigo_centro":"9508","CENTRO DE FORMACION EN ACTIVIDAD FISICA Y CULTURA":"","codigo_regional":"11"},]
+  
+   
+
+    for centro in centros:
+        datos_centros = Centro(**centro)
+        db.session.add(datos_centros)
+    db.session.commit()
+
+event.listen(Centro.__table__, "after_create", insert_centros)
