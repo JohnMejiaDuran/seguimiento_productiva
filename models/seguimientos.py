@@ -391,11 +391,107 @@ def insert_centros (*args, **kwargs):
     {"codigo_centro": "9219", "nombre_centro": "CENTRO DE AUTOMATIZACION INDUSTRIAL", "codigo_regional": "17"},
     {"codigo_centro": "9220", "nombre_centro": "CENTRO DE PROCESOS INDUSTRIALES Y CONSTRUCCIÓN", "codigo_regional": "17"},
     {"codigo_centro": "9306", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "17"},
-    {"codigo_centro": "9515", "nombre_centro": "CENTRO PECUARIO Y AGROEMPRESARIAL", "codigo_regional": "17"}]
-
-
-
-
+    {"codigo_centro": "9515", "nombre_centro": "CENTRO PECUARIO Y AGROEMPRESARIAL", "codigo_regional": "17"},
+    
+    {"codigo_centro": "9516", "nombre_centro": "CENTRO TECNOLOGICO DE LA AMAZONIA", "codigo_regional": "18"},
+    
+    {"codigo_centro": "9113", "nombre_centro": "CENTRO AGROPECUARIO", "codigo_regional": "19"},
+    {"codigo_centro": "9221", "nombre_centro": "CENTRO DE TELEINFORMATICA Y PRODUCCION INDUSTRIAL", "codigo_regional": "19"},
+    {"codigo_centro": "9307", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "19"},
+    
+    {"codigo_centro": "9114", "nombre_centro": "CENTRO BIOTECNOLOGICO DEL CARIBE", "codigo_regional": "20"},
+    {"codigo_centro": "9520", "nombre_centro": "CENTRO AGROEMPRESARIAL", "codigo_regional": "20"},
+    {"codigo_centro": "9521", "nombre_centro": "CENTRO DE OPERACION Y MANTENIMIENTO MINERO", "codigo_regional": "20"},
+    {"codigo_centro": "9115", "nombre_centro": "CENTRO AGROPECUARIO Y DE BIOTECNOLOGIA EL PORVENIR", "codigo_regional": "23"},
+    {"codigo_centro": "9523", "nombre_centro": "CENTRO DE COMERCIO, INDUSTRIA Y TURISMO DE CORDOBA", "codigo_regional": "23"},
+    {"codigo_centro": "9232", "nombre_centro": "CENTRO INDUSTRIAL Y DE DESARROLLO EMPRESARIAL DE SOACHA", "codigo_regional": "25"},
+    {"codigo_centro": "9509", "nombre_centro": "CENTRO DE DESARROLLO AGROINDUSTRIAL Y EMPRESARIAL", "codigo_regional": "25"},
+    {"codigo_centro": "9510", "nombre_centro": "CENTRO AGROECOLOGICO Y EMPRESARIAL", "codigo_regional": "25"},
+    {"codigo_centro": "9511", "nombre_centro": "CENTRO DE LA TECNOLOGIA DEL DISEÑO Y LA PRODUCTIVIDAD EMPRESARIAL", "codigo_regional": "25"},
+    {"codigo_centro": "9512", "nombre_centro": "CENTRO DE BIOTECNOLOGIA AGROPECUARIA", "codigo_regional": "25"},
+    {"codigo_centro": "9513", "nombre_centro": "CENTRO DE DESARROLLO AGROEMPRESARIAL", "codigo_regional": "25"},
+    
+     {"codigo_centro": "9522", "nombre_centro": "CENTRO DE RECURSOS NATURALES, INDUSTRIA Y BIODIVERSIDAD", "codigo_regional": "27"},
+     
+   {"codigo_centro": "9116", "nombre_centro": "CENTRO DE FORMACION AGROINDUSTRIAL", "codigo_regional": "41"},
+   {"codigo_centro": "9525", "nombre_centro": "CENTRO AGROEMPRESARIAL Y DESARROLLO PECUARIO DEL HUILA", "codigo_regional": "41"},
+   {"codigo_centro": "9526", "nombre_centro": "CENTRO DE DESARROLLO AGROEMPRESARIAL Y TURISTICO DEL HUILA", "codigo_regional": "41"},
+   {"codigo_centro": "9527", "nombre_centro": "CENTRO DE LA INDUSTRIA, LA EMPRESA Y LOS SERVICIOS", "codigo_regional": "41"},
+   {"codigo_centro": "9528", "nombre_centro": "CENTRO DE GESTIÓN Y DESARROLLO SOSTENIBLE SURCOLOMBIANO", "codigo_regional": "41"},
+   
+   {"codigo_centro": "9222", "nombre_centro": "CENTRO INDUSTRIAL Y DE ENERGIAS ALTERNATIVAS", "codigo_regional": "44"},
+   {"codigo_centro": "9524", "nombre_centro": "CENTRO AGROEMPRESARIAL Y ACUICOLA", "codigo_regional": "44"},
+   
+   
+   {"codigo_centro": "9118", "nombre_centro": "CENTRO ACUICOLA Y AGROINDUSTRIAL DE GAIRA", "codigo_regional": "47"},
+   {"codigo_centro": "9529", "nombre_centro": "CENTRO DE LOGISTICA Y PROMOCION ECOTURISTICA DEL MAGDALENA", "codigo_regional": "47"},
+   
+   {"codigo_centro": "9117", "nombre_centro": "CENTRO AGROINDUSTRIAL DEL META", "codigo_regional": "50"},
+   {"codigo_centro": "9532", "nombre_centro": "CENTRO DE INDUSTRIA Y SERVICIOS DEL META", "codigo_regional": "50"},
+   
+   {"codigo_centro": "9534", "nombre_centro": "CENTRO SUR COLOMBIANO DE LOGISTICA INTERNACIONAL", "codigo_regional": "52"},
+   {"codigo_centro": "9535", "nombre_centro": "CENTRO AGROINDUSTRIAL Y PESUQERO DE LA COSTA PACIFICA", "codigo_regional": "52"},
+   {"codigo_centro": "9536", "nombre_centro": "CENTRO INTERNACIONAL DE PRODUCCION LIMPIA-LOPE", "codigo_regional": "52"},
+   
+   {"codigo_centro": "9119", "nombre_centro": "CENTRO DE FORMACION PARA EL DESARROLLO RURAL Y MINERO", "codigo_regional": "54"},
+   {"codigo_centro": "9537", "nombre_centro": "CENTRO DE LA INDUSTRIA,LA EMPRESA Y LOS SERVICIOS", "codigo_regional": "54"},
+   
+   {"codigo_centro": "9120", "nombre_centro": "CENTRO AGROINDUSTRIAL", "codigo_regional": "63"},
+   {"codigo_centro": "9231", "nombre_centro": "CENTRO PARA EL DESARROLLO TECNOLÓGICO DE LA CONSTRUCCIÓN Y LA INDUSTRIA", "codigo_regional": "63"},
+   {"codigo_centro": "9538", "nombre_centro": " CENTRO DE COMERCIO Y TURISMO", "codigo_regional": "63"},
+   
+   {"codigo_centro": "9121", "nombre_centro": "CENTRO ATENCION SECTOR AGROPECUARIO", "codigo_regional": "66"},
+   {"codigo_centro": "9223", "nombre_centro": "CENTRO DE DISEÑO E INNOVACIÓN TECNOLÓGICA INDUSTRIAL", "codigo_regional": "66"},
+   {"codigo_centro": "9308", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "66"},
+   
+   
+   {"codigo_centro": "9122", "nombre_centro": "CENTRO ATENCION SECTOR AGROPECUARIO", "codigo_regional": "68"},
+   {"codigo_centro": "9224", "nombre_centro": "CENTRO INDUSTRIAL DE MANTENIMIENTO INTEGRAL", "codigo_regional": "68"},
+   {"codigo_centro": "9225", "nombre_centro": "CENTRO INDUSTRIAL DEL DISEÑO Y LA MANUFACTURA", "codigo_regional": "68"},
+   {"codigo_centro": "9309", "nombre_centro": "CENTRO DE SERVICIOS EMPRESARIALES Y TURÍSTICOS", "codigo_regional": "68"},
+   {"codigo_centro": "9540", "nombre_centro": "CENTRO INDUSTRIAL Y DEL DESARROLLO TECNOLOGICO", "codigo_regional": "68"},
+   {"codigo_centro": "9541", "nombre_centro": "CENTRO AGROTURÍSTICO", "codigo_regional": "68"},
+   {"codigo_centro": "9545", "nombre_centro": "CENTRO AGROEMPRESARIAL Y TURISTICO DE LOS ANDES", "codigo_regional": "68"},
+   {"codigo_centro": "9546", "nombre_centro": "CENTRO DE GESTION AGROEMPRESARIAL DEL ORIENTE", "codigo_regional": "68"},
+   
+   
+    {"codigo_centro": "9542", "nombre_centro": "CENTRO DE LA INNOVACION, LA TECNOLOGIA Y LOS SERVICIOS", "codigo_regional": "70"},
+    
+     {"codigo_centro": "9123", "nombre_centro": "CENTRO AGROPECUARIO LA GRANJA", "codigo_regional": "73"},
+     {"codigo_centro": "9226", "nombre_centro": "CENTRO DE INDUSTRIA Y CONSTRUCCION", "codigo_regional": "73"},
+     {"codigo_centro": "9310", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "73"},
+     
+     {"codigo_centro": "9124", "nombre_centro": "CENTRO AGROPECUARIO DE BUGA", "codigo_regional": "76"},
+  {"codigo_centro": "9125", "nombre_centro": "CENTRO LATINOAMERICANO DE ESPECIES MENORES", "codigo_regional": "76"},
+  {"codigo_centro": "9126", "nombre_centro": "CENTRO NAUTICO PESQUERO DE BUENAVENTURA", "codigo_regional": "76"},
+  {"codigo_centro": "9227", "nombre_centro": "CENTRO DE ELECTRICIDAD Y AUTOMATIZACION INDUSTRIAL - CEAI", "codigo_regional": "76"},
+  {"codigo_centro": "9228", "nombre_centro": "CENTRO DE LA CONSTRUCCION", "codigo_regional": "76"},
+  {"codigo_centro": "9229", "nombre_centro": "CENTRO DE DISEÑO TECNOLOGICO INDUSTRIAL", "codigo_regional": "76"},
+  {"codigo_centro": "9230", "nombre_centro": "CENTRO NACIONAL DE ASISTENCIA TECNICA A LA INDUSTRIA - ASTIN", "codigo_regional": "76"},
+  {"codigo_centro": "9311", "nombre_centro": "CENTRO DE GESTION TECNOLÓGICA DE SERVICIOS", "codigo_regional": "76"},
+  {"codigo_centro": "9543", "nombre_centro": "CENTRO DE TECNOLOGIAS AGROINDUSTRIALES", "codigo_regional": "76"},
+  {"codigo_centro": "9544", "nombre_centro": "CENTRO DE BIOTECNOLOGIA INDUSTRIAL", "codigo_regional": "76"},
+  
+    {"codigo_centro": "9530", "nombre_centro": "CENTRO DE GESTION Y DESARROLLO AGROINDUSTRIAL DE ARAUCA", "codigo_regional": "81"},
+    
+    {"codigo_centro": "9519", "nombre_centro": "CENTRO AGROINDUSTRIAL Y FORTALECIMIENTO EMPRESARIAL DE CASANARE", "codigo_regional": "85"},
+    
+     {"codigo_centro": "9518", "nombre_centro": "CENTRO AGROFORESTAL Y ACUICOLA ARAPAIMA", "codigo_regional": "86"},
+     
+     {"codigo_centro": "9539", "nombre_centro": "CENTRO DE FORMACIÓN TURÍSTICA GENTE DE MAR Y DE SERVICIOS", "codigo_regional": "88"},
+     
+     {"codigo_centro": "9517", "nombre_centro": "CENTRO PARA LA BIODIVERSIDAD Y EL TURISMO DEL AMAZONAS", "codigo_regional": "91"},
+     
+     {"codigo_centro": "9547", "nombre_centro": "CENTRO AMBIENTAL Y ECOTURISTICO DEL NORORIENTE AMAZONICO", "codigo_regional": "94"},
+     
+     {"codigo_centro": "9533", "nombre_centro": "CENTRO DE DESARROLLO AGROINDUSTRIAL, TURISTICO Y TECNOLOGICO DEL GUAVIARE", "codigo_regional": "95"},
+     
+     {"codigo_centro": "9548", "nombre_centro": "CENTRO AGROPECUARIO Y DE SERVICIOS AMBIENTALES JIRI - JIRIMO", "codigo_regional": "97"},
+     
+     {"codigo_centro": "9531", "nombre_centro": "CENTRO DE PRODUCCIÓN Y TRANSFORMACION AGROINDUSTRIAL DE LA ORINOQUÍA", "codigo_regional": "99"},
+  
+]
+   
 
     for centro in centros:
         datos_centros = Centro(**centro)
