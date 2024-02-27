@@ -27,21 +27,20 @@ class BaseUser(db.Model, UserMixin):
     __table_args__ = {"mysql_engine": "InnoDB"}
     id = db.Column(db.Integer, primary_key=True)
     documento = db.Column(db.String(15), unique=True)
-    nombre_regional = db.Column(db.String(100))
+    nombre = db.Column(db.String(100))
     apellido = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(162))
     telefono = db.Column(db.String(50))
     roles = db.relationship("Role", secondary="user_role", backref="users")
 
-    def __init__(self, documento, nombre_regional, apellido, email, password, telefono) -> None:
+    def __init__(self, documento, nombre, apellido, email, password, telefono) -> None:
         self.documento = documento
-        self.nombre_regional = nombre_regional
+        self.nombre = nombre
         self.apellido = apellido
         self.email = email
         self.password = password
         self.telefono = telefono
-
     @classmethod
     def check_password(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
@@ -63,9 +62,9 @@ class Administrador(BaseUser):
     }
 
     def __init__(
-        self, documento, nombre_regional, apellido, email, password, cargo=None
+        self, documento, nombre, apellido, email, password, cargo=None
     ) -> None:
-        super().__init__(documento, nombre_regional, apellido, email, password)
+        super().__init__(documento, nombre, apellido, email, password)
         self.cargo = cargo
 
 
@@ -82,8 +81,8 @@ class Coordinador(BaseUser):
         "polymorphic_identity": "coordinador",
     }
 
-    def __init__(self, documento, nombre_regional, apellido, email, password, area=None) -> None:
-        super().__init__(documento, nombre_regional, apellido, email, password)
+    def __init__(self, documento, nombre, apellido, email, password, area=None) -> None:
+        super().__init__(documento, nombre, apellido, email, password)
         self.area = area
 
 
@@ -101,11 +100,10 @@ class Instructor(BaseUser):
     }
 
     def __init__(
-        self, documento, nombre_regional, apellido, email, password, telefono, vinculacion
+        self, documento, nombre, apellido, email, password, telefono, vinculacion
     ) -> None:
-        super().__init__(documento, nombre_regional, apellido, email, password, telefono)
+        super().__init__(documento, nombre, apellido, email, password, telefono)
         self.vinculacion = vinculacion
-
 
 class Aprendiz(BaseUser):
     __tablename__ = "aprendiz"
@@ -128,7 +126,7 @@ class Aprendiz(BaseUser):
     def __init__(
         self,
         documento,
-        nombre_regional,
+        nombre,
         apellido,
         alternativa,
         ficha_sin_decimal,
@@ -137,7 +135,7 @@ class Aprendiz(BaseUser):
         email=None,
         password=None,
     ) -> None:
-        super().__init__(documento, nombre_regional, apellido, email, password)
+        super().__init__(documento, nombre, apellido, email, password)
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
@@ -208,13 +206,13 @@ class Centro(db.Model):
 class Variable(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB"}
     id_variable = db.Column(db.Integer, primary_key=True)
-    nombre_regional = db.Column(db.String(100))
+    nombre = db.Column(db.String(100))
     tipo = db.Column(db.String(100))
     descripcion = db.Column(db.String(100))
 
-    def __init__(self, id_variable, nombre_regional, tipo, descripcion):
+    def __init__(self, id_variable, nombre, tipo, descripcion):
         self.id_variable = id_variable
-        self.nombre_regional = nombre_regional
+        self.nombre = nombre
         self.tipo = tipo
         self.descripcion = descripcion
 
@@ -298,6 +296,7 @@ class Empresa(db.Model):
         self.direccion = direccion
 
 
+
 def insert_regionales(*args, **kwargs):
     regionales = [
         {"codigo_regional": "5", "nombre_regional": "Regional Antioquia"},
@@ -344,43 +343,59 @@ def insert_regionales(*args, **kwargs):
 event.listen(Regional.__table__, "after_create", insert_regionales)
 
 def insert_centros (*args, **kwargs):
-    centros = [{"codigo_centro":"9101","nombre_centro":"CENTRO DE LOS RECURSOS NATURALES RENOVABLES - LA SALADA","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9127","CENTRO DE FORMACION MINERO AMBIENTAL":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9201","CENTRO DEL DISEÑO Y MANUFACTURA DEL CUERO":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9202","CENTRO DE FORMACION EN DISEÑO, CONFECCION Y MODA":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9203","CENTRO PARA EL DESARROLLO DEL HABITAT Y LA CONSTRUCCION":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9204","CENTRO DE TEGNOLOGIA DE LA MANUFACTURA AVANZADA":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9205","CENTRO TEGNOLOGICO DEL MOBILIARIO":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9206","CENTRO TEXTIL Y DE GESTION INDUSTRIAL":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9301","CENTRO DE COMERCIO":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9401","CENTRO DE SERVICIOS DE SALUD":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9402","CENTRO DE SERVICIOS Y GESTION EMPRESARIAL":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9501","COMPLEJO TECNOLOGICO PARA LA GESTION AGROEMPRESARIAL":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9502","COMPLEJO TECNOLOGICO MINERO AGROEMPRESARIAL":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9503","CENTRO DE LA INNOVACION, LA AGROINDUSTRIA Y LA AVIACION":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9504","COMPLEJO TECNOLOGICO AGROINDUSTRIAL, PECUARIO Y TURISTICO":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9549","COMPLEJO TECNOLOGICO, TURISTICO Y AGROINDUSTRIAL DEL OCCIDENTE ANTIOQUEÑO":"","codigo_regional":"5"},]
-    centros = [{"codigo_centro":"9103","CENTRO PARA EL DESARROLLO AGROECOLOGICO Y AGROINDUSTRIAL":"","codigo_regional":"8"},]
-    centros = [{"codigo_centro":"9207","CENTRO NACIONAL COLOMBO ALEMAN":"","codigo_regional":"8"},]
-    centros = [{"codigo_centro":"9208","CENTRO NACIONAL DE AVIACION":"","codigo_regional":"8"},]
-    centros = [{"codigo_centro":"9302","CENTRO DE COMERCIO Y SERVICIOS":"","codigo_regional":"8"},]
-    centros = [{"codigo_centro":"9209","CENTRO DE TECNOLOGIAS PARA LA CONSTRUCCION DE MADERA":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9210","CENTRO DE ELECTRICIDAD, ELECTRONICA Y TELECOMUNICACIONES":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9211","CENTRO DE GESTION INDUSTRIAL":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9212","CENTRO DE MANUFACTURAS EN TEXTILES Y CUERO":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9213","CENTRO DE TECNOLOGIAS DE TRANSPORTE ":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9214","CENTRO METALMECANICO":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9215","CENTRO DE MATERIALES Y ENSAYOS":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9216","CENTRO DE DISEÑO Y METROLOGIA":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9217","CENTRO PARA LA INDUSTRIA DE LA COMUNICACION GRAFICA":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9303","CENTRO DE GESTION DE MERCADOS,LOGISTICA Y TECNOLOGIAS DE LA INFORMACION":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9403","CENTRO DE FORMACION DE TALENTO HUMANO EN SALUD":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9404","CENTRO DE GESTION ADMINISTRATIVA":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9405","CENTRO DE SERVICIOS FINANCIEROS":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9406","CENTRO NACIONAL DE HOTELERIA,TURISMO Y ALIMENTOS":"","codigo_regional":"11"},]
-    centros = [{"codigo_centro":"9508","CENTRO DE FORMACION EN ACTIVIDAD FISICA Y CULTURA":"","codigo_regional":"11"},]
-  
-   
+    centros =  [{"codigo_centro": "9101", "nombre_centro": "CENTRO DE LOS RECURSOS NATURALES RENOVABLES - LA SALADA", "codigo_regional": "5"},
+    {"codigo_centro": "9127", "nombre_centro": "CENTRO DE FORMACION MINERO AMBIENTAL", "codigo_regional": "5"},
+    {"codigo_centro": "9201", "nombre_centro": "CENTRO DEL DISEÑO Y MANUFACTURA DEL CUERO", "codigo_regional": "5"},
+    {"codigo_centro": "9202", "nombre_centro": "CENTRO DE FORMACION EN DISEÑO, CONFECCION Y MODA", "codigo_regional": "5"},
+    {"codigo_centro": "9203", "nombre_centro": "CENTRO PARA EL DESARROLLO DEL HABITAT Y LA CONSTRUCCION", "codigo_regional": "5"},
+    {"codigo_centro": "9204", "nombre_centro": "CENTRO DE TEGNOLOGIA DE LA MANUFACTURA AVANZADA", "codigo_regional": "5"},
+    {"codigo_centro": "9205", "nombre_centro": "CENTRO TEGNOLOGICO DEL MOBILIARIO", "codigo_regional": "5"},
+    {"codigo_centro": "9206", "nombre_centro": "CENTRO TEXTIL Y DE GESTION INDUSTRIAL", "codigo_regional": "5"},
+    {"codigo_centro": "9301", "nombre_centro": "CENTRO DE COMERCIO", "codigo_regional": "5"},
+    {"codigo_centro": "9401", "nombre_centro": "CENTRO DE SERVICIOS DE SALUD", "codigo_regional": "5"},
+    {"codigo_centro": "9402", "nombre_centro": "CENTRO DE SERVICIOS Y GESTION EMPRESARIAL", "codigo_regional": "5"},
+    {"codigo_centro": "9501", "nombre_centro": "COMPLEJO TECNOLOGICO PARA LA GESTION AGROEMPRESARIAL", "codigo_regional": "5"},
+    {"codigo_centro": "9502", "nombre_centro": "COMPLEJO TECNOLOGICO MINERO AGROEMPRESARIAL", "codigo_regional": "5"},
+    {"codigo_centro": "9503", "nombre_centro": "CENTRO DE LA INNOVACION, LA AGROINDUSTRIA Y LA AVIACION", "codigo_regional": "5"},
+    {"codigo_centro": "9504", "nombre_centro": "COMPLEJO TECNOLOGICO AGROINDUSTRIAL, PECUARIO Y TURISTICO", "codigo_regional": "5"},
+    {"codigo_centro": "9549", "nombre_centro": "COMPLEJO TECNOLOGICO, TURISTICO Y AGROINDUSTRIAL DEL OCCIDENTE ANTIOQUEÑO", "codigo_regional": "5"},
+    {"codigo_centro": "9103", "nombre_centro": "CENTRO PARA EL DESARROLLO AGROECOLOGICO Y AGROINDUSTRIAL", "codigo_regional": "8"},
+    {"codigo_centro": "9207", "nombre_centro": "CENTRO NACIONAL COLOMBO ALEMAN", "codigo_regional": "8"},
+    {"codigo_centro": "9208", "nombre_centro": "CENTRO NACIONAL DE AVIACION", "codigo_regional": "8"},
+    {"codigo_centro": "9302", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "8"},
+    {"codigo_centro": "9209", "nombre_centro": "CENTRO DE TECNOLOGIAS PARA LA CONSTRUCCION DE MADERA", "codigo_regional": "11"},
+    {"codigo_centro": "9210", "nombre_centro": "CENTRO DE ELECTRICIDAD, ELECTRONICA Y TELECOMUNICACIONES", "codigo_regional": "11"},
+    {"codigo_centro": "9211", "nombre_centro": "CENTRO DE GESTION INDUSTRIAL", "codigo_regional": "11"},
+    {"codigo_centro": "9212", "nombre_centro": "CENTRO DE MANUFACTURAS EN TEXTILES Y CUERO", "codigo_regional": "11"},
+    {"codigo_centro": "9213", "nombre_centro": "CENTRO DE TECNOLOGIAS DE TRANSPORTE", "codigo_regional": "11"},
+    {"codigo_centro": "9214", "nombre_centro": "CENTRO METALMECANICO", "codigo_regional": "11"},
+    {"codigo_centro": "9215", "nombre_centro": "CENTRO DE MATERIALES Y ENSAYOS", "codigo_regional": "11"},
+    {"codigo_centro": "9216", "nombre_centro": "CENTRO DE DISEÑO Y METROLOGIA", "codigo_regional": "11"},
+    {"codigo_centro": "9217", "nombre_centro": "CENTRO PARA LA INDUSTRIA DE LA COMUNICACION GRAFICA", "codigo_regional": "11"},
+    {"codigo_centro": "9303", "nombre_centro": "CENTRO DE GESTION DE MERCADOS,LOGISTICA Y TECNOLOGIAS DE LA INFORMACION", "codigo_regional": "11"},
+    {"codigo_centro": "9403", "nombre_centro": "CENTRO DE FORMACION DE TALENTO HUMANO EN SALUD", "codigo_regional": "11"},
+    {"codigo_centro": "9404", "nombre_centro": "CENTRO DE GESTION ADMINISTRATIVA", "codigo_regional": "11"},
+    {"codigo_centro": "9405", "nombre_centro": "CENTRO DE SERVICIOS FINANCIEROS", "codigo_regional": "11"},
+    {"codigo_centro": "9406", "nombre_centro": "CENTRO NACIONAL DE HOTELERIA,TURISMO Y ALIMENTOS", "codigo_regional": "11"},
+    {"codigo_centro": "9508", "nombre_centro": "CENTRO DE FORMACION EN ACTIVIDAD FISICA Y CULTURA", "codigo_regional": "11"},
+    {"codigo_centro": "9104", "nombre_centro": "CENTRO AGROEMPRESARIAL Y MINERO", "codigo_regional": "13"},
+    {"codigo_centro": "9105", "nombre_centro": "CENTRO INTERNACIONAL NAUTICO,FLUVIAL Y PORTUARIO", "codigo_regional": "13"},
+    {"codigo_centro": "9218", "nombre_centro": "CENTRO PARA LA INDUSTRIA PETROQUIMICA", "codigo_regional": "13"},
+    {"codigo_centro": "9304", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "13"},
+    {"codigo_centro": "9110", "nombre_centro": "CENTRO DE DESARROLLO AGROPECUARIO Y AGROINDUSTRIAL", "codigo_regional": "15"},
+    {"codigo_centro": "9111", "nombre_centro": "CENTRO MINERO", "codigo_regional": "15"},
+    {"codigo_centro": "9305", "nombre_centro": "CENTRO DE GESTION ADMINISTRATIVA Y FORTALECIMIENTO EMPRESARIAL", "codigo_regional": "15"},
+    {"codigo_centro": "9514", "nombre_centro": "CENTRO INDUSTRIAL DE MANTENIMIENTO Y  MANUFACTURA", "codigo_regional": "15"},
+    {"codigo_centro": "9551", "nombre_centro": "CENTRO DE LA INNOVACIÓN AGROINDUSTRIAL Y DE SERVICIOS", "codigo_regional": "15"},
+    {"codigo_centro": "9112", "nombre_centro": "CENTRO PARA LA FORMACION CAFETERA", "codigo_regional": "17"},
+    {"codigo_centro": "9219", "nombre_centro": "CENTRO DE AUTOMATIZACION INDUSTRIAL", "codigo_regional": "17"},
+    {"codigo_centro": "9220", "nombre_centro": "CENTRO DE PROCESOS INDUSTRIALES Y CONSTRUCCIÓN", "codigo_regional": "17"},
+    {"codigo_centro": "9306", "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS", "codigo_regional": "17"},
+    {"codigo_centro": "9515", "nombre_centro": "CENTRO PECUARIO Y AGROEMPRESARIAL", "codigo_regional": "17"}]
+
+
+
+
 
     for centro in centros:
         datos_centros = Centro(**centro)
