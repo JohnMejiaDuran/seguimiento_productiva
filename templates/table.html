@@ -1,37 +1,50 @@
 {%extends "layout.html" %}
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
+    <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
-    <a   class="nav-link active text-white" href="registro_instructor.html">indicadores</a>
+    <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
 </button>
 {% endblock %}
+
 {% block upload%}
-<nav class="nav gris d-flex justify-content-between p-1 ">
-    <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
-        
+<nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
+
+    <div class="d-flex">
+        <button class="atras-icono btn btn-success mx-1 mt-1 mb-1">
+            <a href="consultar_fichas">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </button> 
+        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
-        
-        <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
-    </form>   
+            
+            <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+        </form>   
+    </div>
+    
     <ul class="nav">
         <li class="">
-            <button type="button" class="btn btn-outline-secondary btn-sm mx-2">
-                <a  class="nav-link active text-white" href="#aprobados">Etapa electiva aprobada</a>
+            <button type="button" class="btn btn-secondary btn-sm mx-2">
+                <a  class="nav-link active text-white scroll-to-top" href="#">Etapa electiva aprobada</a>
             </button>
         </li>
         <li class="">
-            <button type="button" class="btn btn-outline-secondary btn-sm mx-2">
-                <a  class="nav-link active text-white" href="#juiciospendientes">Juicios pendientes</a>
+            <button type="button" class="btn btn-secondary btn-sm mx-2">
+                <a  class="nav-link active text-white" href="#juiciospendientes_h1">Juicios pendientes</a>
             </button>
         </li>
         <li class="">
-            <button type="button" class="btn btn-outline-secondary btn-sm mx-2">
-                <a  class="nav-link active text-white" href="#novedades">Novedades</a>
+            <button type="button" class="btn btn-secondary btn-sm mx-2">
+                <a  class="nav-link active text-white" href="#novedades_h1">Novedades</a>
             </button>
         </li>
     </ul>
@@ -44,69 +57,77 @@
 
 
 
-<div class="container-fluid mt-lg-3">
-    <h1 class="text-center">Aprendices con etapa lectiva <strong>aprobada</strong></h1>
-    <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
-        <thead>
-            <tr class="">
-                <th class="text-center">#</th>
-                <th class="text-center">Número de Documento</th>
-                <th class="text-center">Nombres</th>
-                <th class="text-center">Apellidos</th>
-                <th class="text-center">alternativa</th>
-                <th class="text-center">Seleccionar</th>
-                <!-- <th>Competencia</th>
-                <th>Juicio de Evaluación</th> -->
-                <!-- Agrega aquí las columnas adicionales que desees mostrar -->
-            </tr>
-        </thead>
-        <tbody>
-            {% for index, row in aprendices_aprobados.iterrows() %}
-                <tr>
-                    <td>{{index + 1}}</td>
-                    <td>{{ row['Número de Documento'] }}</td>
-                    <td>{{ row['Nombre'] }}</td>
-                    <td>{{row['Apellidos']}}</td>
-                    <td><select name="alternativa" id="alternativa">
-                        <option value="practica">practica</option>
-                    </select></td>
-                    <td><input type="checkbox"></td>
-                    <!-- <td>{{row['Competencia']}}</td>
-                    <td>{{row['Juicio de Evaluación']}}</td> -->
-                    <!-- Agrega aquí las columnas adicionales que desees mostrar -->
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-<div class="d-flex justify-content-between container-fluid mt-2">
-    <ul>
-        <button class="btn btn-success">Descargar</button>
-    </ul>
+<div class="container-fluid mt-lg-3" id="aprobados_h1">
+    <h1 class="text-center" >Aprendices con etapa lectiva <strong>aprobada</strong></h1>
 
-    <ul class="nav d-flex align-items-center">
-        <li class="mx-3">
-            <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
-                <option disabled selected value="">Selecciona un instructor</option>
-                {% for instructor in instructores %}
-                <option value="instructor" >{{instructor.nombre}}</option>
+    <form method="POST" action="{{ url_for('ruta_aprendices.guardar_aprendices') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="ficha_sin_decimal{{ index }}" value="{{ ficha_sin_decimal}}">
+        <input type="hidden" name="programa{{ index }}" value="{{ programa}}">
+        <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
+            <thead>
+                <tr class="">
+                    <th class="text-center">#</th>
+                    <th class="text-center">Número de Documento</th>
+                    <th class="text-center">Nombres</th>
+                    <th class="text-center">Apellidos</th>
+                    <th class="text-center">alternativa</th>
+                </tr>
+            </thead>            
+            <tbody>
+                {% for index, row in aprendices_no_en_bd.iterrows() %}
+                    <tr>
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ row['Número de Documento'] }}</td>
+                        <td>{{ row['Nombre'] }}</td>
+                        <td>{{ row['Apellidos'] }}</td>
+                        <td>
+                            <select name="alternativa{{ index }}" id="alternativa{{ index }}">
+                                <option value="Contrato de aprendizaje">Contrato de aprendizaje</option>
+                                <option value="Vinculo laboral">Vinculo laboral</option>
+                                <option value="Pasantia">Pasantia</option>
+
+                                <!-- Otras opciones del select -->
+                            </select>
+                        </td>
+                        <input type="hidden" name="documento{{ index }}" value="{{ row['Número de Documento'] }}">
+                        <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
+                        <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
+                        
+                    </tr>
                 {% endfor %}
-            </select>
-        </li>
-        <li>
-            <button type="submit" class="btn-lg btn-outline-success" id="asignarInstructor" disabled>
-                Asignar instructor
-            </button>
-        </li>
-        
-    </ul>
+            </tbody>
+        </table>
+        <ul class="nav d-flex align-items-center justify-content-end mt-2">
+            <li class="mx-3">
+                    <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
+                        <option disabled selected value="">Selecciona un instructor</option>
+                        {% for instructor in instructores %}
+                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }}</option>
+                        {% endfor %}
+                    </select>
+            </li>
+            <li>
+                <button type="submit" class="btn-lg btn-outline-success" name="asignar_instructor" id="asignar_instructor" disabled>
+                    Asignar instructor
+                </button>
+            </li>  
+        </ul>
+    </form>
+    <div class="d-flex mt-2 justify-content-end mt-2">
+        <ul>
+            <button class="btn btn-warning">Descargar</button>
+        </ul> 
+    </div>
 </div>
+
+
 
     
 
-    <div class="container-fluid mt-lg-3">
-        <h1 class="text-center">Aprendices con <strong>juicios pendientes</strong> </h1>
-        <table id="juiciospendientes" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
+    <div class="container-fluid mt-lg-3" id="juiciospendientes_h1">
+        <h1 class="text-center" >Aprendices con <strong>juicios pendientes</strong> </h1>
+        <table id="juiciospendientes" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
             <thead>
                 <tr class="">
                     <th class="text-center">#</th>
@@ -150,8 +171,8 @@
     </div>
 
     <div class="container-fluid mt-lg-3">
-        <h1 class="text-center">Aprendices con  <strong>novedades</strong></h1>
-        <table id="novedades" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
+        <h1 class="text-center" id="novedades_h1">Aprendices con  <strong>novedades</strong></h1>
+        <table id="novedades" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
             <thead>
                 <tr class="">
                     <th class="text-center">#</th>
@@ -187,41 +208,32 @@
         </ul>
     </div>
 
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
-    <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
     
-        <script>
-              $(document).ready(function() {
-            $('.table').DataTable({
-                
-                language: {
-                    processing: "Tratamiento en curso...",
-                    search: "Buscar&nbsp;:",
-                    lengthMenu: "Agrupar de _MENU_ items",
-                    info: "Mostrando del item _START_ al _END_ de un total de _TOTAL_ items",
-                    infoEmpty: "No existen datos.",
-                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                    infoPostFix: "",
-                    loadingRecords: "Cargando...",
-                    zeroRecords: "No se encontraron datos con tu busqueda",
-                    emptyTable: "No hay datos disponibles en la tabla.",
-                    paginate: {
-                        first: "Primero",
-                        previous: "Anterior",
-                        next: "Siguiente",
-                        last: "Ultimo"
-                    },
-                    aria: {
-                        sortAscending: ": active para ordenar la columna en orden ascendente",
-                        sortDescending: ": active para ordenar la columna en orden descendente"
-                    }
-                },
-                
-            });
-        });
+    <script>
+        var fichaEnVigencia = {{ ficha_en_vigencia|lower }}; // Esto asume que ficha_en_vigencia es una variable de tu contexto que tiene un valor booleano (true/false)
 
-        </script>
-
+if (fichaEnVigencia === false) {
+    swal({
+        title: "La ficha está fuera de vigencia. ¿Deseas continuar?",
+        icon: "warning",
+        dangerMode: true,
+        closeOnClickOutside: false,
+        closeOnEsc: false,
+        buttons: {
+            cancel: "Cancelar", // Cambiar el texto del botón de cancelar
+            confirm: "Continuar" // Cambiar el texto del botón de confirmar
+        }
+    }).then((willContinue) => {
+        if (willContinue) {
+            console.log("El usuario confirmó");
+            // Realizar acciones si el usuario confirma
+        } else {
+            console.log("El usuario canceló");
+            // Redirigir a la página de inicio inmediatamente al hacer clic en "cancelar"
+            window.location.replace("/consultar_fichas");
+        }
+    });
+}
+    </script>
+ 
 {%endblock%}

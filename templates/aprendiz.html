@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="instructores">Instructores</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
+</button>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center ">Aprendices</h1>
+<div class="container-fluid">
+    <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
+        <thead>
+            <tr class="">
+                <th class="text-center">#</th>
+                <th class="text-center">Número de Documento</th>
+                <th class="text-center">Nombres</th>
+                <th class="text-center">Apellidos</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Télefono</th>
+                <th class="text-center">Ficha</th>
+                <th class="text-center">Programa</th>
+                <th class="text-center">Alternativa</th>
+                <th class="text-center">Instructor asignado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aprendiz in aprendices %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{aprendiz.documento}}</td>
+                    <td>{{aprendiz.nombre}}</td>
+                    <td>{{aprendiz.apellido }}</td>
+                    <td>Sin actualizar</td>
+                    <td>Sin actualizar</td>
+                    <td>{{aprendiz.ficha_sin_decimal}}</td>
+                    <td>{{aprendiz.programa}}</td>
+                    <td>{{aprendiz.alternativa}}</td>
+                    <td>{{aprendiz.nombre_instructor}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
+<script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#aprendices').DataTable({
+        language: {
+            processing: "Tratamiento en curso...",
+            search: "Buscar&nbsp;:",
+            lengthMenu: "Agrupar de _MENU_ items",
+            info: "Mostrando un total de _TOTAL_ aprendices",
+            infoEmpty: "No existen datos.",
+            infoFiltered: "(filtrado de _MAX_ elementos en total)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron datos con tu busqueda",
+            emptyTable: "No hay datos disponibles en la tabla.",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": active para ordenar la columna en orden ascendente",
+                sortDescending: ": active para ordenar la columna en orden descendente"
+            }
+        },
+    })})
+</script>
+
+{% if aprendiz_guardado == True %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Aprendices asignados',
+            text: 'Los aprendices han sido asignados con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
+{% endblock%}

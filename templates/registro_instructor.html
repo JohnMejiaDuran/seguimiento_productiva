@@ -1,11 +1,18 @@
 {% extends "layout.html" %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultar_fichas">Consultar fichas</a>
-</button> 
+    <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
+</button>
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultaraprendiz">Consultar aprendiz</a>
-</button> 
+    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="instructores">Instructores</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
+</button>
 {% endblock%}
 
 {% block instructores %}
@@ -20,40 +27,49 @@
 </button>
 {% endblock %}
 {% block content %}
-
+{% if ya_existe %}
+<script>
+     // Mostrar alerta aquí
+    swal({
+        title: 'Ya existe este documento',
+        text: 'El número de documento ya se encuentra en la base de datos',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
 <div class="container col-5 mt-3  pb-3 card rounded-3 mx-auto" style="height: 80vh;">
     <form class="card-body container col-12 text-center" action="/nuevo_instructor" method="POST">
-        <h2 class=" ">Registro instructor</h2>
-        <div class="text-start mt-4 ">
-            <label class="form-label mb-0">Seleccione su estado</label>
-            <select name="estado" class="form-control form-select rounded-pill ">
-                <option disabled selected value="">Seleccione su estado</option>
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h1 class="">Registrar instructor</h1>
+        <div class="text-start mt-4">
+            <label class="form-label">Tipo de vinculación</label>
+            <select name="vinculacion" class="form-control form-select rounded-pill" required>
+                <option disabled selected value="">Seleccione su vinculación</option>
                 <option>Contratista</optio>
-                <option>De planta</option>
+                <option>Funcionario</option>
             </select>
         </div>
 
         <div class="text-start mt-2">
             <label class="form-label mb-0">Ingrese numero de cedula</label> 
-            <input class="container-inputs form-control rounded-pill" type="text" name="documento" placeholder="numero de cedula">
+            <input class="container-inputs form-control rounded-pill" type="text" name="documento" placeholder="numero de cedula" required> 
         </div>
         <div class="text-start mt-2">
-            <label class="form-label mb-0">Ingrese nombre completo</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="nombre"  placeholder="nombre completo">
+            <label class="form-label mb-0">Ingrese nombres</label>
+            <input class="container-inputs form-control rounded-pill" type="text" name="nombre"  placeholder="nombre completo" required>
         </div>
-
+        <div class="text-start mt-2">
+            <label class="form-label mb-0">Ingrese apelidos</label>
+            <input class="container-inputs form-control rounded-pill" type="text" name="apellido"  placeholder="apellido completo" required>
+        </div>
         <div class="text-start mt-2">
             <label class="form-label mb-0">Ingrese correo electronico</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="email"  placeholder="E-mail">
+            <input class="container-inputs form-control rounded-pill" type="email" name="email"  placeholder="E-mail" required>
         </div>
-
-        <div class="text-start mt-2">
-            <label class="form-label mb-0">Ingrese numero de telefono</label>
-            <input class="container-inputs form-control rounded-pill" type="text" name="telefono"  placeholder="telefono">
-        </div>
-
         <div class="mt-3">
-            <button type="submit" class="btn-lg btn-success ">Registrar instructor</button>
+            <button type="submit" class="btn btn-lg btn-success ">Registrar instructor</button>
 
         </div>
     </form>
@@ -65,4 +81,27 @@
 </style>
     
         <script src="js/registroinstructor.js"></script>
+        
+
+        <!-- <script>
+            // Almacenar valores del formulario en el almacenamiento local antes de enviar
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function() {
+                    const inputs = form.querySelectorAll('input');
+                    inputs.forEach(input => {
+                        localStorage.setItem(input.name, input.value);
+                    });
+                });
+        
+                // Restaurar valores del formulario cuando la página se vuelva a cargar
+                const storedInputs = document.querySelectorAll('input');
+                storedInputs.forEach(input => {
+                    const storedValue = localStorage.getItem(input.name);
+                    if (storedValue) {
+                        input.value = storedValue;
+                    }
+                });
+            });
+        </script>   -->
 {% endblock %}
