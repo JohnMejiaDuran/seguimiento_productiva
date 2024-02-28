@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template,request,redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user
-pagina_instructor = Blueprint("pagina_instructor",__name__)
+
+pagina_instructor = Blueprint("pagina_instructor", __name__)
+
 
 @pagina_instructor.route("/inicioinstructor")
 def inicioinstructor():
