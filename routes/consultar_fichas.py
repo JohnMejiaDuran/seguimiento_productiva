@@ -12,10 +12,13 @@ from functools import wraps
 
 consultar_ficha = Blueprint("consultar_ficha", __name__)
 
+
 def admin_required(fn):
     @wraps(fn)
     def decorated_view(*args, **kwargs):
-        if current_user.is_authenticated and any(role.name == "Administrador" for role in current_user.roles):
+        if current_user.is_authenticated and any(
+            role.name == "Administrador" for role in current_user.roles
+        ):
             return fn(*args, **kwargs)
         else:
             flash("No tienes acceso a esta página.")
@@ -72,10 +75,13 @@ def table():
                 sheet = workbook_xls.sheet_by_index(0)
                 ficha = sheet.cell_value(2, 2)
                 ficha_sin_decimal = str(int(ficha))
-
+                modalidad = sheet.cell_value(9, 2)
                 programa = sheet.cell_value(5, 2)
-
+                fecha_inicio = sheet.cell_value(7, 2)
                 fecha_excel = sheet.cell_value(8, 2)
+                regional = sheet.cell_value(10, 2)
+                centro = sheet.cell_value(11, 2)
+
                 if isinstance(fecha_excel, float):
                     fecha_python = xlrd.xldate_as_datetime(
                         fecha_excel, 0
@@ -179,6 +185,11 @@ def table():
 
                     return render_template(
                         "table.html",
+                        rgional=regional,
+                        centro=centro,
+                        fecha_inicio=fecha_inicio,
+                        modalidad=modalidad,
+                        fecha_actual=fecha_actual,
                         aprendices_no_en_bd=aprendices_no_en_bd,
                         evaluar=evaluar,
                         novedades=novedades,

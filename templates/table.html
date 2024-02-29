@@ -94,7 +94,7 @@
                         <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
                         <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
                         
-                    </tr>
+                    </tr>   
                 {% endfor %}
             </tbody>
         </table>
@@ -155,10 +155,6 @@
                         <td>{{row['Competencia']}}</td>
                         <td>{{row['Resultado de Aprendizaje']}}</td>
                         <td>{{row['Juicio de Evaluación']}}</td>
-                        
-                        <!-- <td>{{row['Competencia']}}</td>
-                        <td>{{row['Juicio de Evaluación']}}</td> -->
-                        <!-- Agrega aquí las columnas adicionales que desees mostrar -->
                     </tr>
                 {% endfor %}
             </tbody>
