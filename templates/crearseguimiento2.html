@@ -1,0 +1,208 @@
+{% extends "layout.html" %}
+{% block logout%}
+<a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary">Cerrar sesión</a>    
+{% endblock %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/crearseguimiento">Crear seguimiento</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+  <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
+</button>
+{% endblock%}
+{% block content %}
+<style>
+    body {
+      /* background-color: red; */
+      background-color: #4e8e3721;
+      padding: 0% 20% 0% 20%;
+    }
+
+    form {
+      padding: 3%;
+      border-radius: 5px;
+      border: 2px solid #4e8e37;
+      background-color: #FFF;
+      zoom: 70%;
+    }
+
+    /* Estilo personalizado para quitar bordes al textarea */
+    .editable textarea {
+      border: none;
+      resize: none;
+      /* Evitar redimensionamiento del textarea */
+    }
+
+    /* Estilo para el enlace de flecha */
+    .arrow-link {
+      text-decoration: none;
+      font-size: 1.5em;
+    }
+
+    .banner {
+      border: 2px solid rgba(0, 0, 0, 0.247);
+      margin-bottom: 3%;
+      width: 100%;
+      height: 30vh;
+      /* Ajusta la altura según tu necesidad */
+      /* Color de fondo del banner */
+      color: #ffffff;
+      /* Color del texto en el banner */
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .mb-4 {
+      text-align: center;
+    }
+
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Ajusta el tamaño de la imagen para cubrir completamente el contenedor */
+    }
+
+    .form-check {
+      display: inline-block;
+      margin-right: 20px;
+      /* Ajusta el margen entre los botones según sea necesario */
+    }
+
+    label[for="tipoInforme"] {
+      margin-bottom: 10px;
+      /* Ajusta el margen entre el título y los botones según sea necesario */
+      display: block;
+      font-size: 18px;
+      /* Ajusta el tamaño del título según sea necesario */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <form>
+      <div class="banner">
+        <img src="banner.jpg" alt="">
+
+      </div>
+      <h4 class="mb-4">3. SEGUIMIENTO ETAPA PRODUCTIVA</h4>
+      <div class="form-group">
+        <label for="tipoInforme">TIPO DE INFORME:</label>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial"
+            onclick="mostrarObservaciones()" />
+          <label class="form-check-label" for="parcialRadio">Parcial</label>
+        </div>
+        <div class="form-check">
+          <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final"
+            onclick="mostrarObservaciones()" />
+          <label class="form-check-label" for="finalRadio">Final</label>
+        </div>
+      </div>
+      <h5>PERÍODO EVALUADO</h5>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inicioPeriodo">Inicio:</label>
+          <input type="date" class="form-control" id="inicioPeriodo" />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="finalPeriodo">Final:</label>
+          <input type="date" class="form-control" id="finalPeriodo" />
+        </div>
+      </div>
+      <div class="container mt-5">
+        <form action="primeraparte.html" method="post">
+          <h5 class="text-center mt-4" style="margin-bottom:18px">Tabla de Evaluación - Factores actitudinales y
+            comportamentales</h5>
+          <table class="table table-bordered">
+            <thead class="thead-light">
+              <tr>
+                <th class="text-center">VARIABLE</th>
+                <th class="text-center">DESCRIPCIÓN</th>
+                <th class="text-center">VALORACIÓN</th>
+                <th class="text-center">OBSERVACIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for variable in variables %}
+              <tr>
+                <td>{{ variable.1 }}</td>
+                <td>{{ variable.3 }}</td>
+                <td class="editable">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="satisfactorio1" name="valoracion1" checked>
+                    <label class="form-check-label" for="satisfactorio1">Satisfactorio</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="porMejorar1" name="valoracion1">
+                    <label class="form-check-label" for="porMejorar1">Por Mejorar</label>
+                  </div>
+                </td>
+                <td class="editable"><textarea class="form-control" placeholder=""></textarea></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+           
+          </table>
+          <h5 class="text-center mt-4" style="margin-bottom:18px">Tabla de Evaluación - Factores Técnicos</h5>
+          <table class="table table-bordered">
+            <thead class="thead-light">
+              <tr>
+                <th class="text-center">VARIABLE</th>
+                <th class="text-center">DESCRIPCIÓN</th>
+                <th class="text-center">VALORACIÓN</th>
+                <th class="text-center">OBSERVACIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tecnica in tecnicas %}
+              <tr>
+                <td>{{ tecnica.1 }}</td>
+                <td>{{ tecnica.3 }}</td>
+                <td class="editable">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="satisfactorio1" name="valoracion1" checked>
+                    <label class="form-check-label" for="satisfactorio1">Satisfactorio</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="porMejorar1" name="valoracion1">
+                    <label class="form-check-label" for="porMejorar1">Por Mejorar</label>
+                  </div>
+                </td>
+                <td class="editable"><textarea class="form-control" placeholder=""></textarea></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          <div class="form-group" id="observacionesContainer" style="display: none">
+            <label for="observaciones">Observaciones:</label>
+            <textarea class="form-control" id="observaciones" rows="4" style="resize: none;"></textarea>
+          </div>
+          <div class="form-group" id="observacionesAprendizContainer" style="display: none">
+            <label for="observacionesAprendiz">Observaciones de Aprendiz:</label>
+            <textarea class="form-control" id="observacionesAprendiz" rows="4" style="resize: none;"></textarea>
+          </div>
+          <div class="text-center mt-5">
+            <a href="#" class="arrow-link" onclick="history.back();">&larr; Retroceder</a>
+            <a href="" class="arrow-link">&rarr; Siguiente</a>
+        </form>
+      </div>
+      <script>
+        function mostrarObservaciones() {
+          const finalRadio = document.getElementById('finalRadio');
+          const observacionesContainer = document.getElementById('observacionesContainer');
+          const observacionesAprendizContainer = document.getElementById('observacionesAprendizContainer');
+
+          if (finalRadio.checked) {
+            observacionesContainer.style.display = 'block';
+            observacionesAprendizContainer.style.display = 'block';
+          } else {
+            observacionesContainer.style.display = 'none';
+            observacionesAprendizContainer.style.display = 'none';
+          }
+        }
+      </script>
+</body>
+{% endblock %}
