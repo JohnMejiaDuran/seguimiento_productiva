@@ -12,17 +12,21 @@ def inicioinstructor():
     title = current_user.nombre + " " + current_user.apellido
     return render_template("inicioinstructor.html", title=title)
 
+
 @pagina_instructor.route("/aprendicesasignados")
 def aprendizasignado():
-    aprendices = Aprendiz.query.all()
+    documento_usuario_actual = current_user.documento
+    aprendices = Aprendiz.query.filter_by(documento_instructor=documento_usuario_actual).all()
     title = "Aprendices"
     return render_template(
         "aprendicesasignados.html", title=title, aprendices=aprendices
     )
 
+
 @pagina_instructor.route("/crearseguimiento")
 def crearseguimiento():
     return render_template("crearseguimiento.html")
+
 
 @pagina_instructor.route("/crearseguimiento2")
 def crearseguimiento2():

@@ -103,7 +103,7 @@
                     <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
                         <option disabled selected value="">Selecciona un instructor</option>
                         {% for instructor in instructores %}
-                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }}</option>
+                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }} {{ instructor.apellido}}</option>
                         {% endfor %}
                     </select>
             </li>

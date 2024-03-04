@@ -216,7 +216,7 @@ class Variable(db.Model):
     id_variable = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100))
     tipo = db.Column(db.String(100))
-    descripcion = db.Column(db.String(100))
+    descripcion = db.Column(db.String(255))
 
     def __init__(self, nombre, tipo, descripcion):
         self.nombre = nombre
