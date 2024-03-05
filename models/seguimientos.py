@@ -51,35 +51,6 @@ class BaseUser(db.Model, UserMixin):
     def check_password(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
 
-<<<<<<< HEAD
-class Aprendiz(db.Model):
-    documento = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(50))
-    apellido = db.Column(db.String(50))
-    email = db.Column(db.String(50))
-    telefono = db.Column(db.String(50))
-
-    def __init__(self, documento, nombre, apellido, email, telefono):
-        self.documento = documento
-        self.nombre = nombre
-        self.apellido = apellido
-        self.email = email
-        self.telefono = telefono
-
-class Asignacion(db.Model):
-    documento = db.Column(db.Integer, primary_key=True)
-    nombre = db.Column(db.String(50))
-    apellido = db.Column(db.String(50))
-    email = db.Column(db.String(50))
-    telefono = db.Column(db.String(50))
-
-    def __init__(self, documento, nombre, apellido, email, telefono):
-        self.documento = documento
-        self.nombre = nombre
-        self.apellido = apellido
-        self.email = email
-        self.telefono = telefono
-=======
 
 print(generate_password_hash("1098789300"))
 
@@ -1105,4 +1076,3 @@ def insert_variable(*args, **kwargs):
 
 
 event.listen(Variable.__table__, "after_create", insert_variable)
->>>>>>> aa48ee552b85c1dba55b6426141a3bcf6eb2b9f6
