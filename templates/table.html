@@ -16,19 +16,14 @@
 
 {% block upload%}
 <nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
-
-    <div class="d-flex">
-        <button class="atras-icono btn btn-success mx-1 mt-1 mb-1">
-            <a href="consultar_fichas">
-                <i class="bi bi-arrow-left"></i>
-            </a>
-        </button> 
-        <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="file" name="archivo" accept=".xls, .xlsx" class="form-control-file btn btn-success mx-3  ">
-            
-            <button type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
-        </form>   
+    <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+        <div class="file-upload">
+            <input type="file" name="archivo" accept=".xls" class="form-control-file     mx-3 upload-box">
+        </div>
+        
+        <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
+    </form>    
     </div>
     
     <ul class="nav">
@@ -94,31 +89,26 @@
                         <input type="hidden" name="nombre{{ index }}" value="{{ row['Nombre'] }}">
                         <input type="hidden" name="apellido{{ index }}" value="{{ row['Apellidos'] }}">
                         
-                    </tr>
+                    </tr>   
                 {% endfor %}
             </tbody>
         </table>
         <ul class="nav d-flex align-items-center justify-content-end mt-2">
             <li class="mx-3">
-                    <select  class="btn-lg btn-success" name="instructorSelect" id="instructorSelect">
+                    <select  class="btn btn-success" name="instructorSelect" id="instructorSelect">
                         <option disabled selected value="">Selecciona un instructor</option>
                         {% for instructor in instructores %}
-                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }}</option>
+                        < <option value="{{instructor.documento}}"">{{ instructor.nombre }} {{ instructor.apellido}}</option>
                         {% endfor %}
                     </select>
             </li>
             <li>
-                <button type="submit" class="btn-lg btn-outline-success" name="asignar_instructor" id="asignar_instructor" disabled>
+                <button type="submit" class="btn btn-success" name="asignar_instructor" id="asignar_instructor" disabled>
                     Asignar instructor
                 </button>
             </li>  
         </ul>
     </form>
-    <div class="d-flex mt-2 justify-content-end mt-2">
-        <ul>
-            <button class="btn btn-warning">Descargar</button>
-        </ul> 
-    </div>
 </div>
 
 
@@ -155,10 +145,6 @@
                         <td>{{row['Competencia']}}</td>
                         <td>{{row['Resultado de Aprendizaje']}}</td>
                         <td>{{row['Juicio de Evaluación']}}</td>
-                        
-                        <!-- <td>{{row['Competencia']}}</td>
-                        <td>{{row['Juicio de Evaluación']}}</td> -->
-                        <!-- Agrega aquí las columnas adicionales que desees mostrar -->
                     </tr>
                 {% endfor %}
             </tbody>
@@ -166,7 +152,8 @@
     </div>
     <div class="d-flex justify-content-between container-fluid mt-2">
         <ul>
-            <button class="btn btn-success">Descargar</button>
+            <a href="/descargar_datos" class="btn btn-success" download>Descargar Excel Juicios Pendientes</a>
+        </ul>
         </ul>
     </div>
 
@@ -204,7 +191,7 @@
     </div>
     <div class="d-flex justify-content-between container-fluid mt-2">
         <ul>
-            <button class="btn btn-success">Descargar</button>
+            <a href="/descargar_datos_novedades" class="btn btn-success" download>Descargar Excel Novedades</a>
         </ul>
     </div>
 

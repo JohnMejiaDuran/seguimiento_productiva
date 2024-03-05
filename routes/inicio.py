@@ -51,6 +51,7 @@ def inicio():
             flash("Usuario o contraseña no válidos")
             return render_template("auth/paginainicio.html", title=title)
     else:
+        flash("Usuario o contraseña no válidos")
         return render_template("auth/paginainicio.html", title=title)
 
 

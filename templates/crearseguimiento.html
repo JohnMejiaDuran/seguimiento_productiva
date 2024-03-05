@@ -1,0 +1,323 @@
+{% extends "layout.html" %}
+{% block logout%}
+<a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary">Cerrar sesión</a>    
+{% endblock %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/crearseguimiento">Crear seguimiento</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+  <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
+</button>
+{% endblock%}
+{% block content %}
+<style>
+    body {
+      background-color: #4e8e3721;
+      padding: 0% 0% 0% 0%;
+    }
+     form {
+      padding: 3%;
+      border-radius: 5px;
+      border: 2px solid #4e8e37;
+      background-color: #FFF;
+      zoom: 70%;
+    } 
+    .Titulo {
+      text-align: center;
+      padding-bottom: 2%;
+    }
+    .title-box {
+      /* background-color: red; */
+      border: 1px solid #ddd;
+      /* text-align: center; */
+      padding: 15px;
+      width: 100%;
+      height: 90%;
+      margin-bottom: 20px;
+    }
+    .text-center {
+      /* background-color: red; */
+      margin-top: 3%;
+    }
+    h5 {
+      margin-bottom: 3%;
+    }
+    textarea {
+      resize: none;
+    }
+    .h4 {
+      /* background-color: red; */
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .banner {
+      border: 2px solid rgba(0, 0, 0, 0.247);
+      margin-bottom: 3%;
+      width: 100%;
+      height: 30vh;
+      /* Ajusta la altura según tu necesidad */
+      /* Color de fondo del banner */
+      color: #ffffff;
+      /* Color del texto en el banner */
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* Ajusta el tamaño de la imagen para cubrir completamente el contenedor */
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .botones-container {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 10px;
+        }
+    
+        .botones-container button {
+          margin-right: 10px;
+          margin-left: 10px;
+          margin-bottom: 10px;
+        }
+        .dimensionar-text-area{
+          height: 2.5em;
+          resize: none;
+        }
+
+        main {
+          width: 80%;
+          margin: 0 auto;
+        }
+  </style>
+</head>
+<body>
+  <form>
+  <div class="container mt-5">
+    <form>
+<!--       <div class="banner">
+        <img src="banner.jpg" alt="">
+      </div> -->
+      <!-- Información General -->
+      <h4 class="Titulo">1.INFORMACIÓN GENERAL</h4>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="regional">Regional:</label>
+          <select class="form-control" id="regional">
+            <option id="optionid" value="BARRANCABERMEJA">BARRANCABERMEJA</option>
+            <!-- Otras opciones de regionales -->
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="centro">Centro de Formación:</label>
+          <select class="form-control" id="centro">
+            <option value="">Seleccionar Centro de Formación</option>
+            <!-- Otras opciones de centros de formación -->
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="programa">No. de ficha:</label>
+          <input type="text" class="form-control" id="ficha" placeholder="No. de ficha">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="ficha">Programa de Formación:</label>
+          <input type="text" class="form-control" id="programa" placeholder="programa de formacion">
+        </div>
+      </div>
+      <!-- Datos del Aprendiz -->
+      <h5 class="text"style="margin-left:15px">DATOS DEL APRENDIZ</h5>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="nombreAprendiz">Identificación:</label>
+              <input type="text" class="form-control" id="nombreAprendiz" placeholder="Nombre del Aprendiz">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="identificacion">Nombre:</label>
+              <input type="text" class="form-control" id="identificacion" placeholder="Identificación">
+            </div>
+          </div>
+        </div>
+      </div>
+      <h5 class="text"style="margin-left:15px">ENTE CONFORMADOR</h5>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="razonsocial">Razon social de la empresa:</label>
+              <input type="text" class="form-control" id="razon social" placeholder="razon social">
+            </div>
+            <div class="form-group">
+              <label for="nit">Nit:</label>
+              <input type="text" class="form-control" id="Nit" placeholder="Nit">
+            </div>
+            <div class="form-group">
+              <label for="direccion">Dirección:</label>
+              <input type="text" class="form-control" id="direccion" placeholder="direccion">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="cargo">Cargo:</label>
+              <input type="text" class="form-control" id="cargo" placeholder="cargo">
+            </div>
+            <div class="form-group">
+              <label for="telefono">Telefono:</label>
+              <input type="text" class="form-control" id="telefono" placeholder="telefono">
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" class="form-control" id="email" placeholder="email">
+            </div>
+          </div>
+        </div>
+      </div>
+    </head>
+    <body>
+    
+    <div>
+      <h4 class="text-center">2. PLANEACIÓN ETAPA PRODUCTIVA</h4>
+      <h5 class="text-center">CONCERTACIÓN PLAN DE TRABAJO DURANTE LA ETAPA PRODUCTIVA DEL APRENDIZ</h5>
+    
+      <table class="table" id="miTabla">
+        <thead>
+          <tr>
+            <th colspan="1" class="text-center">1. Actividades a Desarrollar</th>
+            <th colspan="1" class="text-center">2. Evidencias de Aprendizaje</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- Actividades a Desarrollar -->
+            <td>
+              <textarea class="form-control" style="height: 2.5em; resize: none;" rows="6"></textarea>
+            </td>
+            <!-- Evidencias de Aprendizaje -->
+            <td>
+              <textarea class="form-control" style="height: 2.5em; resize: none;"  rows="6"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table" id="miTablaRec">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <!-- Recolección de Evidencias -->
+            <td>
+              <div class="form-group">
+                <label for="fechaInicioRec">Fecha Inicio:</label>
+                <input type="date" class="form-control" id="fechaInicioRec">
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="fechaFinalRec">Fecha Final:</label>
+                <input type="date" class="form-control" id="fechaFinalRec">
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <label for="lugarRec">Lugar:</label>
+                <input type="text" class="form-control" id="lugarRec">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="botones-container">
+        <button type="button" class="btn btn-success" onclick="agregarFila()">+</button>
+        <button type="button" class="btn btn-danger" onclick="eliminarFila()">-</button>
+      </div>
+      <textarea name="" class="form-control"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones"></textarea>
+    </div>
+    <script>
+      function agregarFila() {
+        const tableBody = document.getElementById('miTabla').getElementsByTagName('tbody')[0];
+        const newRow = tableBody.insertRow(tableBody.rows.length);
+        // Columnas para Actividades y Evidencias (estáticas)
+        for (let i = 0; i < 2; i++) {
+          const cell = newRow.insertCell(i);
+          const textarea = document.createElement('textarea');
+          textarea.classList.add('form-control');
+          textarea.style = 'height: 2.5em; resize:none;'
+          textarea.rows = '6';
+          cell.appendChild(textarea);
+        }
+        // Columnas para Recolección de Evidencias
+        const tableBodyRec = document.getElementById('miTablaRec').getElementsByTagName('tbody')[0];
+        const newRowRec = tableBodyRec.insertRow(tableBodyRec.rows.length);
+    
+        const cellFechaInicioRec = newRowRec.insertCell(0);
+        const divFechaInicioRec = document.createElement('div');
+        divFechaInicioRec.className = 'form-group';
+        const labelFechaInicioRec = document.createElement('label');
+        labelFechaInicioRec.textContent = 'Fecha Inicio:';
+        const inputFechaInicioRec = document.createElement('input');
+        inputFechaInicioRec.type = 'date';
+        inputFechaInicioRec.className = 'form-control';
+        inputFechaInicioRec.id = 'fechaInicioRec';
+        divFechaInicioRec.appendChild(labelFechaInicioRec);
+        divFechaInicioRec.appendChild(inputFechaInicioRec);
+        cellFechaInicioRec.appendChild(divFechaInicioRec);
+    
+        const cellFechaFinalRec = newRowRec.insertCell(1);
+        const divFechaFinalRec = document.createElement('div');
+        divFechaFinalRec.className = 'form-group';
+        const labelFechaFinalRec = document.createElement('label');
+        labelFechaFinalRec.textContent = 'Fecha Final:';
+        const inputFechaFinalRec = document.createElement('input');
+        inputFechaFinalRec.type = 'date';
+        inputFechaFinalRec.className = 'form-control';
+        inputFechaFinalRec.id = 'fechaFinalRec';
+        divFechaFinalRec.appendChild(labelFechaFinalRec);
+        divFechaFinalRec.appendChild(inputFechaFinalRec);
+        cellFechaFinalRec.appendChild(divFechaFinalRec);
+    
+        const cellLugarRec = newRowRec.insertCell(2);
+        const divLugarRec = document.createElement('div');
+        divLugarRec.className = 'form-group';
+        const labelLugarRec = document.createElement('label');
+        labelLugarRec.textContent = 'Lugar:';
+        const inputLugarRec = document.createElement('input');
+        inputLugarRec.type = 'text';
+        inputLugarRec.className = 'form-control';
+        inputLugarRec.id = 'lugarRec';
+        divLugarRec.appendChild(labelLugarRec);
+        divLugarRec.appendChild(inputLugarRec);
+        cellLugarRec.appendChild(divLugarRec);
+      }
+    
+      function eliminarFila() {
+        const tableBody = document.getElementById('miTabla').getElementsByTagName('tbody')[0];
+        const tableBodyRec = document.getElementById('miTablaRec').getElementsByTagName('tbody')[0];
+    
+        if (tableBody.rows.length > 0) {
+          tableBody.deleteRow(tableBody.rows.length - 1);
+        }
+    
+        if (tableBodyRec.rows.length > 0) {
+          tableBodyRec.deleteRow(tableBodyRec.rows.length - 1);
+        }
+      }
+    </script>
+    <div class="text-center mt-5">
+      <a href="/crearseguimiento2" class="arrow-link">Siguiente</a>
+    </div>
+  </form>
+{% endblock %}

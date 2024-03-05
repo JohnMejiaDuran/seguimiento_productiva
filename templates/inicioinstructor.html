@@ -1,9 +1,36 @@
 {% extends "layout.html" %}
+{% block calendar %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+{% endblock %}
 {% block logout%}
 <a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary">Cerrar sesión</a>    
 {% endblock %}
 {% block consultar%}
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="">Crear seguimiento</a>
+    <a  class="nav-link active text-white" href="/crearseguimiento">Crear seguimiento</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+  <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
 </button>
 {% endblock%}
+{% block content%}
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+
+        events:function(info,successCallback, failureCallback){
+            console.log(info)
+        }
+      });
+      calendar.render();
+    });
+
+  </script>
+<h2 class="text-center">Agenda</h2>
+<div class="container">
+<div id="calendar"></div>
+</div>
+{% endblock %}

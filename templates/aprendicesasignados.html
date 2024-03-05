@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+{% block link %}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- abajo están los iconos de bootstrap -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+{% endblock %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/inicioinstructor"><i class="fa-solid fa-house"></i></a>
+    <button type="button" class="btn btn-outline-success ">
+        <a  class="nav-link active text-white" href="/crearseguimiento">Crear seguimiento</a>
+    </button>
+    <button type="button" class="btn btn-outline-success ">
+      <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
+    </button>
+{% endblock %}
+
+{% block content %}
+<style>
+    .text-center-middle {
+         text-align: center;
+         vertical-align: middle;
+     }
+     /* Ajuste de tamaño del modal-body */
+     .modal-body {
+         height: 400px;
+         overflow-y: auto; 
+     }
+     /* Ajuste de tamaño del cuadro modal */
+     .modal-dialog {
+         max-width: 50%; /* Ajusta el ancho máximo del cuadro */
+     }
+     .modal-header {
+         justify-content: center;
+     }
+     .nuevo-seguimiento-btn{
+         color: white;
+         background-color: green;
+         border-color: green;
+     }
+     .nuevo-seguimiento-btn:hover{
+         background-color: green;
+         border-color: green;
+     }
+     .bi-filetype-pdf {
+         color: black;
+     }
+     .button-pdf {
+         background-color: transparent;
+         border-color: transparent;
+     }
+     .button-pdf:hover{
+         background-color: transparent;
+     }
+ </style>
+<h1 class="text-center ">Aprendices</h1>
+<div class="container-fluid">
+    <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
+        <thead>
+            <tr class="">
+                <th class="text-center">#</th>
+                <th class="text-center">Número de Documento</th>
+                <th class="text-center">Nombres</th>
+                <th class="text-center">Apellidos</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Télefono</th>
+                <th class="text-center">Ficha</th>
+                <th class="text-center">Programa</th>
+                <th class="text-center">Alternativa</th>
+                <th class="text-center">Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aprendiz in aprendices %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{aprendiz.documento}}</td>
+                    <td>{{aprendiz.nombre}}</td>
+                    <td>{{aprendiz.apellido }}</td>
+                    <td>Sin actualizar</td>
+                    <td>Sin actualizar</td>
+                    <td>{{aprendiz.ficha_sin_decimal}}</td>
+                    <td>{{aprendiz.programa}}</td>
+                    <td>{{aprendiz.alternativa}}</td>
+                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
+<script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#aprendices').DataTable({
+        language: {
+            processing: "Tratamiento en curso...",
+            search: "Buscar&nbsp;:",
+            lengthMenu: "Agrupar de _MENU_ items",
+            info: "Mostrando un total de _TOTAL_ aprendices",
+            infoEmpty: "No existen datos.",
+            infoFiltered: "(filtrado de _MAX_ elementos en total)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron datos con tu busqueda",
+            emptyTable: "No hay datos disponibles en la tabla.",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": active para ordenar la columna en orden ascendente",
+                sortDescending: ": active para ordenar la columna en orden descendente"
+            }
+        },
+    })})
+</script>
+<div class="text-center mt-5">
+
+    <div class="modal fade" id="ojitoModal" tabindex="-1" role="dialog" aria-labelledby="ojitoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="ojitoModalLabel">LISTA DE SEGUIMIENTOS</h5>
+    </div>
+    <div class="modal-body">
+    <div class="container">
+    <div class="row">
+    <div class="col-md-6">
+    <button type="button" id="btnNuevoSeguimiento" class="btn btn-primary nuevo-seguimiento-btn">Nuevo Seguimiento</button>
+    </div>
+    </div>
+    <!-- Nuevas columnas como tabla -->
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <td class="date-column text-center-middle">Fecha</td>
+                    <td class="type-column text-center-middle">Tipo</td>
+                    <td class="pdf-column text-center-middle">pdf</td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/03/2024</td>
+                    <td class="text-center-middle">Parcial</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/06/2024</td>
+                    <td class="text-center-middle">Parcial</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/10/2024</td>
+                    <td class="text-center-middle">Final</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <!-- Puedes agregar más filas aquí -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Fin de las nuevas columnas -->
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Cerrar</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+       // Detecta el clic en el botón "Nuevo Seguimiento"
+        $('#btnNuevoSeguimiento').click(function(){
+        // Redirecciona a otra página HTML
+        window.location.href = 'primeraparte.html';
+      });
+       });
+    </script>    
+{% if aprendiz_guardado == True %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Aprendices asignados',
+            text: 'Los aprendices han sido asignados con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+{% endif %}
+{% endblock%}
