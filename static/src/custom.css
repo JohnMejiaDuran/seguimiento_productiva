@@ -136,3 +136,31 @@ body {
 .container {
   border-radius: 20px;
 }
+
+/* .file-upload {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position: absolute;
+} */
+
+.upload-box {
+  background-color: white;
+  border-radius: 5px;
+  width: 350px;
+  outline: none;
+}
+
+::-webkit-file-upload-button{
+  color: white;
+  background-color: #198754;
+  padding: 10px;
+  border: none;
+  border-radius:5px;
+  outline: none;
+  cursor: pointer;
+}
+
+::-webkit-file-upload-button:hover{
+  background-color: #136c43;
+}

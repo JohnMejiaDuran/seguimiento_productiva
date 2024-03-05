@@ -2,17 +2,12 @@
 
 
 {% block upload%}
-<nav class="nav gris d-flex p-1 ">
-    <div class="">
-        <button class="atras-icono btn btn-success mt-1 mx-1">
-            <a href="">
-                <i class="bi bi-arrow-left"></i>
-            </a>
-        </button>     
-    </div>
+<nav class="nav gris d-flex p-1 border-bottom border-dark border-top  ">
     <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-        <input type="file" name="archivo" accept=".xls" class="form-control-file btn btn-success mx-3  ">
+        <div class="file-upload">
+            <input type="file" name="archivo" accept=".xls" class="form-control-file     mx-3 upload-box">
+        </div>
         
         <button  onclick="verificarFicha()" type="submit" class="btn btn-success" id="botonEnviar" disabled>Subir Archivo</button>
     </form>   
