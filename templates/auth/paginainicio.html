@@ -37,19 +37,21 @@
           <label>Contraseña</label>
           <div class="form-group form-div">
             <span><i class="fa-solid fa-lock"></i></span>
-            <input  type="password" id="password" name="password" placeholder=" Ingrese contraseña">
+            <input class="mb-1"  type="password" id="password" name="password" placeholder=" Ingrese contraseña">
             
           </div>
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          {% for message in messages %}
-            <strong class="text-center color-red">
-              {{message}}
-            </strong>
-          {% endfor %}
-          {% endif%}
-          {% endwith %}   
-          <button type="submit" class="btn btn-success"> Iniciar sesión</button>
+          
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+              <strong class="text-center color-red">
+                {{message}}
+              </strong>
+            {% endfor %}
+            {% endif%}
+            {% endwith %}   
+          
+          <button type="submit" class="mt-4 btn btn-success"> Iniciar sesión</button>
     </div>  
   </form>
 <script>

@@ -1,14 +1,31 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flask_login import current_user
 from models.seguimientos import Aprendiz
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
+from functools import wraps
+from routes.consultar_fichas import admin_required
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
 
+def instructor_required(fn):
+    @wraps(fn)
+    def decorated_view(*args, **kwargs):
+        if current_user.is_authenticated and any(
+            role.name == "Instructor" for role in current_user.roles
+        ):
+            return fn(*args, **kwargs)
+        else:
+            flash("No tienes acceso a esta página.")
+            return redirect(url_for("pagina_inicio.index"))
+
+    return decorated_view
+
+
 @pagina_instructor.route("/inicioinstructor")
 @login_required
+@instructor_required
 def inicioinstructor():
     title = current_user.nombre + " " + current_user.apellido
     new_password = session.pop("new_password", False)
@@ -18,6 +35,8 @@ def inicioinstructor():
 
 
 @pagina_instructor.route("/aprendicesasignados")
+@login_required
+@instructor_required
 def aprendizasignado():
     documento_usuario_actual = current_user.documento
     aprendices = Aprendiz.query.filter_by(
@@ -30,11 +49,15 @@ def aprendizasignado():
 
 
 @pagina_instructor.route("/crearseguimiento")
+@login_required
+@instructor_required
 def crearseguimiento():
     return render_template("crearseguimiento.html")
 
 
 @pagina_instructor.route("/crearseguimiento2")
+@login_required
+@instructor_required
 def crearseguimiento2():
     return render_template("crearseguimiento2.html")
 
@@ -42,6 +65,8 @@ def crearseguimiento2():
 @pagina_instructor.route(
     "/cambio_contrasena",
 )
+@login_required
+@instructor_required
 def cambiocontrasena():
     diferentes = session.pop("diferentes", False)
 
@@ -52,6 +77,8 @@ def cambiocontrasena():
 
 
 @pagina_instructor.route("/confirmar_contrasena", methods=["POST"])
+@login_required
+@instructor_required
 def confirmarcontrasena():
     if request.method == "POST":
         new_password = request.form["new_password"]

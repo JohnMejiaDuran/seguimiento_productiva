@@ -38,24 +38,26 @@ def inicio():
         if user and user.check_password(user.password, password):
             for role in user.roles:
                 login_user(user, remember=True)
-        if user is not None and "Instructor" in [role.name for role in user.roles]:
-            if user.has_changed_password():
-                return redirect(url_for("pagina_instructor.inicioinstructor"))
-            else:
-                return redirect(url_for("pagina_instructor.cambiocontrasena"))
-        elif user is not None and "Aprendiz" in [role.name for role in user.roles]:
-            return redirect(url_for("pagina_aprendiz.inicioaprendiz"))
-        elif user is not None and "Administrador" in [role.name for role in user.roles]:
-            return redirect(url_for("consultar_ficha.consultarficha"))
-        elif user is not None and "Coordinador" in [role.name for role in user.roles]:
-            return redirect(url_for("pagina_coordinador.iniciocoordinador"))
-
-        else:
+            if user is not None and "Instructor" in [role.name for role in user.roles]:
+                if user.has_changed_password():
+                    return redirect(url_for("pagina_instructor.inicioinstructor"))
+                else:
+                    return redirect(url_for("pagina_instructor.cambiocontrasena"))
+            elif user is not None and "Aprendiz" in [role.name for role in user.roles]:
+                return redirect(url_for("pagina_aprendiz.inicioaprendiz"))
+            elif user is not None and "Administrador" in [
+                role.name for role in user.roles
+            ]:
+                return redirect(url_for("consultar_ficha.consultarficha"))
+            elif user is not None and "Coordinador" in [
+                role.name for role in user.roles
+            ]:
+                return redirect(url_for("pagina_coordinador.iniciocoordinador"))
             flash("Usuario o contraseña no válidos")
-            return render_template("auth/paginainicio.html", title=title)
-    else:
         flash("Usuario o contraseña no válidos")
         return render_template("auth/paginainicio.html", title=title)
+
+    return render_template("auth/paginainicio.html", title=title)
 
 
 @pagina_inicio.route("/logout")
