@@ -16,7 +16,9 @@ def inicioinstructor():
 @pagina_instructor.route("/aprendicesasignados")
 def aprendizasignado():
     documento_usuario_actual = current_user.documento
-    aprendices = Aprendiz.query.filter_by(documento_instructor=documento_usuario_actual).all()
+    aprendices = Aprendiz.query.filter_by(
+        documento_instructor=documento_usuario_actual
+    ).all()
     title = "Aprendices"
     return render_template(
         "aprendicesasignados.html", title=title, aprendices=aprendices
@@ -31,3 +33,8 @@ def crearseguimiento():
 @pagina_instructor.route("/crearseguimiento2")
 def crearseguimiento2():
     return render_template("crearseguimiento2.html")
+
+
+@pagina_instructor.route("/cambio_contrasena")
+def cambiocontrasena():
+    return render_template("auth/cambiocontrasena.html")
