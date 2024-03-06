@@ -14,6 +14,17 @@
 </button>
 {% endblock%}
 {% block content%}
+{% if new_password %}
+<script>
+     // Mostrar alerta aquí
+    swal({
+        title: 'Contraseña actualizada',
+        text: 'Se ha cambiado la contraseña satisfactoriamente.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+</script>
+{% endif %}
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {

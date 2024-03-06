@@ -36,6 +36,7 @@ class BaseUser(db.Model, UserMixin):
     apellido = db.Column(db.String(100))
     email = db.Column(db.String(100))
     password = db.Column(db.String(162))
+    password_changed = db.Column(db.Boolean, default=False)
     telefono = db.Column(db.String(50))
     roles = db.relationship("Role", secondary="user_role", backref="users")
 
@@ -48,9 +49,18 @@ class BaseUser(db.Model, UserMixin):
         self.telefono = telefono
 
     @classmethod
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
     def check_password(self, hashed_password, password):
         return check_password_hash(hashed_password, password)
 
+    def change_password(self, new_password):
+        self.password = generate_password_hash(new_password)
+        self.password_changed = True
+
+    def has_changed_password(self):
+        return self.password_changed
 
 print(generate_password_hash("1098789300"))
 
@@ -143,7 +153,7 @@ class Aprendiz(BaseUser):
         email=None,
         password=None,
     ) -> None:
-        super().__init__(documento, nombre, apellido,telefono, email, password)
+        super().__init__(documento, nombre, apellido, telefono, email, password)
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa

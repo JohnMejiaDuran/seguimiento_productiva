@@ -28,7 +28,7 @@ def inicio():
             return redirect(url_for("consultar_ficha.consultarficha"))
         elif "Coordinador" in [role.name for role in current_user.roles]:
             return redirect(url_for("pagina_coordinador.iniciocoordinador"))
-        
+
     if request.method == "POST":
         documento = request.form["documento"]
         password = request.form["password"]
@@ -39,7 +39,10 @@ def inicio():
             for role in user.roles:
                 login_user(user, remember=True)
         if user is not None and "Instructor" in [role.name for role in user.roles]:
-            return redirect(url_for("pagina_instructor.inicioinstructor"))
+            if user.has_changed_password():
+                return redirect(url_for("pagina_instructor.inicioinstructor"))
+            else:
+                return redirect(url_for("pagina_instructor.cambiocontrasena"))
         elif user is not None and "Aprendiz" in [role.name for role in user.roles]:
             return redirect(url_for("pagina_aprendiz.inicioaprendiz"))
         elif user is not None and "Administrador" in [role.name for role in user.roles]:
@@ -69,6 +72,3 @@ def unauthorized(error):
 @pagina_inicio.errorhandler(404)
 def status_404(error):
     return "<h1>Página no encontrada</h1>"
-
-
-
