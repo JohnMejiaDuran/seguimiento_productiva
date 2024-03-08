@@ -132,7 +132,7 @@ def table():
                     )  # El segundo argumento es el modo de fecha en Excel
                     fecha_sin_hora = fecha_python.date()
                     fecha_actual = datetime.now().date()
-
+                    
                     ficha_en_vigencia = True
                     if fecha_sin_hora + timedelta(days=548) < fecha_actual:
                         ficha_en_vigencia = False
@@ -394,6 +394,9 @@ def table():
                     nuevo_libro2.save("novedades.xlsx")
                     return render_template(
                         "table.html",
+                        fecha_actual=fecha_actual,
+                        fecha_sin_hora_inicio=fecha_sin_hora_inicio,
+                        fecha_sin_hora=fecha_sin_hora,
                         aprendices_no_en_bd=aprendices_no_en_bd,
                         evaluar=evaluar,
                         novedades=novedades,
@@ -422,6 +425,7 @@ def descargar_datos():
     ruta_archivo = "juicios_pendientes.xlsx"
     # Utiliza Flask's send_file para enviar el archivo al cliente para su descarga
     return send_file(ruta_archivo, as_attachment=True)
+
 
 @consultar_ficha.route("/descargar_datos_novedades")
 @login_required

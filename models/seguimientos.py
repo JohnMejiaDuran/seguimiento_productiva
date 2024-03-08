@@ -62,6 +62,7 @@ class BaseUser(db.Model, UserMixin):
     def has_changed_password(self):
         return self.password_changed
 
+
 print(generate_password_hash("1098789300"))
 
 
@@ -132,6 +133,8 @@ class Aprendiz(BaseUser):
     alternativa = db.Column(db.String(50))
     ficha_sin_decimal = db.Column(db.String(20))
     programa = db.Column(db.String(100))
+    fecha_inicio_contrato = db.Column(db.String(15), index=True)
+    fecha_fin_contrato = db.Column(db.String(15), index=True)
     documento_instructor = db.Column(
         db.String(15), db.ForeignKey("instructor.documento")
     )
@@ -164,37 +167,23 @@ class Asignacion(db.Model):
 
     __table_args__ = {"mysql_engine": "InnoDB"}
 
-    id_asignacion = db.Column(db.Integer, primary_key=True)
+    id_asignacion = db.Column(db.Integer, primary_key=True, autoincrement=True)
     documento_aprendiz = db.Column(db.String(15), ForeignKey("aprendiz.documento"))
     documento_instructor = db.Column(db.String(15), ForeignKey("instructor.documento"))
     fecha_inicio = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_fin = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_asignacion = db.Column(db.String(15))  # Fecha actual
-    fecha_inicio_contrato = db.Column(db.String(15))  # null, la actualiza el aprendiz
-    fecha_fin_contrato = db.Column(db.String(15))  # null, la actualiza el apreniz
+    fecha_inicio_contrato = db.Column(
+        db.String(15), ForeignKey("aprendiz.fecha_inicio_contrato"), default=None
+    )  # null, la actualiza el aprendiz
+    fecha_fin_contrato = db.Column(
+        db.String(15), ForeignKey("aprendiz.fecha_fin_contrato"), default=None
+    )  # null, la actualiza el apreniz
 
+    fechaInicioContrato = relationship("Aprendiz", foreign_keys=[fecha_inicio_contrato])
+    fechaFinContrato = relationship("Aprendiz", foreign_keys=[fecha_fin_contrato])
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
-
-    def __init__(
-        self,
-        id_asignacion,
-        documento_aprendiz,
-        documento_instructor,
-        fecha_inicio,
-        fecha_fin,
-        fecha_asignacion,
-        fecha_inicio_contrato,
-        fecha_fin_contrato,
-    ):
-        self.id_asignacion = id_asignacion
-        self.documento_aprendiz = documento_aprendiz
-        self.documento_instructor = documento_instructor
-        self.fecha_inicio = fecha_inicio
-        self.fecha_fin = fecha_fin
-        self.fecha_asignacion = fecha_asignacion
-        self.fecha_inicio_contrato = fecha_inicio_contrato
-        self.fecha_fin_contrato = fecha_fin_contrato
 
 
 class Regional(db.Model):

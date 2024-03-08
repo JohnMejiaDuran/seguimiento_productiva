@@ -10,6 +10,7 @@ from models.ModelUser import ModelUser
 from flask_wtf.csrf import CSRFProtect
 from routes.pagina_instructor import pagina_instructor
 from routes.pagina_aprendiz import pagina_aprendiz
+from routes.asignaciones import asignaciones
 app = Flask(__name__)
 
 csrf = CSRFProtect()
@@ -27,6 +28,7 @@ app.secret_key = "your_secret_key_here"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/seguimientos"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+app.register_blueprint(asignaciones)
 app.register_blueprint(consultar_ficha)
 app.register_blueprint(pagina_inicio)
 app.register_blueprint(instructores)

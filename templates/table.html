@@ -4,6 +4,9 @@
     <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
 </button>
 <button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/asignaciones">Asignaciones</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
@@ -12,7 +15,7 @@
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
 </button>
-{% endblock %}
+{% endblock%}
 
 {% block upload%}
 <nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
@@ -59,6 +62,9 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="ficha_sin_decimal{{ index }}" value="{{ ficha_sin_decimal}}">
         <input type="hidden" name="programa{{ index }}" value="{{ programa}}">
+        <input type="hidden" name="fecha_sin_hora_inicio{{ index }}" value="{{ fecha_sin_hora_inicio }}">
+        <input type="hidden" name="fecha_sin_hora" value="{{ fecha_sin_hora }}">
+        <input type="hidden" name="fecha_actual" value="{{ fecha_actual }}">
         <table  id="aprobados" class= "text-center table table-success table-bordered table-striped table-hover style="width:100%" >
             <thead>
                 <tr class="">
