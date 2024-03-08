@@ -8,11 +8,12 @@ from flask import (
     url_for,
     session,
 )
-from models.seguimientos import Aprendiz, Instructor, Asignacion
+from models.seguimientos import Aprendiz, Instructor, Asignacion, Role, UserRole
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
 from routes.consultar_fichas import admin_required
+from werkzeug.security import generate_password_hash
 
 ruta_aprendices = Blueprint("ruta_aprendices", __name__)
 
@@ -60,7 +61,8 @@ def guardar_aprendices():
         fecha_inicio = request.form.get("fecha_sin_hora_inicio")
         fecha_fin = request.form.get("fecha_sin_hora")
         fecha_asignacion = request.form.get("fecha_actual")
-
+        telefono = ""
+        email = ""
         aprendices_a_agregar = []
         asignaciones_a_agregar = []
         hay_aprendices = False
@@ -74,7 +76,8 @@ def guardar_aprendices():
                 nombre = request.form.get(f"nombre{index}")
                 apellido = request.form.get(f"apellido{index}")
                 alternativa = request.form.get(f"alternativa{index}")
-
+                password = documento
+                hashed_password = generate_password_hash(password)
                 if documento and nombre and apellido and alternativa:
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
@@ -83,15 +86,26 @@ def guardar_aprendices():
                     if not aprendiz_existente:
                         hay_aprendices = True
                         aprendiz = Aprendiz(
-                            documento_instructor=document_instructor,
                             documento=documento,
                             nombre=nombre,
                             apellido=apellido,
                             alternativa=alternativa,
                             ficha_sin_decimal=ficha_sin_decimal,
                             programa=programa,
+                            documento_instructor=document_instructor,
+                            password=hashed_password,
+                            telefono=telefono,
+                            email=email,
                         )
+                        db.session.add(aprendiz)
+                        db.session.commit()             
+                        aprendiz_role = Role.query.filter_by(name="Aprendiz").first()
+                        new_user_id = aprendiz.id
+
+                        user_role = UserRole(user_id=new_user_id, role_id=aprendiz_role.id)
                         aprendices_a_agregar.append(aprendiz)
+                        db.session.add(user_role)
+                        db.session.commit()
                         asignacion = Asignacion(
                             documento_aprendiz=documento,
                             documento_instructor=document_instructor,

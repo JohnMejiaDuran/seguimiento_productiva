@@ -118,7 +118,7 @@ class Instructor(BaseUser):
 
     def __init__(
         self, documento, nombre, apellido, email, password, telefono, vinculacion
-    ) -> None:
+    )-> None :
         super().__init__(documento, nombre, apellido, email, password, telefono)
         self.vinculacion = vinculacion
 
@@ -152,11 +152,11 @@ class Aprendiz(BaseUser):
         ficha_sin_decimal,
         programa,
         documento_instructor,
-        telefono=None,
-        email=None,
-        password=None,
-    ) -> None:
-        super().__init__(documento, nombre, apellido, telefono, email, password)
+        password,
+        telefono,
+        email
+    ):
+        super().__init__(documento, nombre, apellido, email,password, telefono )
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
