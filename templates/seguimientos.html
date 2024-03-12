@@ -4,7 +4,7 @@
     <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
 </button>
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/asignaciones">Segumientos</a>
+    <a  class="nav-link active text-white" href="/seguimientos">Segumientos</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
@@ -37,7 +37,7 @@
                 <tr>
                     <td>{{asignacion.id_asignacion}}</td>
                     <td>{{asignacion.documento_aprendiz}}</td>
-                    <td>{{asignacion.documento_instructor}}</td>
+                    <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}}</td>
                     <td>{{asignacion.fecha_inicio }}</td>
                     <td>{{asignacion.fecha_fin}}</td>
                     <td>{{asignacion.fecha_asignacion}}</td>

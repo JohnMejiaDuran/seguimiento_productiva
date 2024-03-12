@@ -4,7 +4,7 @@
     <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
 </button>
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/asignaciones">Asignaciones</a>
+    <a  class="nav-link active text-white" href="/seguimientos">Seguimientos</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
@@ -83,10 +83,14 @@
                         <td>{{ row['Nombre'] }}</td>
                         <td>{{ row['Apellidos'] }}</td>
                         <td>
-                            <select name="alternativa{{ index }}" id="alternativa{{ index }}">
+                            <select name="alternativa{{ index }}" id="alternativa{{ index }}"> 
+                                <option value="Sin Alternativa">    </option>
                                 <option value="Contrato de aprendizaje">Contrato de aprendizaje</option>
                                 <option value="Vinculo laboral">Vinculo laboral</option>
                                 <option value="Pasantia">Pasantia</option>
+                                <option value="Monitoria">Monitoría</option>
+                                <option value="Proyecto Productivo">Proyecto Productivo</option>
+                                <option value="Creacion Unidad Productiva">Creación de Unidad Productiva</option>
 
                                 <!-- Otras opciones del select -->
                             </select>

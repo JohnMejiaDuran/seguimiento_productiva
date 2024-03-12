@@ -21,24 +21,11 @@
       border-radius: 5px;
       border: 2px solid #4e8e37;
       background-color: #FFF;
-      zoom: 70%;
+
     } 
     .Titulo {
       text-align: center;
       padding-bottom: 2%;
-    }
-    .title-box {
-      /* background-color: red; */
-      border: 1px solid #ddd;
-      /* text-align: center; */
-      padding: 15px;
-      width: 100%;
-      height: 90%;
-      margin-bottom: 20px;
-    }
-    .text-center {
-      /* background-color: red; */
-      margin-top: 3%;
     }
     h5 {
       margin-bottom: 3%;
@@ -46,14 +33,7 @@
     textarea {
       resize: none;
     }
-    .h4 {
-      /* background-color: red; */
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+    
     .banner {
       border: 2px solid rgba(0, 0, 0, 0.247);
       margin-bottom: 3%;
@@ -93,29 +73,29 @@
         }
 
         main {
-          width: 80%;
+          width: 90%;
           margin: 0 auto;
         }
   </style>
 </head>
 <body>
   <form>
-  <div class="container mt-5">
+  <div class="container ">
     <form>
-<!--       <div class="banner">
-        <img src="banner.jpg" alt="">
-      </div> -->
+      <div class="banner">
+        <img src="/static/img/banner.jpg" alt="">
+      </div>
       <!-- Información General -->
       <h4 class="Titulo">1.INFORMACIÓN GENERAL</h4>
-      <div class="form-row">
-        <div class="form-group col-md-6">
+      <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
           <label for="regional">Regional:</label>
           <select class="form-control" id="regional">
             <option id="optionid" value="BARRANCABERMEJA">BARRANCABERMEJA</option>
             <!-- Otras opciones de regionales -->
           </select>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 p-2">
           <label for="centro">Centro de Formación:</label>
           <select class="form-control" id="centro">
             <option value="">Seleccionar Centro de Formación</option>
@@ -123,12 +103,12 @@
           </select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
+      <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
           <label for="programa">No. de ficha:</label>
           <input type="text" class="form-control" id="ficha" placeholder="No. de ficha">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 p-2">
           <label for="ficha">Programa de Formación:</label>
           <input type="text" class="form-control" id="programa" placeholder="programa de formacion">
         </div>

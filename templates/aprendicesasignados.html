@@ -54,7 +54,7 @@
          background-color: transparent;
      }
  </style>
-<h1 class="text-center ">Aprendices</h1>
+<h1 class="text-center ">Aprendices Asignados a {{ current_user.nombre }}</h1>
 <div class="container-fluid">
     <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
         <thead>
@@ -72,17 +72,17 @@
             </tr>
         </thead>
         <tbody>
-            {% for aprendiz in aprendices %}
+            {% for asignacion in asignaciones %}
                 <tr>
                     <td>{{loop.index}}</td>
-                    <td>{{aprendiz.documento}}</td>
-                    <td>{{aprendiz.nombre}}</td>
-                    <td>{{aprendiz.apellido }}</td>
-                    <td>Sin actualizar</td>
-                    <td>Sin actualizar</td>
-                    <td>{{aprendiz.ficha_sin_decimal}}</td>
-                    <td>{{aprendiz.programa}}</td>
-                    <td>{{aprendiz.alternativa}}</td>
+                    <td>{{asignacion.aprendiz.documento}}</td>
+                    <td>{{asignacion.aprendiz.nombre}}</td>
+                    <td>{{asignacion.aprendiz.apellido }}</td>
+                    <td>{{ asignacion.aprendiz.email|default('Sin actualizar') }}</td>
+                    <td>{{ asignacion.aprendiz.telefono|default('Sin actualizar') }}</td>
+                    <td>{{asignacion.aprendiz.ficha_sin_decimal}}</td>
+                    <td>{{asignacion.aprendiz.programa}}</td>
+                    <td>{{asignacion.aprendiz.alternativa}}</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
                 </tr>
             {% endfor %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from flask_login import current_user
-from models.seguimientos import Aprendiz
+from models.seguimientos import Aprendiz, Asignacion
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
@@ -39,12 +39,17 @@ def inicioinstructor():
 @instructor_required
 def aprendizasignado():
     documento_usuario_actual = current_user.documento
-    aprendices = Aprendiz.query.filter_by(
+    asignaciones = Asignacion.query.filter_by(
         documento_instructor=documento_usuario_actual
     ).all()
+    for asignacion in asignaciones:
+        if not asignacion.aprendiz.email:
+            asignacion.aprendiz.email = "Sin actualizar"
+        if not asignacion.aprendiz.telefono:
+            asignacion.aprendiz.telefono = "Sin actualizar"
     title = "Aprendices"
     return render_template(
-        "aprendicesasignados.html", title=title, aprendices=aprendices
+        "aprendicesasignados.html", title=title, asignaciones=asignaciones
     )
 
 

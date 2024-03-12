@@ -118,7 +118,7 @@ class Instructor(BaseUser):
 
     def __init__(
         self, documento, nombre, apellido, email, password, telefono, vinculacion
-    )-> None :
+    ) -> None:
         super().__init__(documento, nombre, apellido, email, password, telefono)
         self.vinculacion = vinculacion
 
@@ -133,8 +133,6 @@ class Aprendiz(BaseUser):
     alternativa = db.Column(db.String(50))
     ficha_sin_decimal = db.Column(db.String(20))
     programa = db.Column(db.String(100))
-    fecha_inicio_contrato = db.Column(db.String(15), index=True)
-    fecha_fin_contrato = db.Column(db.String(15), index=True)
 
 
     __mapper_args__ = {
@@ -151,9 +149,9 @@ class Aprendiz(BaseUser):
         programa,
         password,
         telefono,
-        email
+        email,
     ):
-        super().__init__(documento, nombre, apellido, email,password, telefono )
+        super().__init__(documento, nombre, apellido, email, password, telefono)
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
@@ -169,15 +167,10 @@ class Asignacion(db.Model):
     fecha_inicio = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_fin = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_asignacion = db.Column(db.String(15))  # Fecha actual
-    fecha_inicio_contrato = db.Column(
-        db.String(15), ForeignKey("aprendiz.fecha_inicio_contrato"), default=None
-    )  # null, la actualiza el aprendiz
-    fecha_fin_contrato = db.Column(
-        db.String(15), ForeignKey("aprendiz.fecha_fin_contrato"), default=None
-    )  # null, la actualiza el apreniz
+    fecha_inicio_contrato = db.Column(db.String(15), index=True)
+    fecha_fin_contrato = db.Column(db.String(15), index=True)
 
-    fechaInicioContrato = relationship("Aprendiz", foreign_keys=[fecha_inicio_contrato])
-    fechaFinContrato = relationship("Aprendiz", foreign_keys=[fecha_fin_contrato])
+   
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
 
