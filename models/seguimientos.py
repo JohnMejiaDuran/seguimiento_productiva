@@ -135,9 +135,7 @@ class Aprendiz(BaseUser):
     programa = db.Column(db.String(100))
     fecha_inicio_contrato = db.Column(db.String(15), index=True)
     fecha_fin_contrato = db.Column(db.String(15), index=True)
-    documento_instructor = db.Column(
-        db.String(15), db.ForeignKey("instructor.documento")
-    )
+
 
     __mapper_args__ = {
         "polymorphic_identity": "aprendiz",
@@ -151,7 +149,6 @@ class Aprendiz(BaseUser):
         alternativa,
         ficha_sin_decimal,
         programa,
-        documento_instructor,
         password,
         telefono,
         email
@@ -160,7 +157,6 @@ class Aprendiz(BaseUser):
         self.alternativa = alternativa
         self.ficha_sin_decimal = ficha_sin_decimal
         self.programa = programa
-        self.documento_instructor = documento_instructor
 
 
 class Asignacion(db.Model):

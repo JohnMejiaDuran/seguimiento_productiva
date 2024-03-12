@@ -36,18 +36,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for aprendiz in aprendices %}
+            {% for asignacion in asignaciones %}
                 <tr>
                     <td>{{loop.index}}</td>
-                    <td>{{aprendiz.documento}}</td>
-                    <td>{{aprendiz.nombre}}</td>
-                    <td>{{aprendiz.apellido }}</td>
-                    <td>Sin actualizar</td>
-                    <td>Sin actualizar</td>
-                    <td>{{aprendiz.ficha_sin_decimal}}</td>
-                    <td>{{aprendiz.programa}}</td>
-                    <td>{{aprendiz.alternativa}}</td>
-                    <td>{{aprendiz.nombre_instructor}} {{aprendiz.apellido_instructor}} </td>
+                    <td>{{asignacion.aprendiz.documento}}</td>
+                    <td>{{asignacion.aprendiz.nombre}}</td>
+                    <td>{{asignacion.aprendiz.apellido }}</td>
+                    <td>{{ asignacion.aprendiz.email|default('Sin actualizar') }}</td>
+                    <td>{{ asignacion.aprendiz.telefono|default('Sin actualizar') }}</td>
+                    <td>{{asignacion.aprendiz.ficha_sin_decimal}}</td>
+                    <td>{{asignacion.aprendiz.programa}}</td>
+                    <td>{{asignacion.aprendiz.alternativa}}</td>
+                    <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}} </td>
                 </tr>
             {% endfor %}
         </tbody>

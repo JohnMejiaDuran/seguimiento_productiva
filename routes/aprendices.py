@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
 from routes.consultar_fichas import admin_required
 from werkzeug.security import generate_password_hash
+from sqlalchemy.orm import aliased
 
 ruta_aprendices = Blueprint("ruta_aprendices", __name__)
 
@@ -23,28 +24,20 @@ ruta_aprendices = Blueprint("ruta_aprendices", __name__)
 @admin_required
 def aprendices():
     title = "Aprendices"
-    aprendices = Aprendiz.query.all()
     rol = "Administrador"
     logo = "/static/icons/user-icon.png"
     aprendiz_guardado = session.pop("aprendiz_guardado", False)
-
-    for aprendiz in aprendices:
-        # Obtener el nombre del instructor asociado a cada aprendiz
-        instructor = Instructor.query.filter_by(
-            documento=aprendiz.documento_instructor
-        ).first()
-        # Asociar el nombre del instructor
-
-        if instructor:
-            aprendiz.nombre_instructor = instructor.nombre
-            aprendiz.apellido_instructor = instructor.apellido
-        else:
-            # Manejar caso en el que el instructor no existe o el campo documento_instructor está vacío
-            aprendiz.nombre_instructor = "No asignado"
+    asignaciones = Asignacion.query.all()
+    
+    for asignacion in asignaciones:
+        if not asignacion.aprendiz.email:
+            asignacion.aprendiz.email = "Sin actualizar"
+        if not asignacion.aprendiz.telefono:
+            asignacion.aprendiz.telefono = "Sin actualizar"
     return render_template(
         "aprendiz.html",
         title=title,
-        aprendices=aprendices,
+        asignaciones=asignaciones,
         rol=rol,
         logo=logo,
         aprendiz_guardado=aprendiz_guardado,
@@ -92,17 +85,18 @@ def guardar_aprendices():
                             alternativa=alternativa,
                             ficha_sin_decimal=ficha_sin_decimal,
                             programa=programa,
-                            documento_instructor=document_instructor,
                             password=hashed_password,
                             telefono=telefono,
                             email=email,
                         )
                         db.session.add(aprendiz)
-                        db.session.commit()             
+                        db.session.commit()
                         aprendiz_role = Role.query.filter_by(name="Aprendiz").first()
                         new_user_id = aprendiz.id
 
-                        user_role = UserRole(user_id=new_user_id, role_id=aprendiz_role.id)
+                        user_role = UserRole(
+                            user_id=new_user_id, role_id=aprendiz_role.id
+                        )
                         aprendices_a_agregar.append(aprendiz)
                         db.session.add(user_role)
                         db.session.commit()
