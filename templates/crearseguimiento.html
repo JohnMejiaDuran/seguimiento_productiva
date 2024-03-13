@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+
 {% block logout%}
 <a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary">Cerrar sesión</a>    
 {% endblock %}
@@ -11,13 +12,15 @@
 </button>
 {% endblock%}
 {% block content %}
-<style>
+
+
+<!-- <style>
     body {
       background-color: #4e8e3721;
-      padding: 0% 0% 0% 0%;
+      
     }
      form {
-      padding: 3%;
+      padding-top: 1%;
       border-radius: 5px;
       border: 2px solid #4e8e37;
       background-color: #FFF;
@@ -47,12 +50,7 @@
       padding: 20px;
       box-sizing: border-box;
     }
-    .banner img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Ajusta el tamaño de la imagen para cubrir completamente el contenedor */
-    }
+  
     .form-group {
       margin-bottom: 15px;
     }
@@ -76,33 +74,64 @@
           width: 90%;
           margin: 0 auto;
         }
-  </style>
+  </style> -->
+  
+  <div class="banner text-center">
+    <img src="/static/img/banner.jpg" alt="">
+  </div>
+  
 </head>
-<body>
-  <form>
-  <div class="container ">
-    <form>
-      <div class="banner">
-        <img src="/static/img/banner.jpg" alt="">
-      </div>
+
+    <form class="container-fluid w-75">
       <!-- Información General -->
-      <h4 class="Titulo">1.INFORMACIÓN GENERAL</h4>
+      <h3 class="Titulo text-center underline">1.INFORMACIÓN GENERAL</h3>
       <div class="form-row d-flex">
+
         <div class="form-group col-md-6 p-2">
           <label for="regional">Regional:</label>
-          <select class="form-control" id="regional">
-            <option id="optionid" value="BARRANCABERMEJA">BARRANCABERMEJA</option>
-            <!-- Otras opciones de regionales -->
+          <select class="form-control js-example-basic-single buscador" id="buscador" name="regional" required> 
+              <option disabled selected value=""></option>
+              {% for regional in regionales %}
+                  <option value="{{ regional.codigo_regional }}">{{ regional.nombre_regional }}</option>
+              {% endfor %}
           </select>
-        </div>
-        <div class="form-group col-md-6 p-2">
-          <label for="centro">Centro de Formación:</label>
-          <select class="form-control" id="centro">
-            <option value="">Seleccionar Centro de Formación</option>
-            <!-- Otras opciones de centros de formación -->
-          </select>
-        </div>
       </div>
+      
+      <div class="form-group col-md-6 p-2">
+          <label for="centro">Centro de Formación:</label>
+          <select class="form-control" id="centro" name="codigo_centro">
+              <option value="">Seleccionar Centro de Formación</option>
+          </select>
+      </div>
+      
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script type="text/javascript">
+          $(document).ready(function(){
+              $('#buscador').change(function(){
+                  var regional_id = $(this).val();
+                  $.ajax({
+                      url: '/get_centros',
+                      type: 'POST',
+                      contentType: 'application/json',
+                      data: JSON.stringify({ regional_id: regional_id }),
+                      success: function(response){
+                          $('#centro').empty();
+                          $('#centro').append('<option value="">Seleccionar Centro de Formación</option>');
+                          $.each(response, function(index, centro){
+                              $('#centro').append('<option value="'+centro.codigo_centro+'">'+centro.nombre_centro+'</option>');
+                          });
+                      },
+                      error: function(xhr, status, error){
+                          console.error('Error en la solicitud:', error);
+                      }
+                  });
+              });
+          });
+      </script>
+      
+        
+      </div>
+
       <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
           <label for="programa">No. de ficha:</label>
@@ -164,9 +193,7 @@
           </div>
         </div>
       </div>
-    </head>
-    <body>
-    
+
     <div>
       <h4 class="text-center">2. PLANEACIÓN ETAPA PRODUCTIVA</h4>
       <h5 class="text-center">CONCERTACIÓN PLAN DE TRABAJO DURANTE LA ETAPA PRODUCTIVA DEL APRENDIZ</h5>
@@ -225,7 +252,12 @@
         <button type="button" class="btn btn-danger" onclick="eliminarFila()">-</button>
       </div>
       <textarea name="" class="form-control"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones"></textarea>
-    </div>
+    </div>  
+    
+    <script>
+      
+      $('.buscador').select2();
+    </script>
     <script>
       function agregarFila() {
         const tableBody = document.getElementById('miTabla').getElementsByTagName('tbody')[0];
@@ -300,4 +332,6 @@
       <a href="/crearseguimiento2" class="arrow-link">Siguiente</a>
     </div>
   </form>
+  
+ 
 {% endblock %}

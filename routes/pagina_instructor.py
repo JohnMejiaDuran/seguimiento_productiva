@@ -1,6 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    flash,
+    jsonify,
+)
 from flask_login import current_user
-from models.seguimientos import Aprendiz, Asignacion
+from models.seguimientos import Aprendiz, Asignacion, Regional, Centro
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
@@ -53,11 +62,46 @@ def aprendizasignado():
     )
 
 
-@pagina_instructor.route("/crearseguimiento")
+@pagina_instructor.route("/crearseguimiento", methods=["GET", "POST"])
 @login_required
 @instructor_required
 def crearseguimiento():
-    return render_template("crearseguimiento.html")
+    regionales = Regional.query.all()
+    codigo_regional = request.form.get(
+        "regional"
+    )  # Accede al valor del campo 'regional'
+    if codigo_regional:  # Asegura que el valor no sea None
+        centros_in_regionales = Centro.query.filter_by(
+            codigo_regional=codigo_regional
+        ).all()
+    else:
+        centros_in_regionales = (
+            []
+        )  # Si no se ha seleccionado una regional, centros_in_regionales será una lista vacía
+    return render_template(
+        "crearseguimiento.html",
+        regionales=regionales,
+        centros_in_regionales=centros_in_regionales,
+    )
+
+@pagina_instructor.route('/get_centros', methods=['POST'])
+def get_centros():
+    # Obtenemos el regional_id de la solicitud POST
+    regional_id = request.json.get('regional_id')
+
+    # Verificamos si regional_id está presente
+    if regional_id is not None:
+        # Consultamos los centros de formación asociados con el regional_id
+        centros = Centro.query.filter_by(codigo_regional=regional_id).all()
+
+        # Creamos una lista de diccionarios con los datos de los centros
+        centros_data = [{'codigo_centro': centro.codigo_centro, 'nombre_centro': centro.nombre_centro} for centro in centros]
+
+        # Devolvemos los datos de los centros en formato JSON
+        return jsonify(centros_data)
+    else:
+        # Si no se proporciona regional_id, devolvemos una respuesta vacía en formato JSON
+        return jsonify([])
 
 
 @pagina_instructor.route("/crearseguimiento2")
