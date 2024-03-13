@@ -14,6 +14,7 @@ from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
 from routes.consultar_fichas import admin_required
+from sqlalchemy import or_
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -62,46 +63,56 @@ def aprendizasignado():
     )
 
 
-@pagina_instructor.route("/crearseguimiento", methods=["GET", "POST"])
+@pagina_instructor.route("/crearseguimiento3", methods=["GET", "POST"])
 @login_required
 @instructor_required
 def crearseguimiento():
     regionales = Regional.query.all()
-    codigo_regional = request.form.get(
-        "regional"
-    )  # Accede al valor del campo 'regional'
-    if codigo_regional:  # Asegura que el valor no sea None
-        centros_in_regionales = Centro.query.filter_by(
-            codigo_regional=codigo_regional
-        ).all()
-    else:
-        centros_in_regionales = (
-            []
-        )  # Si no se ha seleccionado una regional, centros_in_regionales será una lista vacía
-    return render_template(
-        "crearseguimiento.html",
-        regionales=regionales,
-        centros_in_regionales=centros_in_regionales,
+    return render_template("crearseguimiento3.html", regionales=regionales)
+
+
+@pagina_instructor.route("/buscar_aprendiz", methods=["POST", "GET"])
+def buscar_aprendiz():
+    if request.method == "POST":
+        searchbox = request.form.get("text")
+    elif request.method == "GET":
+        searchbox = request.args.get("text")
+
+    # Obtener el documento del instructor actual
+    documento_instructor_actual = current_user.documento
+
+    # Filtrar las asignaciones solo para el instructor actual
+    asignaciones = (
+        Asignacion.query.join(Aprendiz)
+        .filter(
+            Asignacion.documento_instructor == documento_instructor_actual,
+            or_(
+                Aprendiz.documento.ilike(f"%{searchbox}%"),
+                Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
+            )
+        )
+        .all()
     )
 
-@pagina_instructor.route('/get_centros', methods=['POST'])
-def get_centros():
-    # Obtenemos el regional_id de la solicitud POST
-    regional_id = request.json.get('regional_id')
+    # Preparar los datos para enviarlos como respuesta
+    resultados = [
+        {"documento": asignacion.documento_aprendiz} for asignacion in asignaciones
+    ]
+    
+    # Devolver los resultados en formato JSON
+    return jsonify(resultados)
 
-    # Verificamos si regional_id está presente
-    if regional_id is not None:
-        # Consultamos los centros de formación asociados con el regional_id
-        centros = Centro.query.filter_by(codigo_regional=regional_id).all()
 
-        # Creamos una lista de diccionarios con los datos de los centros
-        centros_data = [{'codigo_centro': centro.codigo_centro, 'nombre_centro': centro.nombre_centro} for centro in centros]
-
-        # Devolvemos los datos de los centros en formato JSON
-        return jsonify(centros_data)
-    else:
-        # Si no se proporciona regional_id, devolvemos una respuesta vacía en formato JSON
-        return jsonify([])
+@pagina_instructor.route("/get_centros/<regional_id>", methods=["GET"])
+@login_required
+@instructor_required
+def get_centros(regional_id):
+    centros = Centro.query.filter_by(codigo_regional=regional_id).all()
+    centros_data = [
+        {"codigo_centro": centro.codigo_centro, "nombre_centro": centro.nombre_centro}
+        for centro in centros
+    ]
+    return jsonify({"centros": centros_data})
 
 
 @pagina_instructor.route("/crearseguimiento2")

@@ -6,10 +6,11 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 {% endblock %}
 {% block consultar%}
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/inicioinstructor"><i class="fa-solid fa-house"></i></a>
     <button type="button" class="btn btn-outline-success ">
-        <a  class="nav-link active text-white" href="/crearseguimiento">Crear seguimiento</a>
+        <a  class="nav-link active text-white" href="/inicioinstructor"><i class="fa-solid fa-house"></i></a>
+    </button>
+    <button type="button" class="btn btn-outline-success ">
+        <a  class="nav-link active text-white" href="/crearseguimiento3">Crear seguimiento</a>
     </button>
     <button type="button" class="btn btn-outline-success ">
       <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
@@ -80,8 +81,8 @@
                     <td>{{asignacion.aprendiz.apellido }}</td>
                     <td>{{ asignacion.aprendiz.email|default('Sin actualizar') }}</td>
                     <td>{{ asignacion.aprendiz.telefono|default('Sin actualizar') }}</td>
-                    <td>{{asignacion.aprendiz.ficha_sin_decimal}}</td>
-                    <td>{{asignacion.aprendiz.programa}}</td>
+                    <td>{{asignacion.aprendiz.ficha_id}}</td>
+                    <td>{{asignacion.aprendiz.ficha.programa}}</td>
                     <td>{{asignacion.aprendiz.alternativa}}</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
                 </tr>

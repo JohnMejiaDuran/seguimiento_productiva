@@ -85,53 +85,24 @@
     <form class="container-fluid w-75">
       <!-- Información General -->
       <h3 class="Titulo text-center underline">1.INFORMACIÓN GENERAL</h3>
-      <div class="form-row d-flex">
-
-        <div class="form-group col-md-6 p-2">
-          <label for="regional">Regional:</label>
-          <select class="form-control js-example-basic-single buscador" id="buscador" name="regional" required> 
-              <option disabled selected value=""></option>
-              {% for regional in regionales %}
-                  <option value="{{ regional.codigo_regional }}">{{ regional.nombre_regional }}</option>
-              {% endfor %}
-          </select>
-      </div>
+        <div class="form-row d-flex">
+            <div class="form-group col-md-6 p-2">
+                <label for="regional">Regional:</label>
+                <select class="form-control js-example-basic-single buscador" id="regional" name="regional" required> 
+                    <option disabled selected value=""></option>
+                    {% for regional in regionales %}
+                        <option value="{{ regional.codigo_regional }}">{{ regional.nombre_regional }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6 p-2">
+                <label for="centro">Centro de Formación:</label>
+                <select class="form-control" id="centro" name="codigo_centro">
+                    <option value="">Seleccionar Centro de Formación</option>
+                </select>
+            </div>
+        </div>
       
-      <div class="form-group col-md-6 p-2">
-          <label for="centro">Centro de Formación:</label>
-          <select class="form-control" id="centro" name="codigo_centro">
-              <option value="">Seleccionar Centro de Formación</option>
-          </select>
-      </div>
-      
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script type="text/javascript">
-          $(document).ready(function(){
-              $('#buscador').change(function(){
-                  var regional_id = $(this).val();
-                  $.ajax({
-                      url: '/get_centros',
-                      type: 'POST',
-                      contentType: 'application/json',
-                      data: JSON.stringify({ regional_id: regional_id }),
-                      success: function(response){
-                          $('#centro').empty();
-                          $('#centro').append('<option value="">Seleccionar Centro de Formación</option>');
-                          $.each(response, function(index, centro){
-                              $('#centro').append('<option value="'+centro.codigo_centro+'">'+centro.nombre_centro+'</option>');
-                          });
-                      },
-                      error: function(xhr, status, error){
-                          console.error('Error en la solicitud:', error);
-                      }
-                  });
-              });
-          });
-      </script>
-      
-        
-      </div>
-
       <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
           <label for="programa">No. de ficha:</label>
@@ -253,11 +224,28 @@
       </div>
       <textarea name="" class="form-control"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones"></textarea>
     </div>  
-    
     <script>
-      
-      $('.buscador').select2();
-    </script>
+      $(document).ready(function(){
+          $('#regional').change(function(){
+              var regionalId = $(this).val();
+              $.ajax({
+                  url: '/get_centros/' + regionalId,
+                  type: 'GET',
+                  success: function(response){
+                      var centros = response.centros;
+                      var options = '<option value="">Seleccionar Centro de Formación</option>';
+                      for(var i=0; i<centros.length; i++){
+                          options += '<option value="' + centros[i].codigo_centro + '">' + centros[i].nombre_centro + '</option>';
+                      }
+                      $('#centro').html(options);
+                  },
+                  error: function(error){
+                      console.log(error);
+                  }
+              });
+          });
+      });
+  </script>
     <script>
       function agregarFila() {
         const tableBody = document.getElementById('miTabla').getElementsByTagName('tbody')[0];

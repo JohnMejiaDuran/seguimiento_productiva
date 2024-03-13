@@ -123,6 +123,14 @@ class Instructor(BaseUser):
         self.vinculacion = vinculacion
 
 
+class Ficha(db.Model):
+    __tablename__ = "ficha"
+    __table_args__ = {"mysql_engine": "InnoDB"}
+
+    id_ficha = db.Column(db.Integer, primary_key=True)
+    programa = db.Column(db.String(200))
+
+
 class Aprendiz(BaseUser):
     __tablename__ = "aprendiz"
     __table_args__ = {"mysql_engine": "InnoDB"}
@@ -131,9 +139,8 @@ class Aprendiz(BaseUser):
         db.String(15), db.ForeignKey("base_user.documento"), primary_key=True
     )
     alternativa = db.Column(db.String(50))
-    ficha_sin_decimal = db.Column(db.String(20))
-    programa = db.Column(db.String(100))
-
+    ficha_id = db.Column(db.Integer, db.ForeignKey("ficha.id_ficha"))
+    ficha = relationship("Ficha", foreign_keys=[ficha_id])
 
     __mapper_args__ = {
         "polymorphic_identity": "aprendiz",
@@ -145,16 +152,15 @@ class Aprendiz(BaseUser):
         nombre,
         apellido,
         alternativa,
-        ficha_sin_decimal,
-        programa,
+        ficha_id,
         password,
         telefono,
         email,
     ):
         super().__init__(documento, nombre, apellido, email, password, telefono)
         self.alternativa = alternativa
-        self.ficha_sin_decimal = ficha_sin_decimal
-        self.programa = programa
+        self.ficha_id = ficha_id
+    
 
 
 class Asignacion(db.Model):
@@ -170,7 +176,6 @@ class Asignacion(db.Model):
     fecha_inicio_contrato = db.Column(db.String(15), index=True)
     fecha_fin_contrato = db.Column(db.String(15), index=True)
 
-   
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
 

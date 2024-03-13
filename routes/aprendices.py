@@ -8,7 +8,7 @@ from flask import (
     url_for,
     session,
 )
-from models.seguimientos import Aprendiz, Instructor, Asignacion, Role, UserRole
+from models.seguimientos import Aprendiz, Instructor, Asignacion, Role, UserRole, Ficha
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
@@ -28,7 +28,7 @@ def aprendices():
     logo = "/static/icons/user-icon.png"
     aprendiz_guardado = session.pop("aprendiz_guardado", False)
     asignaciones = Asignacion.query.all()
-    
+
     for asignacion in asignaciones:
         if not asignacion.aprendiz.email:
             asignacion.aprendiz.email = "Sin actualizar"
@@ -48,7 +48,7 @@ def aprendices():
 @login_required
 def guardar_aprendices():
     if request.method == "POST" and "asignar_instructor" in request.form:
-        ficha_sin_decimal = request.form.get("ficha_sin_decimal")
+        ficha = request.form.get("ficha_sin_decimal")
         programa = request.form.get("programa")
         document_instructor = request.form.get("instructorSelect")
         fecha_inicio = request.form.get("fecha_sin_hora_inicio")
@@ -58,6 +58,7 @@ def guardar_aprendices():
         email = ""
         aprendices_a_agregar = []
         asignaciones_a_agregar = []
+
         hay_aprendices = False
 
         # Recorre los datos del formulario y verifica los aprendices
@@ -78,13 +79,26 @@ def guardar_aprendices():
 
                     if not aprendiz_existente:
                         hay_aprendices = True
+                        nueva_ficha = None
+                        existing_ficha = Ficha.query.filter_by(id_ficha=ficha).first()
+                        if existing_ficha:
+                            print(f"La ficha {ficha} ya existe.")
+                        else:
+                            nueva_ficha = Ficha(id_ficha=ficha, programa=programa)
+                            db.session.add(nueva_ficha)
+                            try:
+                                db.session.commit()
+                                print("Ficha guardada exitosamente.")
+                            except IntegrityError as e:
+                                db.session.rollback()
+                                print(f"Error al guardar la ficha: {str(e)}")
+
                         aprendiz = Aprendiz(
                             documento=documento,
                             nombre=nombre,
                             apellido=apellido,
                             alternativa=alternativa,
-                            ficha_sin_decimal=ficha_sin_decimal,
-                            programa=programa,
+                            ficha_id=nueva_ficha.id_ficha if nueva_ficha else ficha,
                             password=hashed_password,
                             telefono=telefono,
                             email=email,
@@ -100,6 +114,7 @@ def guardar_aprendices():
                         aprendices_a_agregar.append(aprendiz)
                         db.session.add(user_role)
                         db.session.commit()
+
                         asignacion = Asignacion(
                             documento_aprendiz=documento,
                             documento_instructor=document_instructor,

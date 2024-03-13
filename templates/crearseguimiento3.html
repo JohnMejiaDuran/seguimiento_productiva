@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block consultar%}
+<button type="button" class="btn btn-outline-success ">
+    <a  class="nav-link active text-white" href="/inicioinstructor"><i class="fa-solid fa-house"></i></a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+    
+    <a  class="nav-link active text-white" href="/crearseguimiento3">Crear seguimiento</a>
+</button>
+<button type="button" class="btn btn-outline-success ">
+  <a  class="nav-link active text-white" href="/aprendicesasignados">Aprendices Asignados</a>
+</button>
+{% endblock%}
+{% block content %}
+    <form class="container-fluid w-75">
+        <h3 class="Titulo text-center underline mt-2">1.INFORMACIÓN GENERAL</h3>
+        <div class="form-row d-flex">
+            <div class="form-group col-md-6 p-2">
+                <label for="regional" class="font-weight-bold"><b>Regional:</b></label>
+                <select class="form-control js-example-basic-single buscador" id="regional" name="regional" required> 
+                    <option disabled selected value="">Seleccionar Regional</option>
+                    {% for regional in regionales %}
+                        <option value="{{ regional.codigo_regional }}">{{ regional.nombre_regional }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-6 p-2">
+                <label for="centro"><b>Centro de Formación:</b></label>
+                <select class="form-control" id="centro" name="codigo_centro">
+                    <option disabled selected value="">Seleccionar Centro de Formación</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row d-flex">
+            <div class="form-group col-md-6 p-2">
+              <label for="programa"><b>No. de ficha:</b></label>
+              <input type="text" class="form-control" id="ficha" placeholder="No. de ficha">
+            </div>
+            <div class="form-group col-md-6 p-2">
+              <label for="ficha"><b>Programa de Formación:</b></label>
+              <input type="text" class="form-control" id="programa" placeholder="programa de formacion">
+            </div>
+          </div>
+
+          <h5 class="">DATOS DEL APRENDIZ</h5>
+          <div class="form-row d-flex">
+              <div class="form-group col-md-6 p-2">
+                  <label for="nombreAprendiz"><b>Identificación:</b></label>
+                  <input type="text" class="form-control" id="documento" placeholder="Número de documento">
+                  <p id="datalist"></p>
+              </div>
+              <div class="form-group col-md-6 p-2">
+                  <label for="identificacion"><b>Nombre:</b></label>
+                  <input type="text" class="form-control" id="nombreAprendiz" placeholder="Nombre del aprendiz">
+              </div>
+          </div>
+        
+    </form>
+    <script>
+        $(document).ready(function(){
+            $("#documento").on("input", function(e){
+                $("#datalist").empty();
+                $.ajax({
+                    type: "get",
+                    url: "/buscar_aprendiz",
+                    data: { text: $("#documento").val() },
+                    success: function(res){
+                        var data = "<div class='list-group'>";
+                        $.each(res, function(index, value){
+                            data += "<p class='list-group-item list-group-item-action' data-documento='" + value.documento + "'>" + value.documento + "</p>";
+                        });
+                        data += "</div>";
+                        $("#datalist").html(data);
+    
+                        // Manejar la selección de un elemento de la lista
+                        $("#datalist .list-group-item").click(function(){
+                            var documentoSeleccionado = $(this).data("documento");
+                            $("#documento").val(documentoSeleccionado);
+                            $("#datalist").empty();
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    
+    <script>
+        $(document).ready(function(){
+            $('#regional').change(function(){
+                var regionalId = $(this).val();
+                $.ajax({
+                    url: '/get_centros/' + regionalId,
+                    type: 'GET',
+                    success: function(response){
+                        var centros = response.centros;
+                        var options = '<option value="">Seleccionar Centro de Formación</option>';
+                        for(var i=0; i<centros.length; i++){
+                            options += '<option value="' + centros[i].codigo_centro + '">' + centros[i].nombre_centro + '</option>';
+                        }
+                        $('#centro').html(options);
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+   
+{% endblock %}
