@@ -14,6 +14,19 @@
 {% block content %}
     <form class="container-fluid w-75">
         <h3 class="Titulo text-center underline mt-2">1.INFORMACIÓN GENERAL</h3>
+        <h5 class="">DATOS DEL APRENDIZ</h5>
+          <div class="form-row d-flex">
+              <div class="form-group col-md-6 p-2">
+                  <label for="nombreAprendiz"><b>Identificación:</b></label>
+                  <input type="text" class="form-control" id="documento" placeholder="Número de documento">
+                  <p id="datalist"></p>
+              </div>
+              <div class="form-group col-md-6 p-2">
+                  <label for="identificacion"><b>Nombre:</b></label>
+                  <input type="text" class="form-control" id="nombreAprendiz" placeholder="Nombre del aprendiz">
+              </div>
+          </div>
+        
         <div class="form-row d-flex">
             <div class="form-group col-md-6 p-2">
                 <label for="regional" class="font-weight-bold"><b>Regional:</b></label>
@@ -43,18 +56,7 @@
             </div>
           </div>
 
-          <h5 class="">DATOS DEL APRENDIZ</h5>
-          <div class="form-row d-flex">
-              <div class="form-group col-md-6 p-2">
-                  <label for="nombreAprendiz"><b>Identificación:</b></label>
-                  <input type="text" class="form-control" id="documento" placeholder="Número de documento">
-                  <p id="datalist"></p>
-              </div>
-              <div class="form-group col-md-6 p-2">
-                  <label for="identificacion"><b>Nombre:</b></label>
-                  <input type="text" class="form-control" id="nombreAprendiz" placeholder="Nombre del aprendiz">
-              </div>
-          </div>
+          
         
     </form>
     <script>

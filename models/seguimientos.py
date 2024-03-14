@@ -129,6 +129,8 @@ class Ficha(db.Model):
 
     id_ficha = db.Column(db.Integer, primary_key=True)
     programa = db.Column(db.String(200))
+    codigo_centro = db.Column(db.Integer, ForeignKey("centro.codigo_centro"))
+    centro = relationship("Centro", foreign_keys=[codigo_centro])
 
 
 class Aprendiz(BaseUser):
@@ -160,7 +162,6 @@ class Aprendiz(BaseUser):
         super().__init__(documento, nombre, apellido, email, password, telefono)
         self.alternativa = alternativa
         self.ficha_id = ficha_id
-    
 
 
 class Asignacion(db.Model):
@@ -245,7 +246,6 @@ class Seguimiento(db.Model):
     fecha_fin = db.Column(db.String(15))
     tipo = db.Column(db.String(100))
     nit = db.Column(db.Integer, ForeignKey("empresa.nit"))
-    codigo_centro = db.Column(db.Integer, ForeignKey("centro.codigo_centro"))
     documento_aprendiz_aprendiz = db.Column(
         db.String(15), ForeignKey("aprendiz.documento")
     )
@@ -254,7 +254,6 @@ class Seguimiento(db.Model):
 
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz_aprendiz])
     empresa = relationship("Empresa", foreign_keys=[nit])
-    centro = relationship("Centro", foreign_keys=[codigo_centro])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
 
     def __init__(
@@ -266,7 +265,6 @@ class Seguimiento(db.Model):
         fecha_fin,
         tipo,
         nit,
-        codigo_centro,
         documento_aprendiz,
         documento_instructor,
         reconocimiento,
@@ -278,7 +276,6 @@ class Seguimiento(db.Model):
         self.fecha_fin = fecha_fin
         self.tipo = tipo
         self.nit = nit
-        self.codigo_centro = codigo_centro
         self.documento_aprendiz = documento_aprendiz
         self.documento_instructor = documento_instructor
         self.reconocimiento = reconocimiento
@@ -298,8 +295,8 @@ class Empresa(db.Model):
 
 def insert_regionales(*args, **kwargs):
     regionales = [
-        {"codigo_regional": "5", "nombre_regional": "Regional Antioquia"},
-        {"codigo_regional": "8", "nombre_regional": "Regional Atlantico"},
+        {"codigo_regional": "05", "nombre_regional": "Regional Antioquia"},
+        {"codigo_regional": "08", "nombre_regional": "Regional Atlantico"},
         {"codigo_regional": "11", "nombre_regional": "Regional Distrito Capital"},
         {"codigo_regional": "13", "nombre_regional": "Regional Bolívar"},
         {"codigo_regional": "15", "nombre_regional": "Regional Boyacá"},
@@ -347,102 +344,102 @@ def insert_centros(*args, **kwargs):
         {
             "codigo_centro": "9101",
             "nombre_centro": "CENTRO DE LOS RECURSOS NATURALES RENOVABLES - LA SALADA",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9127",
             "nombre_centro": "CENTRO DE FORMACIÓN MINERO AMBIENTAL",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9201",
             "nombre_centro": "CENTRO DEL DISEÑO Y MANUFACTURA DEL CUERO",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9202",
             "nombre_centro": "CENTRO DE FORMACIÓN EN DISEÑO, CONFECCIÓN Y MODA",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9203",
             "nombre_centro": "CENTRO PARA EL DESARROLLO DEL HABITAT Y LA CONSTRUCCIÓN",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9204",
             "nombre_centro": "CENTRO DE TECNOLOGÍA DE LA MANUFACTURA AVANZADA",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9205",
             "nombre_centro": "CENTRO TECNOLÓGICO DEL MOBILIARIO",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9206",
             "nombre_centro": "CENTRO TEXTIL Y DE GESTIÓN INDUSTRIAL",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9301",
             "nombre_centro": "CENTRO DE COMERCIO",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9401",
             "nombre_centro": "CENTRO DE SERVICIOS DE SALUD",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9402",
             "nombre_centro": "CENTRO DE SERVICIOS Y GESTION EMPRESARIAL",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9501",
             "nombre_centro": "COMPLEJO TECNOLOGICO PARA LA GESTION AGROEMPRESARIAL",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9502",
             "nombre_centro": "COMPLEJO TECNOLÓGICO MINERO AGROEMPRESARIAL",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9503",
             "nombre_centro": "CENTRO DE LA INNOVACIÓN, LA AGROINDUSTRIA Y LA AVIACIÓN",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9504",
             "nombre_centro": "COMPLEJO TECNOLOGICO AGROINDUSTRIAL, PECUARIO Y TURISTICO",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9549",
             "nombre_centro": "COMPLEJO TECNOLOGICO, TURISTICO Y AGROINDUSTRIAL DEL OCCIDENTE ANTIOQUEÑO",
-            "codigo_regional": "5",
+            "codigo_regional": "05",
         },
         {
             "codigo_centro": "9103",
             "nombre_centro": "CENTRO PARA EL DESARROLLO AGROECOLÓGICO Y AGROINDUSTRIAL",
-            "codigo_regional": "8",
+            "codigo_regional": "08",
         },
         {
             "codigo_centro": "9207",
             "nombre_centro": "CENTRO NACIONAL COLOMBO ALEMAN",
-            "codigo_regional": "8",
+            "codigo_regional": "08",
         },
         {
             "codigo_centro": "9208",
             "nombre_centro": "CENTRO INDUSTRIAL Y DE AVIACION",
-            "codigo_regional": "8",
+            "codigo_regional": "08",
         },
         {
             "codigo_centro": "9302",
             "nombre_centro": "CENTRO DE COMERCIO Y SERVICIOS",
-            "codigo_regional": "8",
+            "codigo_regional": "08",
         },
         {
             "codigo_centro": "9209",

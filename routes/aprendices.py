@@ -56,6 +56,7 @@ def guardar_aprendices():
         fecha_asignacion = request.form.get("fecha_actual")
         telefono = ""
         email = ""
+        codigo_centro = request.form.get("codigo_centro")
         aprendices_a_agregar = []
         asignaciones_a_agregar = []
 
@@ -84,7 +85,7 @@ def guardar_aprendices():
                         if existing_ficha:
                             print(f"La ficha {ficha} ya existe.")
                         else:
-                            nueva_ficha = Ficha(id_ficha=ficha, programa=programa)
+                            nueva_ficha = Ficha(id_ficha=ficha, programa=programa, codigo_centro=codigo_centro)
                             db.session.add(nueva_ficha)
                             try:
                                 db.session.commit()

@@ -121,6 +121,8 @@ def table():
                 fecha_excel = sheet.cell_value(8, 2)
                 regional = sheet.cell_value(10, 2)
                 centro = sheet.cell_value(11, 2)
+                centro_codigo_primeras_4 = centro[:4]
+                codigo_centro = int(centro_codigo_primeras_4)
 
                 if isinstance(fecha_inicio, float):
                     fecha_python_1 = xlrd.xldate_as_datetime(fecha_inicio, 0)
@@ -132,7 +134,7 @@ def table():
                     )  # El segundo argumento es el modo de fecha en Excel
                     fecha_sin_hora = fecha_python.date()
                     fecha_actual = datetime.now().date()
-                    
+
                     ficha_en_vigencia = True
                     if fecha_sin_hora + timedelta(days=548) < fecha_actual:
                         ficha_en_vigencia = False
@@ -212,7 +214,11 @@ def table():
                     ]
 
                     evaluar = competencias_por_evaluar[
-                        ~(df["Número de Documento"].isin(practicasporevaluar))
+                        ~(
+                            competencias_por_evaluar["Número de Documento"].isin(
+                                practicasporevaluar
+                            )
+                        )
                     ]
 
                     #########################################################################
@@ -400,6 +406,7 @@ def table():
                         aprendices_no_en_bd=aprendices_no_en_bd,
                         evaluar=evaluar,
                         novedades=novedades,
+                        codigo_centro=codigo_centro,
                         rol=rol,
                         instructores=instructores,
                         ficha_sin_decimal=ficha_sin_decimal,
