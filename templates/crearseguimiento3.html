@@ -12,18 +12,26 @@
 </button>
 {% endblock%}
 {% block content %}
-
+<style>
+    .form-control {
+        height: 2.5rem;
+    }
+</style>
 <form class="container-fluid w-75">
     <h5 class="">DATOS DEL APRENDIZ</h5>
     <div class="form-row d-flex">
-        <div class="form-group col-md-6 p-2">
+        <div class="form-group col-md-6 p-2" style="position: relative;">
             <label for="documento"><b>Identificación:</b></label>
-            <input type="text" class="form-control" id="documento" placeholder="Número de documento">
-            <div id="datalist"></div> <!-- Lista desplegable -->
+            <input type="text" class="form-control" id="documento" placeholder="Número de documento" autocomplete="off">
+            <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden;"></div>
+<!-- Lista desplegable -->
         </div>
-        <div class="form-group col-md-6 p-2">
+        <div class="form-group col-md-6 p-2 ">
             <label for="nombreAprendiz"><b>Nombre:</b></label>
-            <div class="form-control" id="aprendiz"></div>
+            <div class="form-control" id="aprendiz">
+                
+            </div>
+        
         </div>
     </div>
 
@@ -49,46 +57,61 @@
         </div>
     </div>
 </form>
-    <script>
-        $(document).ready(function(){
-            $("#documento").on("input", function(e){
+<script>
+    $(document).ready(function(){
+        $("#documento").on("input", function(e){
+            var inputValue = $(this).val().trim();
+            if (inputValue === "") {
+                // Si el campo está vacío, limpiar los otros campos
+                $("#aprendiz, #regional, #centro, #ficha, #programa").text("");
                 $("#datalist").empty();
-                $.ajax({
-                    type: "get",
-                    url: "/buscar_aprendiz",
-                    data: { text: $("#documento").val() },
-                    success: function(res){
-                        var data = "<div class='list-group'>";
-                        $.each(res, function(index, value){
-                            data += "<p class='list-group-item list-group-item-action' data-documento='" + value.documento + "'>" + value.documento + "</p>";
-                        });
-                        data += "</div>";
-                        $("#datalist").html(data);
-    
-                        // Manejar la selección de un elemento de la lista
-                        $("#datalist .list-group-item").click(function(){
-                            var documentoSeleccionado = $(this).data("documento");
-                            $("#documento").val(documentoSeleccionado);
-                            $("#datalist").empty();
-    
-                            // Realizar una solicitud AJAX adicional para obtener la información del aprendiz
-                            $.ajax({
-                                type: "get",
-                                url: "/get_aprendiz/" + documentoSeleccionado,
-                                success: function(aprendiz){
-                                    $("#aprendiz").text(aprendiz.nombre_aprendiz + " " +  aprendiz.apellido_aprendiz);
-                                    $("#regional").text(aprendiz.nombre_regional);
-                                    $("#centro").text(aprendiz.nombre_centro);
-                                    $("#ficha").text(aprendiz.codigo_ficha);
-                                    $("#programa").text(aprendiz.programa);
-                                }
-                            });
-                        });
-                    }
-                });
+                return;
+            }
+            $("#datalist").empty();
+            $.ajax({
+                type: "get",
+                url: "/buscar_aprendiz",
+                data: { text: inputValue },
+                success: function(res){
+                    var data = "<div class='list-group'>";
+                    $.each(res, function(index, value){
+                        data += "<p style='margin: 0; width: 30rem;' class='list-group-item list-group-item-action' data-documento='" + value.documento + "'>" + value.documento + "</p>";
+                    });
+                    data += "</div>";
+                    $("#datalist").html(data);
+                }
             });
         });
-    </script>
+
+        // Cerrar el datalist al hacer clic fuera de él
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#datalist, #documento').length) {
+                $("#datalist").empty();
+            }
+        });
+
+        // Manejar la selección de un elemento de la lista
+        $(document).on("click", "#datalist .list-group-item", function(){
+            var documentoSeleccionado = $(this).data("documento");
+            $("#documento").val(documentoSeleccionado);
+            $("#datalist").empty();
+
+            // Realizar una solicitud AJAX adicional para obtener la información del aprendiz
+            $.ajax({
+                type: "get",
+                url: "/get_aprendiz/" + documentoSeleccionado,
+                success: function(aprendiz){
+                    $("#aprendiz").text(aprendiz.nombre_aprendiz + " " +  aprendiz.apellido_aprendiz);
+                    $("#regional").text(aprendiz.nombre_regional);
+                    $("#centro").text(aprendiz.nombre_centro);
+                    $("#ficha").text(aprendiz.codigo_ficha);
+                    $("#programa").text(aprendiz.programa);
+                }
+            });
+        });
+    });
+</script>
+
     
     
     <script>
