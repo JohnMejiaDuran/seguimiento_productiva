@@ -89,7 +89,7 @@ def buscar_aprendiz():
             or_(
                 Aprendiz.documento.ilike(f"%{searchbox}%"),
                 Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
-            )
+            ),
         )
         .all()
     )
@@ -98,21 +98,63 @@ def buscar_aprendiz():
     resultados = [
         {"documento": asignacion.documento_aprendiz} for asignacion in asignaciones
     ]
-    
+
     # Devolver los resultados en formato JSON
     return jsonify(resultados)
 
 
-@pagina_instructor.route("/get_centros/<regional_id>", methods=["GET"])
+# @pagina_instructor.route("/get_centros/<regional_id>", methods=["GET"])
+# @login_required
+# @instructor_required
+# def get_centros(regional_id):
+#     centros = Centro.query.filter_by(codigo_regional=regional_id).all()
+#     centros_data = [
+#         {"codigo_centro": centro.codigo_centro, "nombre_centro": centro.nombre_centro}
+#         for centro in centros
+#     ]
+#     return jsonify({"centros": centros_data})
+
+
+@pagina_instructor.route("/get_aprendiz/<documento>", methods=["GET"])
 @login_required
 @instructor_required
-def get_centros(regional_id):
-    centros = Centro.query.filter_by(codigo_regional=regional_id).all()
-    centros_data = [
-        {"codigo_centro": centro.codigo_centro, "nombre_centro": centro.nombre_centro}
-        for centro in centros
-    ]
-    return jsonify({"centros": centros_data})
+def aprendiz(documento):
+    # Buscar la asignación del aprendiz basada en el número de documento
+    asignacion = Asignacion.query.filter_by(documento_aprendiz=documento).first()
+
+    if asignacion:
+        # Si se encuentra la asignación, obtener los datos del aprendiz
+        aprendiz = asignacion.aprendiz
+        nombre_aprendiz = aprendiz.nombre
+        apellido_aprendiz = aprendiz.apellido
+
+        # Obtener la información adicional del aprendiz (ficha, centro y regional)
+        ficha = aprendiz.ficha
+        codigo_ficha = ficha.id_ficha
+        programa = ficha.programa
+
+        centro = ficha.centro
+        nombre_centro = centro.nombre_centro
+
+        regional = centro.regional
+        nombre_regional = regional.nombre_regional
+
+        # Construir el diccionario con la información del aprendiz
+        aprendiz_data = {
+            "nombre_aprendiz": nombre_aprendiz,
+            "apellido_aprendiz": apellido_aprendiz,
+            "nombre_centro": nombre_centro,
+            "nombre_regional": nombre_regional,
+            "programa": programa,
+            "codigo_ficha": codigo_ficha
+        }
+
+        return jsonify(aprendiz_data)
+    else:
+        # Si no se encuentra la asignación, devolver un mensaje de error
+        return jsonify(
+            {"error": "No se encontró ningún aprendiz con ese número de documento."}
+        )
 
 
 @pagina_instructor.route("/crearseguimiento2")

@@ -12,53 +12,43 @@
 </button>
 {% endblock%}
 {% block content %}
-    <form class="container-fluid w-75">
-        <h3 class="Titulo text-center underline mt-2">1.INFORMACIÓN GENERAL</h3>
-        <h5 class="">DATOS DEL APRENDIZ</h5>
-          <div class="form-row d-flex">
-              <div class="form-group col-md-6 p-2">
-                  <label for="nombreAprendiz"><b>Identificación:</b></label>
-                  <input type="text" class="form-control" id="documento" placeholder="Número de documento">
-                  <p id="datalist"></p>
-              </div>
-              <div class="form-group col-md-6 p-2">
-                  <label for="identificacion"><b>Nombre:</b></label>
-                  <input type="text" class="form-control" id="nombreAprendiz" placeholder="Nombre del aprendiz">
-              </div>
-          </div>
-        
-        <div class="form-row d-flex">
-            <div class="form-group col-md-6 p-2">
-                <label for="regional" class="font-weight-bold"><b>Regional:</b></label>
-                <select class="form-control js-example-basic-single buscador" id="regional" name="regional" required> 
-                    <option disabled selected value="">Seleccionar Regional</option>
-                    {% for regional in regionales %}
-                        <option value="{{ regional.codigo_regional }}">{{ regional.nombre_regional }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group col-md-6 p-2">
-                <label for="centro"><b>Centro de Formación:</b></label>
-                <select class="form-control" id="centro" name="codigo_centro">
-                    <option disabled selected value="">Seleccionar Centro de Formación</option>
-                </select>
-            </div>
+
+<form class="container-fluid w-75">
+    <h5 class="">DATOS DEL APRENDIZ</h5>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="documento"><b>Identificación:</b></label>
+            <input type="text" class="form-control" id="documento" placeholder="Número de documento">
+            <div id="datalist"></div> <!-- Lista desplegable -->
         </div>
+        <div class="form-group col-md-6 p-2">
+            <label for="nombreAprendiz"><b>Nombre:</b></label>
+            <div class="form-control" id="aprendiz"></div>
+        </div>
+    </div>
 
-        <div class="form-row d-flex">
-            <div class="form-group col-md-6 p-2">
-              <label for="programa"><b>No. de ficha:</b></label>
-              <input type="text" class="form-control" id="ficha" placeholder="No. de ficha">
-            </div>
-            <div class="form-group col-md-6 p-2">
-              <label for="ficha"><b>Programa de Formación:</b></label>
-              <input type="text" class="form-control" id="programa" placeholder="programa de formacion">
-            </div>
-          </div>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="regional" class="font-weight-bold"><b>Regional:</b></label>
+            <div class="form-control" id="regional"></div>
+        </div>
+        <div class="form-group col-md-6 p-2">
+            <label for="centro"><b>Centro de Formación:</b></label>
+            <div class="form-control" id="centro"></div>
+        </div>
+    </div>
 
-          
-        
-    </form>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="ficha"><b>No. de ficha:</b></label>
+            <div class="form-control" id="ficha"></div>
+        </div>
+        <div class="form-group col-md-6 p-2">
+            <label for="programa"><b>Programa de Formación:</b></label>
+            <div class="form-control" id="programa"></div>
+        </div>
+    </div>
+</form>
     <script>
         $(document).ready(function(){
             $("#documento").on("input", function(e){
@@ -80,12 +70,26 @@
                             var documentoSeleccionado = $(this).data("documento");
                             $("#documento").val(documentoSeleccionado);
                             $("#datalist").empty();
+    
+                            // Realizar una solicitud AJAX adicional para obtener la información del aprendiz
+                            $.ajax({
+                                type: "get",
+                                url: "/get_aprendiz/" + documentoSeleccionado,
+                                success: function(aprendiz){
+                                    $("#aprendiz").text(aprendiz.nombre_aprendiz + " " +  aprendiz.apellido_aprendiz);
+                                    $("#regional").text(aprendiz.nombre_regional);
+                                    $("#centro").text(aprendiz.nombre_centro);
+                                    $("#ficha").text(aprendiz.codigo_ficha);
+                                    $("#programa").text(aprendiz.programa);
+                                }
+                            });
                         });
                     }
                 });
             });
         });
     </script>
+    
     
     <script>
         $(document).ready(function(){

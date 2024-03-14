@@ -77,7 +77,7 @@ def guardar_aprendices():
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
                     ).first()
-
+                    # Si el aprendiz ya existe actualizar la ficha FALTA AGREGAR
                     if not aprendiz_existente:
                         hay_aprendices = True
                         nueva_ficha = None
