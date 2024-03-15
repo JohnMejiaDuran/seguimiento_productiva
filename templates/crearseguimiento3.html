@@ -15,15 +15,44 @@
 <style>
     .form-control {
         height: 2.5rem;
+        background-color: rgba(128, 128, 128, 0.587);
     }
+    .input-container {
+    position: relative;
+}
+
+.input-container input {
+    padding-right: 30px; /* Ajusta el padding derecho para que el texto no se solape con el icono */
+    background-color: white;
+}
+
+.input-container .icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input-container .icon i {
+    font-size: 20px; /* Tamaño del ícono */
+    color: #555; /* Color del ícono */
+}
+
 </style>
 <form class="container-fluid w-75">
     <h5 class="">DATOS DEL APRENDIZ</h5>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2" style="position: relative;">
             <label for="documento"><b>Identificación:</b></label>
-            <input type="text" class="form-control" id="documento" placeholder="Número de documento" autocomplete="off">
-            <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden;"></div>
+            <div class="input-container">
+                <input type="text" class="form-control" id="documento" placeholder="Número de documento" autocomplete="off">
+                <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+            </div>
+            
+            <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden;">
+            
+            </div>
+            
 <!-- Lista desplegable -->
         </div>
         <div class="form-group col-md-6 p-2 ">

@@ -61,6 +61,25 @@ def guardar_aprendices():
         asignaciones_a_agregar = []
 
         hay_aprendices = False
+        nueva_ficha = None
+        # Crear nueva ficha una vez fuera del bucle
+        existing_ficha = Ficha.query.filter_by(id_ficha=ficha).first()
+        if existing_ficha:
+            print(f"La ficha {ficha} ya existe.")
+            nueva_ficha = existing_ficha
+        else:
+            nueva_ficha = Ficha(
+                id_ficha=ficha,
+                programa=programa,
+                codigo_centro=codigo_centro,
+            )
+            db.session.add(nueva_ficha)
+            try:
+                db.session.commit()
+                print("Ficha guardada exitosamente.")
+            except IntegrityError as e:
+                db.session.rollback()
+                print(f"Error al guardar la ficha: {str(e)}")
 
         # Recorre los datos del formulario y verifica los aprendices
         for key, value in request.form.items():
@@ -73,27 +92,23 @@ def guardar_aprendices():
                 alternativa = request.form.get(f"alternativa{index}")
                 password = documento
                 hashed_password = generate_password_hash(password)
+                print("documento:", documento)
+                print("nombre:", nombre)
+                print("apellido:", apellido)
+                print("alternativa:", alternativa)
                 if documento and nombre and apellido and alternativa:
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
                     ).first()
-                    # Si el aprendiz ya existe actualizar la ficha FALTA AGREGAR
-                    if not aprendiz_existente:
-                        hay_aprendices = True
-                        nueva_ficha = None
-                        existing_ficha = Ficha.query.filter_by(id_ficha=ficha).first()
-                        if existing_ficha:
-                            print(f"La ficha {ficha} ya existe.")
-                        else:
-                            nueva_ficha = Ficha(id_ficha=ficha, programa=programa, codigo_centro=codigo_centro)
-                            db.session.add(nueva_ficha)
-                            try:
-                                db.session.commit()
-                                print("Ficha guardada exitosamente.")
-                            except IntegrityError as e:
-                                db.session.rollback()
-                                print(f"Error al guardar la ficha: {str(e)}")
 
+                    if aprendiz_existente:
+                        # Asignar la nueva ficha al aprendiz existente si es diferente
+                        if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha:
+                            aprendiz_existente.ficha_id = nueva_ficha.id_ficha
+                            db.session.commit()
+                            print("Se ha actualizado la ficha del aprendiz existente.")
+                            hay_aprendices = True
+                    else:
                         aprendiz = Aprendiz(
                             documento=documento,
                             nombre=nombre,
@@ -124,11 +139,8 @@ def guardar_aprendices():
                             fecha_asignacion=fecha_asignacion,
                         )
                         asignaciones_a_agregar.append(asignacion)
-                    else:
-                        print(
-                            f"El aprendiz con documento {documento} ya está en la base de datos"
-                        )
-
+                        hay_aprendices = True
+        print("hay_aprendices:", hay_aprendices) 
         if hay_aprendices:
             try:
                 db.session.add_all(aprendices_a_agregar)
@@ -151,6 +163,6 @@ def guardar_aprendices():
                 return redirect(url_for("centro_formacion.centros", mensaje=mensaje))
 
         return "No se enviaron datos para guardar o todos los aprendices ya existen en la base de datos"
-
     else:
         return "Acción no permitida"
+

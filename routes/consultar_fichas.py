@@ -94,7 +94,7 @@ def consultarficha():
 @login_required
 @admin_required
 def table():
-    rol = "Empresario"
+    rol = ""
     instructores = Instructor.query.all()
     if request.method == "POST":
         # Verifica si se ha enviado un archivo en la solicitud.
@@ -176,23 +176,37 @@ def table():
                     aprendices_aprobados = conteo_por_persona_aprobada[
                         conteo_por_persona_aprobada.eq(documentos)
                     ].reset_index()  # conteo por persona aprobada debe ser igual al conteo de documentos -1 ya que no contamos el resultado de la etapa practica
+                    aprendices_aprobados["Ficha"] = ficha_sin_decimal.strip()
 
                     # Cargar los números de documento de la base de datos SQLAlchemy
                     numeros_documento_bd = db.session.query(
                         Aprendiz.documento
                     ).all()  # Suponiendo que 'session' es tu sesión SQLAlchemy y 'Aprendiz' es tu tabla
 
-                    # Convertir los números de documento a una lista
                     numeros_documento_bd_str = [
                         str(num[0]) for num in numeros_documento_bd
                     ]
+                    numeros_ficha_bd = db.session.query(Aprendiz.ficha_id).all()
+                    numeros_ficha_bd_str = [str(num[0]) for num in numeros_ficha_bd]
+                    
                     # Filtrar los aprendices basados en si sus números de documento ya están en la base de datos SQLAlchemy
                     aprendices_no_en_bd = aprendices_aprobados[
-                        ~aprendices_aprobados["Número de Documento"]
-                        .astype(str)
-                        .isin(numeros_documento_bd_str)
-                    ]
+                            ~aprendices_aprobados["Ficha"]
+                            .astype(str)
+                            .isin(numeros_ficha_bd_str)
+                        ]
 
+                    print("APRENDICES DOCUMENTO BD STR")
+                    print(numeros_documento_bd_str)
+                    print("APRENDICES DOCUMENTO BD")
+                    print(numeros_documento_bd)
+                    print("APRENDICES APROBADOS")
+                    print(aprendices_aprobados)
+                    print(" FICHA   EN BASE DE DATOS")
+                    print(type(numeros_ficha_bd_str))
+                    print(numeros_ficha_bd)
+                    print("NO EN BD")
+                    print(aprendices_no_en_bd)
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
 
