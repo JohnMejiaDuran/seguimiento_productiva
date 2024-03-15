@@ -105,9 +105,11 @@ def guardar_aprendices():
                         # Asignar la nueva ficha al aprendiz existente si es diferente
                         if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha:
                             aprendiz_existente.ficha_id = nueva_ficha.id_ficha
+                            aprendiz_existente.alternativa = alternativa
                             db.session.commit()
                             print("Se ha actualizado la ficha del aprendiz existente.")
                             hay_aprendices = True
+                            
                     else:
                         aprendiz = Aprendiz(
                             documento=documento,
