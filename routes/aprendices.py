@@ -100,12 +100,14 @@ def guardar_aprendices():
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
                     ).first()
-
+                    asignacion_existente = Asignacion.query.filter_by(documento_aprendiz=documento).first()
                     if aprendiz_existente:
                         # Asignar la nueva ficha al aprendiz existente si es diferente
                         if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha:
                             aprendiz_existente.ficha_id = nueva_ficha.id_ficha
                             aprendiz_existente.alternativa = alternativa
+                            db.session.commit()
+                            asignacion_existente.documento_instructor = document_instructor
                             db.session.commit()
                             print("Se ha actualizado la ficha del aprendiz existente.")
                             hay_aprendices = True

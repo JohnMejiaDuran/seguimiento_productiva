@@ -177,11 +177,20 @@ def table():
                         conteo_por_persona_aprobada.eq(documentos)
                     ].reset_index()  # conteo por persona aprobada debe ser igual al conteo de documentos -1 ya que no contamos el resultado de la etapa practica
                     aprendices_aprobados["Ficha"] = ficha_sin_decimal.strip()
-
+                    print("FICHAS ")
+                    print(aprendices_aprobados)
+                    df_aprobados = pd.DataFrame(
+                        {
+                            "Número de Documento": aprendices_aprobados[
+                                "Número de Documento"
+                            ],
+                            "Nombre": aprendices_aprobados["Nombre"],
+                            "Apellidos": aprendices_aprobados["Apellidos"],
+                            "Ficha": aprendices_aprobados["Ficha"],
+                        }
+                    )
+                    print(df_aprobados)
                     # Cargar los números de documento de la base de datos SQLAlchemy
-                    numeros_documento_bd = db.session.query(
-                        Aprendiz.documento
-                    ).all()  # Suponiendo que 'session' es tu sesión SQLAlchemy y 'Aprendiz' es tu tabla
 
                     # Cargar los números de documento y ficha de la base de datos SQLAlchemy
                     numeros_documento_bd = [
@@ -192,26 +201,33 @@ def table():
                         str(num[0]) for num in db.session.query(Aprendiz.ficha_id).all()
                     ]
 
-                    # Filtrar los aprendices basados en si sus números de documento y ficha ya están en la base de datos SQLAlchemy
-                    aprendices_no_en_bd = aprendices_aprobados[
-                    ~aprendices_aprobados["Ficha"].astype(str).isin(numeros_ficha_bd)
-                ]
+                    df_combined = pd.DataFrame(
+                        {
+                            "Número de Documento": numeros_documento_bd,
+                            "Ficha": numeros_ficha_bd,
+                        }
+                    )
+                    print(df_combined)
 
-                    print("APRENDICES DOCUMENTO BD STR")
-                    # print(numeros_documento_bd_str)
-                    print("APRENDICES DOCUMENTO BD")
-                    print(numeros_documento_bd)
-                    print("APRENDICES APROBADOS")
-                    print(aprendices_aprobados)
+                    df_aprobados["Ficha"] = (
+                        df_aprobados["Ficha"] == df_combined["Ficha"]
+                    )
+                    # print("FICHA_EN_DB")
+                    # print(df_aprobados["Ficha"])
+
+                    # Filtrar los aprendices cuyas fichas son diferentes en los DataFrames
+                    aprendices_no_en_bd = df_aprobados[~df_aprobados["Ficha"]]
+
+                    # Mostrar los aprendices cuyas fichas son diferentes
+                    print("Aprendices cuyas fichas son diferentes en los DataFrames:")
+                    print(aprendices_no_en_bd)
+                    # Filtrar los aprendices basados en si sus números de documento y ficha ya están en la base de datos SQLAlchemy
+
                     print(" FICHA   EN BASE DE DATOS")
                     print(numeros_ficha_bd)
                     print("NO EN BD")
                     print(aprendices_no_en_bd)
-                    print("NÚMEROS DE DOCUMENTO EN LA BASE DE DATOS:")
-                    print(numeros_documento_bd)
 
-                    print("FICHAS DE LOS APRENDICES APROBADOS:")
-                    print(aprendices_aprobados["Ficha"])
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
 
