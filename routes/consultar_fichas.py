@@ -179,7 +179,8 @@ def table():
                     aprendices_aprobados["Ficha"] = ficha_sin_decimal.strip()
                     print("FICHAS ")
                     print(aprendices_aprobados)
-                    df_aprobados = pd.DataFrame(
+
+                    aprendices_aprobados = pd.DataFrame(
                         {
                             "Número de Documento": aprendices_aprobados[
                                 "Número de Documento"
@@ -189,44 +190,6 @@ def table():
                             "Ficha": aprendices_aprobados["Ficha"],
                         }
                     )
-                    print(df_aprobados)
-                    # Cargar los números de documento de la base de datos SQLAlchemy
-
-                    # Cargar los números de documento y ficha de la base de datos SQLAlchemy
-                    numeros_documento_bd = [
-                        str(num[0])
-                        for num in db.session.query(Aprendiz.documento).all()
-                    ]
-                    numeros_ficha_bd = [
-                        str(num[0]) for num in db.session.query(Aprendiz.ficha_id).all()
-                    ]
-
-                    df_combined = pd.DataFrame(
-                        {
-                            "Número de Documento": numeros_documento_bd,
-                            "Ficha": numeros_ficha_bd,
-                        }
-                    )
-                    print(df_combined)
-
-                    df_aprobados["Ficha"] = (
-                        df_aprobados["Ficha"] == df_combined["Ficha"]
-                    )
-                    # print("FICHA_EN_DB")
-                    # print(df_aprobados["Ficha"])
-
-                    # Filtrar los aprendices cuyas fichas son diferentes en los DataFrames
-                    aprendices_no_en_bd = df_aprobados[~df_aprobados["Ficha"]]
-
-                    # Mostrar los aprendices cuyas fichas son diferentes
-                    print("Aprendices cuyas fichas son diferentes en los DataFrames:")
-                    print(aprendices_no_en_bd)
-                    # Filtrar los aprendices basados en si sus números de documento y ficha ya están en la base de datos SQLAlchemy
-
-                    print(" FICHA   EN BASE DE DATOS")
-                    print(numeros_ficha_bd)
-                    print("NO EN BD")
-                    print(aprendices_no_en_bd)
 
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
@@ -438,7 +401,7 @@ def table():
                         fecha_actual=fecha_actual,
                         fecha_sin_hora_inicio=fecha_sin_hora_inicio,
                         fecha_sin_hora=fecha_sin_hora,
-                        aprendices_no_en_bd=aprendices_no_en_bd,
+                        aprendices_aprobados=aprendices_aprobados,
                         evaluar=evaluar,
                         novedades=novedades,
                         codigo_centro=codigo_centro,
@@ -448,8 +411,9 @@ def table():
                         programa=programa,
                         ficha_en_vigencia=ficha_en_vigencia,
                     )
-                except (ValueError, KeyError, TypeError):
+                except (ValueError, KeyError, TypeError) as e:
                     not_data = False
+                    print(f"Error inesperado: {str(e)}", "error")
                     flash("Error en los datos del archivo Excel", "error")
                     session["not_data"] = not_data
                     return redirect(

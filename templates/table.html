@@ -73,16 +73,18 @@
                     <th class="text-center">Número de Documento</th>
                     <th class="text-center">Nombres</th>
                     <th class="text-center">Apellidos</th>
+                    <th class="text-center">Ficha</th>
                     <th class="text-center">alternativa</th>
                 </tr>
             </thead>            
             <tbody>
-                {% for index, row in aprendices_no_en_bd.iterrows() %}
+                {% for index, row in aprendices_aprobados.iterrows() %}
                     <tr>
                         <td>{{ index + 1 }}</td>
                         <td>{{ row['Número de Documento'] }}</td>
                         <td>{{ row['Nombre'] }}</td>
                         <td>{{ row['Apellidos'] }}</td>
+                        <td>{{ row['Ficha'] }}</td>
                         <td>
                             <select name="alternativa{{ index }}" id="alternativa{{ index }}"> 
                                 <option value="Sin Alternativaa"></option>

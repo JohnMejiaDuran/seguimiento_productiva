@@ -96,6 +96,7 @@ def guardar_aprendices():
                 print("nombre:", nombre)
                 print("apellido:", apellido)
                 print("alternativa:", alternativa)
+                print("ficha :", ficha)
                 if documento and nombre and apellido and alternativa:
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
@@ -103,7 +104,7 @@ def guardar_aprendices():
                     asignacion_existente = Asignacion.query.filter_by(documento_aprendiz=documento).first()
                     if aprendiz_existente:
                         # Asignar la nueva ficha al aprendiz existente si es diferente
-                        if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha:
+                        if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha or aprendiz_existente.ficha_id  == nueva_ficha.id_ficha:
                             aprendiz_existente.ficha_id = nueva_ficha.id_ficha
                             aprendiz_existente.alternativa = alternativa
                             db.session.commit()
