@@ -245,7 +245,7 @@ class Seguimiento(db.Model):
     fecha_inicio = db.Column(db.String(15))
     fecha_fin = db.Column(db.String(15))
     tipo = db.Column(db.String(100))
-    nit = db.Column(db.Integer, ForeignKey("empresa.nit"))
+    id_asociacion = db.Column(db.Integer, db.ForeignKey("asociacion.id_asociacion"))
     documento_aprendiz_aprendiz = db.Column(
         db.String(15), ForeignKey("aprendiz.documento")
     )
@@ -253,7 +253,7 @@ class Seguimiento(db.Model):
     reconocimiento = db.Column(db.String(50))
 
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz_aprendiz])
-    empresa = relationship("Empresa", foreign_keys=[nit])
+    empresa = relationship("Asociacion", foreign_keys=[id_asociacion])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
 
     def __init__(
@@ -283,14 +283,29 @@ class Seguimiento(db.Model):
 
 class Empresa(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB"}
-    nit = db.Column(db.Integer, primary_key=True)
+    nit = db.Column(db.String(15), primary_key=True)
     razon_social = db.Column(db.String(100))
     direccion = db.Column(db.String(100))
+    telefono = db.Column(db.String(15))
+    email = db.Column(db.String(50))
 
-    def __init__(self, nit, razon_social, direccion):
+    def __init__(self, nit, razon_social, direccion, telefono, email):
         self.nit = nit
         self.razon_social = razon_social
         self.direccion = direccion
+        self.telefono = telefono
+        self.email = email
+
+class Asociacion(db.Model):
+    id_asociacion = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nit_empresa = db.Column(db.String(15), db.ForeignKey("empresa.nit"))
+    nit = relationship("Empresa", foreign_keys=[nit_empresa])
+    id_aprendiz = db.Column(db.String(15), db.ForeignKey("aprendiz.documento"))
+    documento = relationship("Aprendiz", foreign_keys=[id_aprendiz])
+
+    def __init__(self, nit_empresa, id_aprendiz):
+        self.nit_empresa = nit_empresa
+        self.id_aprendiz = id_aprendiz
 
 
 def insert_regionales(*args, **kwargs):

@@ -58,21 +58,19 @@
         {% block content %}{% endblock %}
     </main>
     
-    <input type="checkbox" id="btn-menu">
-    <div class="container-menu">
+    <input type="checkbox" id="btn-menu" >
+    <div class="container-menu" onclick="cerrarMenu()">
         <div class="cont-menu">
             <nav>
                 <a href="">Editar perfil</a>
                 <a href="{{url_for("pagina_inicio.logout")}}" class="">Cerrar sesión</a>
+                {% block leftmenu %}{% endblock %}
             </nav>
-            <label for="btn-menu" class="equis-menu fa-regular fa-circle-xmark"></label>
+            <!-- <label for="btn-menu" class="equis-menu fa-regular fa-circle-xmark" ></label> -->
         </div>
     </div>
 
 
-
-
-    
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>   
     <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -80,7 +78,16 @@
     <script src="/static/js/main.js"></script>
 
     <script>
-        
+      function cerrarMenu() {
+        var checkbox = document.getElementById('btn-menu');
+        checkbox.checked = false;
+    }
+
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            cerrarMenu();
+        }
+    });
     </script>
 </body>
 
