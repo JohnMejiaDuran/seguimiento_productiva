@@ -10,9 +10,9 @@ asignaciones = Blueprint("asignaciones", __name__)
 @asignaciones.route("/seguimientos")
 def asignacion():
     asignaciones = Asignacion.query.all()
-    for asignacion in asignaciones:
-        if not asignacion.fecha_inicio_contrato:
-            asignacion.fecha_inicio_contrato = "Sin actualizar"
-        if not asignacion.fecha_fin_contrato:
-            asignacion.fecha_fin_contrato = "Sin actualizar"
+    # for asignacion in asignaciones:
+    #     if not asignacion.fecha_inicio_contrato:
+    #         asignacion.fecha_inicio_contrato = "Sin actualizar"
+    #     if not asignacion.fecha_fin_contrato:
+    #         asignacion.fecha_fin_contrato = "Sin actualizar"
     return render_template("/seguimientos.html", asignaciones=asignaciones)

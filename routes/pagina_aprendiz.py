@@ -13,10 +13,18 @@ def inicioaprendiz():
     return render_template("inicioaprendiz.html", title=title, logo=logo)
 
 
+@pagina_aprendiz.route("/empresas")
+def empresas():
+    empresas = Empresa.query.all()
+    return render_template("empresas.html", empresas=empresas)
+
+
 @pagina_aprendiz.route("/registroempresa")
 def registroempresa():
     asociacion_exitosa = session.pop("asociacion", False)
-    return render_template("registroempresa.html", asociacion_exitosa=asociacion_exitosa)
+    return render_template(
+        "registroempresa.html", asociacion_exitosa=asociacion_exitosa
+    )
 
 
 @pagina_aprendiz.route("/guardar_empresa", methods=["POST"])

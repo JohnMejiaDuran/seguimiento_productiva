@@ -63,8 +63,9 @@
         <div class="cont-menu">
             <nav>
                 <a href="">Editar perfil</a>
-                <a href="{{url_for("pagina_inicio.logout")}}" class="">Cerrar sesión</a>
                 {% block leftmenu %}{% endblock %}
+                <a href="{{url_for("pagina_inicio.logout")}}" class="">Cerrar sesión</a>
+                
             </nav>
             <!-- <label for="btn-menu" class="equis-menu fa-regular fa-circle-xmark" ></label> -->
         </div>

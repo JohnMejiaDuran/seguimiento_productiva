@@ -174,8 +174,7 @@ class Asignacion(db.Model):
     fecha_inicio = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_fin = db.Column(db.String(15))  # se extrae del excel con openpyxl
     fecha_asignacion = db.Column(db.String(15))  # Fecha actual
-    fecha_inicio_contrato = db.Column(db.String(15), index=True)
-    fecha_fin_contrato = db.Column(db.String(15), index=True)
+    
 
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
@@ -303,6 +302,9 @@ class Asociacion(db.Model):
     id_aprendiz = db.Column(db.String(15), db.ForeignKey("aprendiz.documento"))
     documento = relationship("Aprendiz", foreign_keys=[id_aprendiz])
 
+    fecha_inicio_contrato = db.Column(db.String(15))
+    fecha_fin_contrato = db.Column(db.String(15))
+    
     def __init__(self, nit_empresa, id_aprendiz):
         self.nit_empresa = nit_empresa
         self.id_aprendiz = id_aprendiz

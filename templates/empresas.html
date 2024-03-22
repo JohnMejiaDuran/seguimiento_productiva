@@ -1,60 +1,62 @@
 {% extends "layout.html" %}
+{% block logout%}
+<a href="{{url_for("pagina_inicio.logout")}}" class="d-flex btn btn-secondary text-lg">Cerrar sesión</a>    
+{% endblock %}
+{% block leftmenu %}
+<a href="">Registrar empresa</a>
+{% endblock %}
 {% block consultar%}
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/consultar_fichas"><i class="fa-solid fa-house"></i></a>
-</button>
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/seguimientos">Segumientos</a>
-</button>
-<button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
-</button>
+
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
 </button>
-{% endblock%}
+{% endblock %}
 {% block content %}
-<h1 class="text-center ">Seguimientos</h1>
+<h1 class="text-center ">Empresas registradas</h1>
 <div class="container-fluid">
     <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
         <thead>
             <tr class="">
-                <th class="text-center">ID</th>
-                <th class="text-center">Aprendiz</th>
-                <th class="text-center">Instructor</th>
-                <th class="text-center">Fecha Inicio</th>
-                <th class="text-center">Fecha Fin</th>
-                <th class="text-center">Fecha de Asignación</th>
-                <th class="text-center">Fecha Incio Contrato</th>
-                <th class="text-center">Fecha Fin Contrato</th>
-                <th class="text-center">Seguimientos</th>
+                <th class="text-center">#</th>
+                <th class="text-center">Nit</th>
+                <th class="text-center">Razón Social</th>
+                <th class="text-center">Dirección</th>
+                <th class="text-center">Telefono</th>
+                <th class="text-center">Email</th>
                 <th class="text-center">Opciones</th>
+    
             </tr>
         </thead>
         <tbody>
-            {% for asignacion in asignaciones %}
+            {% for empresa in empresas %}
                 <tr>
-                    <td>{{asignacion.id_asignacion}}</td>
-                    <td>{{asignacion.documento_aprendiz}}</td>
-                    <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}}</td>
-                    <td>{{asignacion.fecha_inicio }}</td>
-                    <td>{{asignacion.fecha_fin}}</td>
-                    <td>{{asignacion.fecha_asignacion}}</td>
-                    <td></td>
-                    <td></td>
-                    <td>0</td>
-                    <td>ojo</td>
+                    <td>{{loop.index}}</td>
+                    <td>{{empresa.nit}}</td>
+                    <td>{{empresa.razon_social}}</td>
+                    <td>{{empresa.direccion}}</td>
+                    <td>{{empresa.telefono}}</td>
+                    <td>{{empresa.email}}</td>
+                    <td>Editar</td>
+                    
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
+<div class="container-fluid mt-3">
+    <button class="btn btn-success">
+        <a href="registroempresa" class="btn text-white ">Registrar Nueva Empresa</a>
+    </button>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
 <script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+
 <script>
     $(document).ready(function() {
     $('#aprendices').DataTable({
