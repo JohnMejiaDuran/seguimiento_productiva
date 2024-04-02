@@ -7,7 +7,7 @@
     <a  class="nav-link active text-white" href="/seguimientos">Seguimientos</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
-    <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+    <a  class="nav-link active text-white" href="/empresas">Empresas</a>
 </button>
 <button type="button" class="btn btn-outline-success ">
     <a  class="nav-link active text-white" href="instructores">Instructores</a>
@@ -16,9 +16,13 @@
     <a  class="nav-link active text-white" href="aprendiz">Aprendices</a>
 </button>
 {% endblock%}
+{% block leftmenu %}
+<a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
+{% endblock %}
 
 {% block upload%}
-<nav class="navbar sticky-top navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
+<nav class="navbar navbar-expand-lg gris d-flex justify-content-between p-1 border-bottom border-dark border-top ">
+    <!-- Se elimino sticky-top  para mantener la barra al hacer scroll hacia abajo -->
     <form class="p-1 d-flex" action="/table" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
         <div class="file-upload">
