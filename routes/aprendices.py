@@ -8,13 +8,22 @@ from flask import (
     url_for,
     session,
 )
-from models.seguimientos import Aprendiz, Instructor, Asignacion, Role, UserRole, Ficha
+from models.seguimientos import (
+    Aprendiz,
+    Asociacion,
+    Asignacion,
+    Role,
+    UserRole,
+    Ficha,
+    Empresa,
+)
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
 from flask_login import login_required
 from routes.consultar_fichas import admin_required
 from werkzeug.security import generate_password_hash
 from sqlalchemy.orm import aliased
+from datetime import datetime
 
 ruta_aprendices = Blueprint("ruta_aprendices", __name__)
 
@@ -28,8 +37,7 @@ def aprendices():
     logo = "/static/icons/user-icon.png"
     aprendiz_guardado = session.pop("aprendiz_guardado", False)
     asignaciones = Asignacion.query.all()
-    
-
+    asociacion_exitosa = session.pop("asociacion_exitosa", False)
     for asignacion in asignaciones:
         if not asignacion.aprendiz.email:
             asignacion.aprendiz.email = "Sin actualizar"
@@ -42,7 +50,85 @@ def aprendices():
         rol=rol,
         logo=logo,
         aprendiz_guardado=aprendiz_guardado,
+        asociacion_exitosa=asociacion_exitosa,
     )
+
+
+@ruta_aprendices.route("/buscar_empresa", methods=["POST", "GET"])
+def buscarempresa():
+    if request.method == "POST":
+        searchbox = request.form.get("text")
+    elif request.method == "GET":
+        searchbox = request.args.get("text")
+
+    # Filtrar las asignaciones solo para el instructor actual
+    empresas_encontradas = Empresa.query.filter(
+        Empresa.nit.ilike(f"%{searchbox}%")
+    ).all()
+
+    # Preparar los datos para enviarlos como respuesta
+    resultados_empresas = [{"nit": empresa.nit} for empresa in empresas_encontradas]
+    # Devolver los resultados en formato JSON
+    return jsonify(resultados_empresas)
+
+
+@ruta_aprendices.route("/get_empresa/<nit>", methods=["GET"])
+def encontrar_empresa(nit):
+    buscar_empresa = Empresa.query.filter_by(nit=nit).first()
+
+    if buscar_empresa:
+        razon_social = buscar_empresa.razon_social
+
+        empresa_data = {"razon_social": razon_social}
+
+        return jsonify(empresa_data)
+    else:
+        # Si no se encuentra la asignación, devolver un mensaje de error
+        return jsonify(
+            {"error": "No se encontró ningún aprendiz con ese número de documento."}
+        )
+
+
+@ruta_aprendices.route("/asociar_aprendiz", methods=["POST"])
+def asociaraprendiz():
+    # Obtener los datos del formulario
+    nit_empresa = request.form.get("nit")
+    fecha_inicio_str = request.form.get("fechaInicio")
+    fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d").date()
+
+    # Obtener la fecha de fin del formulario y quitar la parte de la hora
+    fecha_fin_str = request.form.get("fechaFin")
+    fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").date()
+    print(fecha_inicio)
+    print(fecha_fin)
+    # Suponiendo que tienes una función para buscar el aprendiz por su documento
+    documento_aprendiz = request.form.get(
+        "aprendizDocumento"
+    )  # Asegúrate de tener este campo en tu formulario
+    aprendiz = Aprendiz.query.filter_by(documento=documento_aprendiz).first()
+
+    if aprendiz:
+        # Crear una nueva instancia de Asociacion
+        nueva_asociacion = Asociacion(
+            nit_empresa=nit_empresa,
+            id_aprendiz=aprendiz.documento,
+            fecha_inicio_contrato=fecha_inicio,
+            fecha_fin_contrato=fecha_fin,
+        )
+
+        # Agregar la nueva asociación a la sesión y guardarla en la base de datos
+        db.session.add(nueva_asociacion)
+        db.session.commit()
+
+        # Redireccionar a la ruta deseada en caso de éxito
+        asociacion_exitosa = True
+        session["asociacion_exitosa"] = asociacion_exitosa
+        return redirect(
+            url_for("ruta_aprendices.aprendices", asociacion_exitosa=asociacion_exitosa)
+        )
+    else:
+        # Si no se encuentra el aprendiz, redireccionar a otra ruta
+        return redirect(url_for("ruta_aprendices.aprendices"))
 
 
 @ruta_aprendices.route("/guardar_aprendices", methods=["POST"])
@@ -111,12 +197,19 @@ def guardar_aprendices():
                     if aprendiz_existente and asignacion_existente:
                         # Asignar la nueva ficha al aprendiz existente si es diferente
                         if nueva_ficha:
-                            if aprendiz_existente.ficha_id != nueva_ficha.id_ficha or aprendiz_existente.ficha_id == nueva_ficha.id_ficha:
+                            if (
+                                aprendiz_existente.ficha_id != nueva_ficha.id_ficha
+                                or aprendiz_existente.ficha_id == nueva_ficha.id_ficha
+                            ):
                                 aprendiz_existente.ficha_id = nueva_ficha.id_ficha
                                 aprendiz_existente.alternativa = alternativa
-                                asignacion_existente.documento_instructor = document_instructor
+                                asignacion_existente.documento_instructor = (
+                                    document_instructor
+                                )
                                 db.session.commit()
-                                print("Se ha actualizado la ficha del aprendiz existente.")
+                                print(
+                                    "Se ha actualizado la ficha del aprendiz existente."
+                                )
                                 hay_aprendices = True
 
                     else:

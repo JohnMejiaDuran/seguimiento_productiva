@@ -19,12 +19,18 @@
 {% block leftmenu %}
 <a  class="nav-link active text-white" href="/centros_formacion">Añadir centro</a>
 {% endblock %}
+
 {% block content %}
+<style>
+    #aprendizDocumento, #razonsocial {
+        background-color: rgba(128, 128, 128, 0.151);
+    }
+</style>
 <h1 class="text-center ">Aprendices</h1>
 <div class="container-fluid">
     <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
         <thead>
-            <tr class="">
+            <tr class="align-middle">
                 <th class="text-center">#</th>
                 <th class="text-center">Número de Documento</th>
                 <th class="text-center">Nombres</th>
@@ -40,7 +46,7 @@
         </thead>
         <tbody>
             {% for asignacion in asignaciones %}
-                <tr>
+                <tr class="align-middle" >
                     <td>{{loop.index}}</td>
                     <td>{{asignacion.aprendiz.documento}}</td>
                     <td>{{asignacion.aprendiz.nombre}}</td>
@@ -50,19 +56,196 @@
                     <td>{{asignacion.aprendiz.ficha_id}}</td>
                     <td>{{asignacion.aprendiz.ficha.programa}}</td>
                     <td>{{asignacion.aprendiz.alternativa}}</td>
-                    <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}} </td>
-                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#ojitoModal"><i class="fa-sharp fa-solid fa-pen-to-square"></i></td>
+                    <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}} </td> 
+                    <td>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-success mx-1" title="Editar datos aprendiz" data-toggle="modal" data-target="#ojitoModal"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-warning mx-1" title="Asociar empresa" data-toggle="modal" data-target="#asociarEmpresaModal" data-documento="{{ asignacion.aprendiz.documento }}">
+                            <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
+                            </button>
+                        </div>
+                    </td>
                 </tr>
+                
             {% endfor %}
         </tbody>
     </table>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="asociarEmpresaModal" tabindex="-1" role="dialog" aria-labelledby="asociarEmpresaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="asociarEmpresaModalLabel">Asociar empresa con aprendiz</h5>
+                <button type="button" class="button" data-dismiss="modal" style="border: none; background-color: transparent;">
+                    <i class="fa-solid fa-x"></i>
+                </button>   
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de asociar empresa -->
+                <form id="asociarEmpresaForm" method="POST" action="/asociar_aprendiz">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="">
+                        <div class="form-group" style="position: relative;">
+                            <label for="documento"><b>Nit:</b></label>
+                            <div class="input-container">
+                                <input type="text" class="form-control" id="nit" name="nit" placeholder="Buscar empresa por NIT" autocomplete="off" required>
+                            </div>
+                            
+                            <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden; width: 28rem; " >
+                            
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="nitEmpresa"><b>Razón social:</b></label>
+                            <input type="text" class="form-control" id="razonsocial" placeholder="" readonly>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="aprendizDocumento"><b>Número de Documento del Aprendiz:</b></label>
+                            <input type="text" class="form-control" id="aprendizDocumento" name="aprendizDocumento" readonly>
+                            <div class="form-group mt-2">
+                                <label for="fechaInicio"><b>Fecha de Inicio de Contrato:</b></label>
+                                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="fechaFin"><b>Fecha de Fin de Contrato:</b></label>
+                                <input type="date" class="form-control" id="fechaFin" name="fechaFin" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Asociar</button>
+                    </div>
+                </form>
+            
+            
+        </div>
+    </div>
+</div>
+{% if asociacion_exitosa %}
+<script>
+     swal({
+                title: 'Aprendiz Asociado',
+                text: 'Empresa asociada satisfactoriamente',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+</script>
+{% endif %}
+<script>
+    $(document).ready(function() {
+        // Obtener la fecha de inicio de contrato
+        var fechaInicioInput = $('#fechaInicio');
+        // Obtener el campo de fecha de fin de contrato
+        var fechaFinInput = $('#fechaFin');
 
+        // Calcular automáticamente la fecha de fin al cambiar la fecha de inicio
+        fechaInicioInput.change(function() {
+            // Obtener la fecha de inicio seleccionada
+            var fechaInicio = new Date(fechaInicioInput.val());
+            // Sumar 6 meses a la fecha de inicio
+            var fechaFin = new Date(fechaInicio.setMonth(fechaInicio.getMonth() + 6));
+            // Formatear la fecha de fin en el formato adecuado (YYYY-MM-DD)
+            var formattedFechaFin = fechaFin.toISOString().split('T')[0];
+            // Establecer la fecha de fin calculada en el campo de entrada de fecha de fin
+            fechaFinInput.val(formattedFechaFin);
+        });
+    });
+</script>
+<script>
+    // Función para tomar el documento del aprendiz y establecerlo en el campo del formulario dentro del modal
+    $(document).ready(function() {
+        $('#asociarEmpresaModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var documento = button.data('documento'); // Extraer el número de documento del atributo de datos
+            $('#aprendizDocumento').val(documento); // Establecer el número de documento en el campo del formulario
+        });
+    });
+</script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  
-<script type="text/javascript" src="/test/wp-content/themes/child/script/jquery.jcarousel.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#nit").on("input", function(e){
+            var inputValue = $(this).val().trim();
+            if (inputValue === "") {
+                // Si el campo está vacío, limpiar el datalist
+                $("#datalist").empty();
+                return;
+            }
+            $("#datalist").empty();
+            $.ajax({
+                type: "GET",
+                url: "/buscar_empresa",
+                data: { text: inputValue },
+                success: function(res){
+                    var data = "<div class='list-group'>";
+                    $.each(res, function(index, value){
+                        data += "<p style='margin: 0; width: 30rem;' class='list-group-item list-group-item-action' data-nit='" + value.nit + "'>" + value.nit + "</p>";
+                    });
+                    data += "</div>";
+                    $("#datalist").html(data);
+                    // Habilitar o deshabilitar el botón de guardar dependiendo de si la empresa ya existe
+                    $("#guardar-btn").prop('disabled', res.length > 0);
+                    // Mostrar u ocultar el mensaje de empresa existente según si ya existe una empresa
+                    $("#mensaje-empresa-existente").toggle(res.length > 0);
+                    // Limpiar los campos si la empresa no existe
+                    if (res.length === 0) {
+                        $("#razonsocial").val('');
+                    }
+                    
+                }
+            });
+        });
 
+        // Cerrar el datalist al hacer clic fuera de él
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#datalist, #nit').length) {
+                $("#datalist").empty();
+            }
+        });
+
+        // Manejar la selección de un elemento de la lista
+        $(document).on("click", "#datalist .list-group-item", function(){
+            var nitSeleccionado = $(this).data("nit");
+            $("#nit").val(nitSeleccionado);
+            $("#datalist").empty();
+
+            // Realizar una solicitud AJAX adicional para obtener la información de la empresa
+            $.ajax({
+                type: "GET",
+                url: "/get_empresa/" + nitSeleccionado,
+                success: function(empresa){
+                    $("#razonsocial").val(empresa.razon_social);
+
+                    // Si la empresa existe, deshabilitar los campos
+                    if (empresa.exists) {
+                        $("#razonsocial").prop('disabled', true);
+
+                    }
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Limpiar los campos de entrada al cerrar el modal
+        $('#asociarEmpresaModal').on('hidden.bs.modal', function (event) {
+            $('#nit').val('');
+            $('#razonsocial').val('');
+            $('#aprendizDocumento').val('');
+        });
+
+        // Función para tomar el documento del aprendiz y establecerlo en el campo del formulario dentro del modal
+        $('#asociarEmpresaModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var documento = button.data('documento'); // Extraer el número de documento del atributo de datos
+            $('#aprendizDocumento').val(documento); // Establecer el número de documento en el campo del formulario
+        });
+    });
+</script>
 <script>
     $(document).ready(function() {
     $('#aprendices').DataTable({

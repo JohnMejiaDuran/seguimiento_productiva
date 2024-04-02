@@ -46,8 +46,8 @@
                     <td>{{asignacion.fecha_inicio }}</td>
                     <td>{{asignacion.fecha_fin}}</td>
                     <td>{{asignacion.fecha_asignacion}}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ ultimas_asociaciones.get(asignacion.documento_aprendiz, {}).fecha_inicio_contrato }}</td>
+                    <td>{{ ultimas_asociaciones.get(asignacion.documento_aprendiz, {}).fecha_fin_contrato }}</td>
                     <td>0</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
                 </tr>

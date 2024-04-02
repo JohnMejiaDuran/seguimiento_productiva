@@ -144,6 +144,8 @@ class Aprendiz(BaseUser):
     ficha_id = db.Column(db.Integer, db.ForeignKey("ficha.id_ficha"))
     ficha = relationship("Ficha", foreign_keys=[ficha_id])
 
+    
+
     __mapper_args__ = {
         "polymorphic_identity": "aprendiz",
     }
@@ -171,10 +173,9 @@ class Asignacion(db.Model):
     id_asignacion = db.Column(db.Integer, primary_key=True, autoincrement=True)
     documento_aprendiz = db.Column(db.String(15), ForeignKey("aprendiz.documento"))
     documento_instructor = db.Column(db.String(15), ForeignKey("instructor.documento"))
-    fecha_inicio = db.Column(db.String(15))  # se extrae del excel con openpyxl
-    fecha_fin = db.Column(db.String(15))  # se extrae del excel con openpyxl
-    fecha_asignacion = db.Column(db.String(15))  # Fecha actual
-    
+    fecha_inicio = db.Column(db.Date)  # se extrae del excel con openpyxl
+    fecha_fin = db.Column(db.Date)  # se extrae del excel con openpyxl
+    fecha_asignacion = db.Column(db.Date)  # Fecha actual
 
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
@@ -295,6 +296,7 @@ class Empresa(db.Model):
         self.telefono = telefono
         self.email = email
 
+
 class Asociacion(db.Model):
     id_asociacion = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nit_empresa = db.Column(db.String(15), db.ForeignKey("empresa.nit"))
@@ -302,12 +304,20 @@ class Asociacion(db.Model):
     id_aprendiz = db.Column(db.String(15), db.ForeignKey("aprendiz.documento"))
     documento = relationship("Aprendiz", foreign_keys=[id_aprendiz])
 
-    fecha_inicio_contrato = db.Column(db.String(15))
-    fecha_fin_contrato = db.Column(db.String(15))
-    
-    def __init__(self, nit_empresa, id_aprendiz):
+    fecha_inicio_contrato = db.Column(db.Date)
+    fecha_fin_contrato = db.Column(db.Date)
+
+    def __init__(
+        self,
+        nit_empresa,
+        id_aprendiz,
+        fecha_inicio_contrato,
+        fecha_fin_contrato
+    ):
         self.nit_empresa = nit_empresa
         self.id_aprendiz = id_aprendiz
+        self.fecha_inicio_contrato = fecha_inicio_contrato  # Asignar el valor a fecha_inicio_contrato
+        self.fecha_fin_contrato = fecha_fin_contrato
 
 
 def insert_regionales(*args, **kwargs):
