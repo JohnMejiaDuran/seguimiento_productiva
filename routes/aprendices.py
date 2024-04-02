@@ -28,6 +28,7 @@ def aprendices():
     logo = "/static/icons/user-icon.png"
     aprendiz_guardado = session.pop("aprendiz_guardado", False)
     asignaciones = Asignacion.query.all()
+    
 
     for asignacion in asignaciones:
         if not asignacion.aprendiz.email:
