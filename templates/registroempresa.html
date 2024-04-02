@@ -96,8 +96,12 @@
             <input type="text" id="email" name="email" class="form-control" placeholder="Email" required>
         </div>
     </div>
-    <div class="text-center mt">
-        <button class="btn btn-success">Guardar</button>
+    <div class="text-center mt-5">
+        <button id="guardar-btn" class="btn btn-success">Guardar</button>
+    </div>
+
+    <div id="mensaje-empresa-existente" class="text-center mt" style="display: none;">
+        <p class="text-danger">La empresa ya está registrada y no se pueden modificar sus valores.</p>
     </div>
 
     {% if ya_existe_empresa %}
@@ -108,10 +112,85 @@
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
+        // Mostrar el mensaje de empresa existente si ya existe una empresa
+        $("#mensaje-empresa-existente").show();
+        // Deshabilitar el botón de guardar si la empresa ya existe
+        $("#guardar-btn").prop('disabled', true);
     </script>
     {% endif %}
 </form>
+<script>
+    $(document).ready(function(){
+        $("#nit").on("input", function(e){
+            var inputValue = $(this).val().trim();
+            if (inputValue === "") {
+                // Si el campo está vacío, limpiar el datalist
+                $("#datalist").empty();
+                return;
+            }
+            $("#datalist").empty();
+            $.ajax({
+                type: "GET",
+                url: "/buscar_empresa",
+                data: { text: inputValue },
+                success: function(res){
+                    var data = "<div class='list-group'>";
+                    $.each(res, function(index, value){
+                        data += "<p style='margin: 0; width: 30rem;' class='list-group-item list-group-item-action' data-nit='" + value.nit + "'>" + value.nit + "</p>";
+                    });
+                    data += "</div>";
+                    $("#datalist").html(data);
+                    // Habilitar o deshabilitar el botón de guardar dependiendo de si la empresa ya existe
+                    $("#guardar-btn").prop('disabled', res.length > 0);
+                    // Mostrar u ocultar el mensaje de empresa existente según si ya existe una empresa
+                    $("#mensaje-empresa-existente").toggle(res.length > 0);
+                    // Limpiar los campos si la empresa no existe
+                    if (res.length === 0) {
+                        $("#razonsocial").val('');
+                        $("#direccion").val('');
+                        $("#telefono").val('');
+                        $("#email").val('');
+                    }
+                    
+                }
+            });
+        });
 
+        // Cerrar el datalist al hacer clic fuera de él
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#datalist, #nit').length) {
+                $("#datalist").empty();
+            }
+        });
 
+        // Manejar la selección de un elemento de la lista
+        $(document).on("click", "#datalist .list-group-item", function(){
+            var nitSeleccionado = $(this).data("nit");
+            $("#nit").val(nitSeleccionado);
+            $("#datalist").empty();
 
-{% endblock %}  
+            // Realizar una solicitud AJAX adicional para obtener la información de la empresa
+            $.ajax({
+                type: "GET",
+                url: "/get_empresa/" + nitSeleccionado,
+                success: function(empresa){
+                    $("#razonsocial").val(empresa.razon_social);
+                    $("#direccion").val(empresa.direccion);
+                    $("#telefono").val(empresa.telefono);
+                    $("#email").val(empresa.email);
+
+                    // Si la empresa existe, deshabilitar los campos
+                    if (empresa.exists) {
+                        $("#razonsocial").prop('disabled', true);
+                        $("#direccion").prop('disabled', true);
+                        $("#telefono").prop('disabled', true);
+                        $("#email").prop('disabled', true);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
+
