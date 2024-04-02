@@ -46,7 +46,7 @@
                     <td>{{asignacion.fecha_inicio_contrato}}</td>
                     <td>{{asignacion.fecha_fin_contrato}}</td>
                     <td>0</td>
-                    <td>ojo</td>
+                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -82,4 +82,66 @@
         },
     })})
 </script>
+<div class="text-center mt-5">
+
+    <div class="modal fade" id="ojitoModal" tabindex="-1" role="dialog" aria-labelledby="ojitoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h5 class="modal-title" id="ojitoModalLabel">LISTA DE SEGUIMIENTOS</h5>
+    </div>
+    <div class="modal-body">
+    <div class="container">
+    <div class="row">
+    
+    </div>
+    <!-- Nuevas columnas como tabla -->
+    <div class="table-responsive mt-2">
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <td class="date-column text-center-middle">Fecha</td>
+                    <td class="type-column text-center-middle">Tipo</td>
+                    <td class="pdf-column text-center-middle">pdf</td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/03/2024</td>
+                    <td class="text-center-middle">Parcial</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/06/2024</td>
+                    <td class="text-center-middle">Parcial</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <tr>
+                    <td class="text-center-middle">12/10/2024</td>
+                    <td class="text-center-middle">Final</td>
+                    <td class="text-center-middle"><button type="button" class="btn btn-sm btn-success button-pdf"><i class="bi bi-filetype-pdf"></i></button></td>
+                </tr>
+                <!-- Puedes agregar más filas aquí -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Fin de las nuevas columnas -->
+    </div>
+    </div>
+    <div class="modal-footer">
+    <button type="button" class="btn btn-danger ml-auto" data-dismiss="modal">Cerrar</button>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+       // Detecta el clic en el botón "Nuevo Seguimiento"
+        $('#btnNuevoSeguimiento').click(function(){
+        // Redirecciona a otra página HTML
+        window.location.href = 'primeraparte.html';
+      });
+       });
+    </script> 
 {% endblock %}

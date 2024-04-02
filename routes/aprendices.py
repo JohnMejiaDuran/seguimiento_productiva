@@ -67,6 +67,7 @@ def guardar_aprendices():
         if existing_ficha:
             print(f"La ficha {ficha} ya existe.")
             nueva_ficha = existing_ficha
+            print(nueva_ficha)
         else:
             nueva_ficha = Ficha(
                 id_ficha=ficha,
@@ -101,18 +102,22 @@ def guardar_aprendices():
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
                     ).first()
-                    asignacion_existente = Asignacion.query.filter_by(documento_aprendiz=documento).first()
-                    if aprendiz_existente:
+                    print(aprendiz_existente)
+                    asignacion_existente = Asignacion.query.filter_by(
+                        documento_aprendiz=documento
+                    ).first()
+                    print(asignacion_existente)
+                    if aprendiz_existente and asignacion_existente:
                         # Asignar la nueva ficha al aprendiz existente si es diferente
-                        if nueva_ficha and aprendiz_existente.ficha_id != nueva_ficha.id_ficha or aprendiz_existente.ficha_id  == nueva_ficha.id_ficha:
-                            aprendiz_existente.ficha_id = nueva_ficha.id_ficha
-                            aprendiz_existente.alternativa = alternativa
-                            db.session.commit()
-                            asignacion_existente.documento_instructor = document_instructor
-                            db.session.commit()
-                            print("Se ha actualizado la ficha del aprendiz existente.")
-                            hay_aprendices = True
-                            
+                        if nueva_ficha:
+                            if aprendiz_existente.ficha_id != nueva_ficha.id_ficha or aprendiz_existente.ficha_id == nueva_ficha.id_ficha:
+                                aprendiz_existente.ficha_id = nueva_ficha.id_ficha
+                                aprendiz_existente.alternativa = alternativa
+                                asignacion_existente.documento_instructor = document_instructor
+                                db.session.commit()
+                                print("Se ha actualizado la ficha del aprendiz existente.")
+                                hay_aprendices = True
+
                     else:
                         aprendiz = Aprendiz(
                             documento=documento,
@@ -145,7 +150,7 @@ def guardar_aprendices():
                         )
                         asignaciones_a_agregar.append(asignacion)
                         hay_aprendices = True
-        print("hay_aprendices:", hay_aprendices) 
+        print("hay_aprendices:", hay_aprendices)
         if hay_aprendices:
             try:
                 db.session.add_all(aprendices_a_agregar)
@@ -170,4 +175,3 @@ def guardar_aprendices():
         return "No se enviaron datos para guardar o todos los aprendices ya existen en la base de datos"
     else:
         return "Acción no permitida"
-

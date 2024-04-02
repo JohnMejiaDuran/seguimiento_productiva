@@ -33,6 +33,7 @@
                 <th class="text-center">Programa</th>
                 <th class="text-center">Alternativa</th>
                 <th class="text-center">Instructor asignado</th>
+                <th class="text-center">Opciones</th>
             </tr>
         </thead>
         <tbody>
@@ -48,6 +49,7 @@
                     <td>{{asignacion.aprendiz.ficha.programa}}</td>
                     <td>{{asignacion.aprendiz.alternativa}}</td>
                     <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}} </td>
+                    <td><button type="button" class="btn btn-success" data-toggle="modal" data-target="#ojitoModal"><i class="fa-sharp fa-solid fa-pen-to-square"></i></td>
                 </tr>
             {% endfor %}
         </tbody>
