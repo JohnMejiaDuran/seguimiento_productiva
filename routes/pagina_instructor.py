@@ -82,18 +82,21 @@ def buscar_aprendiz():
     # Obtener el documento del instructor actual
     documento_instructor_actual = current_user.documento
 
-    # Filtrar las asignaciones solo para el instructor actual
+    # Filtrar las asignaciones solo para el instructor actual y con alternativa diferente a "Sin Alternativa"
     asignaciones = (
         Asignacion.query.join(Aprendiz)
         .filter(
             Asignacion.documento_instructor == documento_instructor_actual,
+            Aprendiz.alternativa != "Sin Alternativa",
             or_(
                 Aprendiz.documento.ilike(f"%{searchbox}%"),
                 Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
             ),
+            
         )
         .all()
     )
+    print("Resultados de la consulta SQL:", asignaciones)
 
     # Preparar los datos para enviarlos como respuesta
     resultados = [
