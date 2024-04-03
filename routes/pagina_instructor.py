@@ -92,7 +92,6 @@ def buscar_aprendiz():
                 Aprendiz.documento.ilike(f"%{searchbox}%"),
                 Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
             ),
-            
         )
         .all()
     )
@@ -133,22 +132,22 @@ def aprendiz(documento):
 
     if asignacion:
         # Si se encuentra la asignación, obtener los datos del aprendiz
-        nit = asociacion.nit_empresa
-        empresa = Empresa.query.filter_by(nit=nit).first()
+        nit = None
+        razon_social = None
+        telefono = None
+        direccion = None
+        email = None
 
-        if empresa:
-            # Si se encuentra la empresa, obtener sus datos
-            razon_social = empresa.razon_social
-            telefono = empresa.telefono
-            direccion = empresa.direccion
-            email = empresa.email
-        else:
-            # Si no se encuentra la empresa, establecer valores predeterminados
-            nit = "No disponible"
-            razon_social = "No disponible"
-            telefono = "No disponible"
-            direccion = "No disponible"
-            email = "No disponible"
+        if asociacion:
+            nit = asociacion.nit_empresa
+            empresa = Empresa.query.filter_by(nit=nit).first()
+
+            if empresa:
+                # Si se encuentra la empresa, obtener sus datos
+                razon_social = empresa.razon_social
+                telefono = empresa.telefono
+                direccion = empresa.direccion
+                email = empresa.email
 
         aprendiz = asignacion.aprendiz
         nombre_aprendiz = aprendiz.nombre
@@ -164,6 +163,14 @@ def aprendiz(documento):
 
         regional = centro.regional
         nombre_regional = regional.nombre_regional
+
+        # Establecer los valores predeterminados si no se encuentra una empresa asociada
+        if nit is None:
+            nit = "No disponible"
+            razon_social = "No disponible"
+            telefono = "No disponible"
+            direccion = "No disponible"
+            email = "No disponible"
 
         # Construir el diccionario con la información del aprendiz
         aprendiz_data = {
