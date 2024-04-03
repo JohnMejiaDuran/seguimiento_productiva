@@ -9,12 +9,13 @@ from flask import (
     jsonify,
 )
 from flask_login import current_user
-from models.seguimientos import Aprendiz, Asignacion, Regional, Centro
+from models.seguimientos import Aprendiz, Asignacion, Regional, Asociacion, Empresa
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
 from routes.consultar_fichas import admin_required
 from sqlalchemy import or_
+from sqlalchemy import desc
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -121,9 +122,31 @@ def buscar_aprendiz():
 def aprendiz(documento):
     # Buscar la asignación del aprendiz basada en el número de documento
     asignacion = Asignacion.query.filter_by(documento_aprendiz=documento).first()
+    asociacion = (
+        Asociacion.query.filter_by(id_aprendiz=documento)
+        .order_by(desc(Asociacion.id_asociacion))
+        .first()
+    )
 
     if asignacion:
         # Si se encuentra la asignación, obtener los datos del aprendiz
+        nit = asociacion.nit_empresa
+        empresa = Empresa.query.filter_by(nit=nit).first()
+
+        if empresa:
+            # Si se encuentra la empresa, obtener sus datos
+            razon_social = empresa.razon_social
+            telefono = empresa.telefono
+            direccion = empresa.direccion
+            email = empresa.email
+        else:
+            # Si no se encuentra la empresa, establecer valores predeterminados
+            nit = "No disponible"
+            razon_social = "No disponible"
+            telefono = "No disponible"
+            direccion = "No disponible"
+            email = "No disponible"
+
         aprendiz = asignacion.aprendiz
         nombre_aprendiz = aprendiz.nombre
         apellido_aprendiz = aprendiz.apellido
@@ -146,14 +169,23 @@ def aprendiz(documento):
             "nombre_centro": nombre_centro,
             "nombre_regional": nombre_regional,
             "programa": programa,
-            "codigo_ficha": codigo_ficha
+            "codigo_ficha": codigo_ficha,
+            "nit": nit,
+            "razon_social": razon_social,
+            "direccion": direccion,
+            "email": email,
+            "telefono": telefono,
         }
 
         return jsonify(aprendiz_data)
     else:
         # Si no se encuentra la asignación, devolver un mensaje de error
-        return jsonify(
-            {"error": "No se encontró ningún aprendiz con ese número de documento."}
+        flash("No se encontró ningún aprendiz con ese número de documento.", "error")
+        return (
+            jsonify(
+                {"error": "No se encontró ningún aprendiz con ese número de documento"}
+            ),
+            404,
         )
 
 

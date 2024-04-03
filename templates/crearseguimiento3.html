@@ -40,6 +40,7 @@
 
 </style>
 <form class="container-fluid w-75">
+    <h2 class="text-center">Información General</h2>
     <h5 class="">DATOS DEL APRENDIZ</h5>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2" style="position: relative;">
@@ -51,7 +52,18 @@
             
             <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden;">
             
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-danger mt-2">
+                <ul>
+                    {% for category, message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
             </div>
+        {% endif %}
+        {% endwith %}
             
 <!-- Lista desplegable -->
         </div>
@@ -85,6 +97,37 @@
             <div class="form-control" id="programa"></div>
         </div>
     </div>
+    <h5 class="mt-2">ENTE CONFORMADOR</h5>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="razonsocial"><b>Razón social:</b></label>
+            <div class="form-control" id="razonsocial"></div>
+        </div>
+        <div class="form-group col-md-6 p-2 input-container">
+            <label for="cargo"><b>Cargo:</b></label>
+            <input type="text" class="form-control" id="documento" placeholder="Jefe directo" autocomplete="off">
+        </div>
+    </div>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="nit"><b>Nit:</b></label>
+            <div class="form-control" id="nit"></div>
+        </div>
+        <div class="form-group col-md-6 p-2">
+            <label for="telefono"><b>Teléfono:</b></label>
+            <div class="form-control" id="telefono"></div>
+        </div>
+    </div>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
+            <label for="direccion"><b>Dirección</b></label>
+            <div class="form-control" id="direccion"></div>
+        </div>
+        <div class="form-group col-md-6 p-2">
+            <label for="email"><b>Email:</b></label>
+            <div class="form-control" id="email"></div>
+        </div>
+    </div>
 </form>
 <script>
     $(document).ready(function(){
@@ -92,7 +135,7 @@
             var inputValue = $(this).val().trim();
             if (inputValue === "") {
                 // Si el campo está vacío, limpiar los otros campos
-                $("#aprendiz, #regional, #centro, #ficha, #programa").text("");
+                $("#aprendiz, #regional, #centro, #ficha, #programa, #razonsocial, #telefono, #email, #direccion, #nit" ).text("");
                 $("#datalist").empty();
                 return;
             }
@@ -135,35 +178,17 @@
                     $("#centro").text(aprendiz.nombre_centro);
                     $("#ficha").text(aprendiz.codigo_ficha);
                     $("#programa").text(aprendiz.programa);
+                    $("#nit").text(aprendiz.nit);
+                    $("#razonsocial").text(aprendiz.razon_social);
+                    $("#telefono").text(aprendiz.telefono);
+                    $("#direccion").text(aprendiz.direccion);
+                    $("#email").text(aprendiz.email);
                 }
             });
         });
     });
 </script>
-
+<script>
     
-    
-    <script>
-        $(document).ready(function(){
-            $('#regional').change(function(){
-                var regionalId = $(this).val();
-                $.ajax({
-                    url: '/get_centros/' + regionalId,
-                    type: 'GET',
-                    success: function(response){
-                        var centros = response.centros;
-                        var options = '<option value="">Seleccionar Centro de Formación</option>';
-                        for(var i=0; i<centros.length; i++){
-                            options += '<option value="' + centros[i].codigo_centro + '">' + centros[i].nombre_centro + '</option>';
-                        }
-                        $('#centro').html(options);
-                    },
-                    error: function(error){
-                        console.log(error);
-                    }
-                });
-            });
-        });
-    </script>
-   
+</script>
 {% endblock %}

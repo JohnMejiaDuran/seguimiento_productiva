@@ -99,8 +99,6 @@ def asociaraprendiz():
     # Obtener la fecha de fin del formulario y quitar la parte de la hora
     fecha_fin_str = request.form.get("fechaFin")
     fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").date()
-    print(fecha_inicio)
-    print(fecha_fin)
     # Suponiendo que tienes una función para buscar el aprendiz por su documento
     documento_aprendiz = request.form.get(
         "aprendizDocumento"
@@ -180,11 +178,6 @@ def guardar_aprendices():
                 alternativa = request.form.get(f"alternativa{index}")
                 password = documento
                 hashed_password = generate_password_hash(password)
-                print("documento:", documento)
-                print("nombre:", nombre)
-                print("apellido:", apellido)
-                print("alternativa:", alternativa)
-                print("ficha :", ficha)
                 if documento and nombre and apellido and alternativa:
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
