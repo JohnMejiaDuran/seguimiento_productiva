@@ -13,12 +13,19 @@
 {% endblock%}
 {% block content %}
 <style>
+    
     .form-control {
-        height: 2.5rem;
-        background-color: rgba(128, 128, 128, 0.151);
+        
+        border: 0.1px solid rgb(79, 74, 74);
+        
     }
     .input-container {
     position: relative;
+}
+
+div > .auto {
+    height: 2.5rem;
+    background-color: rgba(128, 128, 128, 0.151);
 }
 
 .input-container input {
@@ -37,10 +44,36 @@
     font-size: 20px; /* Tamaño del ícono */
     color: #555; /* Color del ícono */
 }
+div > .actividades, div > .evidencias {
+    margin: 5px;
+}
 
+div > .fecha_inicio, div > .fecha_fin, div > .lugar {
+    margin: 5px;
+}
+.form-group {
+            margin-bottom: 10px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"] {
+            width: 100%;
+        }
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px; /* Espacio entre los botones y los campos de entrada */
+}
 </style>
-<form class="container-fluid w-75">
-    <h2 class="text-center">Información General</h2>
+<form class="container-fluid w-75 mt-3">
+    <div>
+        <label for="">¿La reunión es virtual o presencial?</label><br>
+        <select name="" id="reunion">
+            <option value=""></option>
+            <option value="">Presencial</option>
+            <option value="">Virtual</option>
+        </select>
+    </div>
+    <h3 class="text-center">1. INFORMACIÓN GENERAL</h3>
     <h5 class="">DATOS DEL APRENDIZ</h5>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2" style="position: relative;">
@@ -69,7 +102,7 @@
         </div>
         <div class="form-group col-md-6 p-2 ">
             <label for="nombreAprendiz"><b>Nombre:</b></label>
-            <div class="form-control" id="aprendiz">
+            <div class="form-control auto" id="aprendiz">
                 
             </div>
         
@@ -79,29 +112,29 @@
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="regional" class="font-weight-bold"><b>Regional:</b></label>
-            <div class="form-control" id="regional"></div>
+            <div class="form-control auto" id="regional"></div>
         </div>
         <div class="form-group col-md-6 p-2">
             <label for="centro"><b>Centro de Formación:</b></label>
-            <div class="form-control" id="centro"></div>
+            <div class="form-control auto" id="centro"></div>
         </div>
     </div>
 
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="ficha"><b>No. de ficha:</b></label>
-            <div class="form-control" id="ficha"></div>
+            <div class="form-control auto" id="ficha"></div>
         </div>
         <div class="form-group col-md-6 p-2">
             <label for="programa"><b>Programa de Formación:</b></label>
-            <div class="form-control" id="programa"></div>
+            <div class="form-control auto" id="programa"></div>
         </div>
     </div>
     <h5 class="mt-2">ENTE CONFORMADOR</h5>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="razonsocial"><b>Razón social:</b></label>
-            <div class="form-control" id="razonsocial"></div>
+            <div class="form-control auto" id="razonsocial"></div>
         </div>
         <div class="form-group col-md-6 p-2 input-container">
             <label for="cargo"><b>Cargo:</b></label>
@@ -111,24 +144,70 @@
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="nit"><b>Nit:</b></label>
-            <div class="form-control" id="nit"></div>
+            <div class="form-control auto" id="nit"></div>
         </div>
         <div class="form-group col-md-6 p-2">
             <label for="telefono"><b>Teléfono:</b></label>
-            <div class="form-control" id="telefono"></div>
+            <input type="number" class="form-control" id="telefono"></div>
         </div>
     </div>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="direccion"><b>Dirección</b></label>
-            <div class="form-control" id="direccion"></div>
+            <div class="form-control auto" id="direccion"></div>
         </div>
         <div class="form-group col-md-6 p-2">
             <label for="email"><b>Email:</b></label>
-            <div class="form-control" id="email"></div>
+            <input type="email" class="form-control" id="email"></div>
         </div>
     </div>
+    <h3 class="text-center mt-3">2. PLANEACIÓN DE ETAPA PRODUCTIVA</h3>
+    <h5 class="text-center mt-2">CONCERTACIÓN PLAN DE TRABAJO DURANTE LA ETAPA PRODUCTIVA DEL APRENDIZ</h5>
+    <div id="inputFields">
+        <!-- Campo de entrada inicial -->
+        <div class="form-row d-flex">
+            <div class="form-group col-md-2.5 actividades">
+                <label for="direccion"><b>Actividades a desarrollar:</b></label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-2.5 evidencias">
+                <label for="email"><b>Evidencias de aprendizaje:</b></label>
+                <input type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-1.5 fecha_inicio">
+                <label for=""><b>Fecha inicio:</b></label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="form-group col-md-1.5 fecha_fin">
+                <label for=""><b>Fecha fin:</b></label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="form-group col-md-1.5 lugar">
+                <label for="email"><b>Lugar:</b></label>
+                <input type="text" class="form-control">
+            </div>
+        </div>
+    </div>
+    <div class="button-container ">
+        <button class="btn btn-info mr-2 mx-2" type="button" id="addInput" onclick="addInputField()">+ Agregar</button>
+        <button class="btn btn-danger mx-2" type="button" id="removeInput" onclick="removeInputField()">- Eliminar</button>
+    </div>
+    <textarea name="" class="form-control mt-3"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones" style="resize: None; height: 2rem;"></textarea>
 </form>
+<script>
+    function addInputField() {
+        var inputFields = document.getElementById('inputFields');
+        var newInputField = inputFields.firstElementChild.cloneNode(true);
+        inputFields.appendChild(newInputField);
+    }
+
+    function removeInputField() {
+        var inputFields = document.getElementById('inputFields');
+        if (inputFields.children.length > 1) {
+            inputFields.removeChild(inputFields.lastElementChild);
+        }
+    }
+</script>
 <script>
     $(document).ready(function(){
         $("#documento").on("input", function(e){
