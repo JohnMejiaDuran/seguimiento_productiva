@@ -9,7 +9,7 @@ from flask import (
     jsonify,
 )
 from flask_login import current_user
-from models.seguimientos import Aprendiz, Asignacion, Regional, Asociacion, Empresa
+from models.seguimientos import Aprendiz, Asignacion, Regional, Asociacion, Empresa, Variable
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
@@ -68,8 +68,9 @@ def aprendizasignado():
 @login_required
 @instructor_required
 def crearseguimiento():
+    variables = Variable.query.all()
     regionales = Regional.query.all()
-    return render_template("crearseguimiento3.html", regionales=regionales)
+    return render_template("crearseguimiento3.html", regionales=regionales, variables=variables)
 
 
 @pagina_instructor.route("/buscar_aprendiz", methods=["POST", "GET"])

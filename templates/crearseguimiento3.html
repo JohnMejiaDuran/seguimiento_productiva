@@ -13,7 +13,9 @@
 {% endblock%}
 {% block content %}
 <style>
-    
+    .container-fluid {
+        background-color:  rgb(243, 234, 234);
+    }
     .form-control {
         
         border: 0.1px solid rgb(79, 74, 74);
@@ -64,9 +66,9 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     margin-top: 10px; /* Espacio entre los botones y los campos de entrada */
 }
 </style>
-<form class="container-fluid w-75 mt-3">
+<form class="container-fluid w-75 ">
     <div>
-        <label for="">¿La reunión es virtual o presencial?</label><br>
+        <label for="" class="mt-3">¿La reunión es virtual o presencial?</label><br>
         <select name="" id="reunion">
             <option value=""></option>
             <option value="">Presencial</option>
@@ -193,7 +195,179 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <button class="btn btn-danger mx-2" type="button" id="removeInput" onclick="removeInputField()">- Eliminar</button>
     </div>
     <textarea name="" class="form-control mt-3"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones" style="resize: None; height: 2rem;"></textarea>
+    <div class="form-group mt-3">
+        <label for="tipoInforme"><b>TIPO DE INFORME:    </b></label>   
+        <div class="form-check d-flex">
+          <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial"
+            onclick="mostrarObservaciones()" />
+          <label class="form-check-label" for="parcialRadio">Parcial</label>
+        </div>
+        <div class="form-check d-flex">
+          <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final"
+            onclick="mostrarObservaciones()" />
+          <label class="form-check-label" for="finalRadio">Final</label>
+        </div>
+      </div>
+      
+        <h5>PERIODO EVALUADO</h5>
+        <div class="form-row d-flex">
+            <div class="form-group col-md-6 p-2">
+                <label for="direccion"><b>Dirección</b></label>
+                <input type="date" class="form-control">
+            </div>
+            <div class="form-group col-md-6 p-2">
+                <label for="email"><b>Email:</b></label>
+                <input type="date" class="form-control">
+            </div>
+        </div>
+        <h4 class="text-center">Tabla de Evaluación - Factores actitudinales y comportamentales</h4>
+
+      
+      <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
+        <thead>
+            <tr class="">
+                <th class="text-center">VARIABLE</th>
+                <th class="text-center">DESCRIPCIÓN</th>
+                <th class="text-center">VALORACIÓN</th>
+                <th class="text-center">OBSERVACIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for variable in variables %}
+                {% if variable.tipo == 'Actitudinal' %}
+                    <tr>
+                        <td class="align-middle">{{ variable.nombre }}</td>
+                        <td class="align-middle">{{ variable.descripcion }}</td>
+                        <td class="align-middle">
+                            <div class="d-flex" >
+                                <div class="d-flex m-2" >
+                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
+                                    <label class="form-check-label" for="satisfactorio">Satisfactorio</label>
+                                </div>
+                                <div class="d-flex m-2 ">
+                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
+                                    <label class="form-check-label" for="satisfactorio" style="white-space: nowrap;">Por mejorar</label>
+                                </div>
+                            </div>
+                            
+                            
+                        </td>
+                        <td><textarea name="" id="" cols="20" rows="5"></textarea></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="border-top border-success mt-3 mb-3"></div>
+    <h4 class="text-center">Tabla de Evaluación - Factores Técnicos</h4>
+    <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
+        <thead>
+            <tr class="">
+                <th class="text-center">VARIABLE</th>
+                <th class="text-center">DESCRIPCIÓN</th>
+                <th class="text-center">VALORACIÓN</th>
+                <th class="text-center">OBSERVACIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for variable in variables %}
+                {% if variable.tipo == 'Tecnica' %}
+                    <tr>
+                        <td class="align-middle">{{ variable.nombre }}</td>
+                        <td class="align-middle">{{ variable.descripcion }}</td>
+                        <td class="align-middle">
+                            <div class="d-flex" >
+                                <div class="d-flex m-2" >
+                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
+                                    <label class="form-check-label" for="satisfactorio">Satisfactorio</label>
+                                </div>
+                                <div class="d-flex m-2 ">
+                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
+                                    <label class="form-check-label" for="satisfactorio" style="white-space: nowrap;">Por mejorar</label>
+                                </div>
+                            </div>
+                        </td>
+                        <td><textarea name="" id="" cols="20" rows="5"></textarea></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="border-top border-success mt-3 mb-3"></div>
+    <div class="form-group" id="observacionesContainer" style="display: none">
+        <label for="observaciones">Observaciones:</label>
+        <textarea class="form-control" id="observaciones" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)"></textarea>
+      </div>
+      <div class="form-group" id="observacionesAprendizContainer" style="display: none">
+        <label for="observacionesAprendiz">Observaciones de Aprendiz:</label>
+        <textarea class="form-control" id="observacionesAprendiz" rows="4" style="resize: none;"></textarea>
+      </div>
+    </div>
+      <div class="form-group" id="evaluacionProductiva" style="display: none;" >
+        <h4 class="text-center mt-3">4. EVALUACIÓN ETAPA PRODUCTIVA</h4>
+        <div class="border-top border-success mt-3 mb-3"></div>
+        <div class="d-flex align-items-center m-4" >
+            <label for=""><b>JUICIO DE EVALUACIÓN:</b></label>
+            <div class="p-4">
+                <input type="radio" class="form-check-input" id="aprobado" name="juicio">
+                <label for="aprobado">APROBADO</label>
+            </div>
+            <div>
+                <input type="radio" class="form-check-input" id="no-aprobado" name="juicio">
+                <label for="no-aprobado">NO APROBADO</label>
+            </div>
+        </div>
+        <div class="border-top border-success mt-3 mb-3"></div>
+        <div class="d-flex align-items-center m">
+            <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
+            <div class="p-4">
+                <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" onclick="mostrarObservacionesDesempeño()">
+                <label for="desempeñoSi">SI</label>
+            </div>
+            <div>
+                <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" onclick="mostrarObservacionesDesempeño()">
+
+                <label for="desempeñoNo">NO</label>
+            </div>
+        </div>
+        <div class="form-group" id="observacionesAprendizDesempeño" style="display: none">
+            <label for="observacionesAprendiz"></label>
+            <textarea class="form-control" id="observacionesAprendiz" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
+          </div>
+        <div class="border-top border-success mt-3 mb-3"></div>
+      
+
 </form>
+<script>
+    function mostrarObservaciones() {
+      const finalRadio = document.getElementById('finalRadio');
+      const observacionesContainer = document.getElementById('observacionesContainer');
+      const observacionesAprendizContainer = document.getElementById('observacionesAprendizContainer');
+      const evaluacionProductiva = document.getElementById('evaluacionProductiva');
+
+      if (finalRadio.checked) {
+        observacionesContainer.style.display = 'block';
+        observacionesAprendizContainer.style.display = 'block';
+        evaluacionProductiva.style.display = 'block';
+      } else {
+        observacionesContainer.style.display = 'none';
+        observacionesAprendizContainer.style.display = 'none';
+        evaluacionProductiva.style.display = 'none';
+      }
+    }
+
+    function mostrarObservacionesDesempeño(){
+        const desempeñoSi = document.getElementById('desempeñoSi');
+        const observacionesAprendizDesempeño = document.getElementById('observacionesAprendizDesempeño');
+
+        if (desempeñoSi.checked) {
+        observacionesAprendizDesempeño.style.display = 'block';
+        
+      } else {
+        observacionesAprendizDesempeño.style.display = 'none';
+      }
+    }
+  </script>
 <script>
     function addInputField() {
         var inputFields = document.getElementById('inputFields');
