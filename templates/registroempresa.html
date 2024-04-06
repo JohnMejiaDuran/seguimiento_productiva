@@ -73,7 +73,6 @@
         <div class="form-group col-md-6 p-2 ">
             <label for="nombreAprendiz"><b>Razón social:</b></label>
             <input type="text" id="razonsocial" name="razonsocial" class="form-control" placeholder="Razón social" required>
-        
         </div>
     </div>
 
@@ -136,7 +135,7 @@
                 success: function(res){
                     var data = "<div class='list-group'>";
                     $.each(res, function(index, value){
-                        data += "<p style='margin: 0; width: 30rem;' class='list-group-item list-group-item-action' data-nit='" + value.nit + "'>" + value.nit + "</p>";
+                        data += "<p style='margin: 0; width: 30rem;' class='list-group-item list-group-item-action empresa-item' data-nit='" + value.nit + "'>" + value.nit + "</p>";
                     });
                     data += "</div>";
                     $("#datalist").html(data);
@@ -164,33 +163,31 @@
         });
 
         // Manejar la selección de un elemento de la lista
-        $(document).on("click", "#datalist .list-group-item", function(){
-            var nitSeleccionado = $(this).data("nit");
-            $("#nit").val(nitSeleccionado);
+        $(document).on('click', '.empresa-item', function() {
+            var nit = $(this).data('nit');
+            // Asignar el valor del NIT seleccionado al campo de entrada
+            $('#nit').val(nit);
+            // Ocultar el datalist
             $("#datalist").empty();
-
-            // Realizar una solicitud AJAX adicional para obtener la información de la empresa
+            // Realizar la solicitud para obtener los detalles de la empresa seleccionada
             $.ajax({
-                type: "GET",
-                url: "/get_empresa/" + nitSeleccionado,
-                success: function(empresa){
-                    $("#razonsocial").val(empresa.razon_social);
-                    $("#direccion").val(empresa.direccion);
-                    $("#telefono").val(empresa.telefono);
-                    $("#email").val(empresa.email);
-
-                    // Si la empresa existe, deshabilitar los campos
-                    if (empresa.exists) {
-                        $("#razonsocial").prop('disabled', true);
-                        $("#direccion").prop('disabled', true);
-                        $("#telefono").prop('disabled', true);
-                        $("#email").prop('disabled', true);
-                    }
+                url: '/obtener_empresa',
+                data: {'nit': nit},
+                success: function(data) {
+                    $('#razonsocial').val(data.razon_social);
+                    $('#direccion').val(data.direccion);
+                    $('#telefono').val(data.telefono);
+                    $('#email').val(data.email);
+                },
+                error: function() {
+                    // Manejar el caso en que la empresa no se encuentre
+                    alert('Empresa no encontrada');
                 }
             });
         });
     });
 </script>
+
 
 {% endblock %}
 

@@ -48,29 +48,19 @@ def buscarempresa():
     return jsonify(resultados_empresas)
 
 
-@empresa.route("/get_empresa/<nit>", methods=["GET"])
-def encontrar_empresa(nit):
-    buscar_empresa = Empresa.query.filter_by(nit=nit).first()
-
-    if buscar_empresa:
-        razon_social = buscar_empresa.razon_social
-        direccion = buscar_empresa.direccion
-        telefono = buscar_empresa.telefono
-        email = buscar_empresa.email
-
-        empresa_data = {
-            "razon_social": razon_social,
-            "direccion": direccion,
-            "telefono": telefono,
-            "email": email,
-        }
-
-        return jsonify(empresa_data)
+@empresa.route('/obtener_empresa', methods=['GET'])
+def obtener_empresa():
+    nit = request.args.get('nit')
+    empresas = Empresa.query.filter_by(nit=nit).first()
+    if empresas:
+        return jsonify({
+            'razon_social': empresas.razon_social,
+            'direccion': empresas.direccion,
+            'telefono': empresas.telefono,
+            'email': empresas.email
+        })
     else:
-        # Si no se encuentra la asignación, devolver un mensaje de error
-        return jsonify(
-            {"error": "No se encontró ningún aprendiz con ese número de documento."}
-        )
+        return jsonify({'error': 'Empresa no encontrada'}), 404
 
 
 @empresa.route("/guardar_empresa", methods=["POST"])
