@@ -193,7 +193,41 @@ def table():
                     )
                     
                     ficha_existente = Ficha.query.filter_by(id_ficha=ficha_sin_decimal).first()
-                    ficha_nueva = not ficha_existente
+
+                    if ficha_existente:
+                        print("La ficha ya existe")
+                        ficha_nueva = ficha_existente
+                        print(ficha_nueva)
+                    else:
+                        ficha_nueva = Ficha(id_ficha=ficha_sin_decimal)  # Crear un nuevo objeto Ficha
+                        print("Ficha nueva:", ficha_nueva)
+
+                    # Crear una lista para almacenar los booleanos
+                    aprendiz_y_ficha_lista = []
+
+                    for index, row in aprendices_aprobados.iterrows():
+                        documento_aprendiz = row["Número de Documento"]
+
+                        aprendiz_existente = Aprendiz.query.filter_by(documento=documento_aprendiz).first()
+
+                        if aprendiz_existente:
+                            # Comprobar si la ficha del aprendiz existente es diferente a la nueva ficha
+                            if aprendiz_existente.ficha_id != ficha_nueva.id_ficha:
+                                print("El aprendiz y la ficha son diferentes")
+                                aprendiz_y_ficha_lista.append(True)
+                            else:
+                                aprendiz_y_ficha_lista.append(False)
+                        else:
+                            aprendiz_y_ficha_lista.append(False)
+
+                    # Imprimir la lista de booleanos
+                    print("Lista de booleanos para cada aprendiz:", aprendiz_y_ficha_lista)
+                            # print(
+                            #     "Aprendiz con documento {} ya existe en la base de datos.".format(
+                            #         documento_aprendiz
+                            #     )
+                            # )
+
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
 
@@ -414,7 +448,8 @@ def table():
                         programa=programa,
                         ficha_en_vigencia=ficha_en_vigencia,
                         asignaciones=asignaciones,
-                        ficha_nueva = ficha_nueva
+                        ficha_nueva=ficha_nueva,
+                        aprendiz_y_ficha_lista=aprendiz_y_ficha_lista
                     )
                 except (ValueError, KeyError, TypeError) as e:
                     not_data = False
