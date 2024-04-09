@@ -16,6 +16,7 @@ from models.seguimientos import (
     UserRole,
     Ficha,
     Empresa,
+    Instructor,
 )
 from utils.db import db
 from sqlalchemy.exc import IntegrityError
@@ -37,7 +38,9 @@ def aprendices():
     logo = "/static/icons/user-icon.png"
     aprendiz_guardado = session.pop("aprendiz_guardado", False)
     asignaciones = Asignacion.query.all()
+    instructores = Instructor.query.all()
     asociacion_exitosa = session.pop("asociacion_exitosa", False)
+    aprendiz_actualizado = session.pop("aprendiz_actualizado", False)
     for asignacion in asignaciones:
         if not asignacion.aprendiz.email:
             asignacion.aprendiz.email = "Sin actualizar"
@@ -51,6 +54,8 @@ def aprendices():
         logo=logo,
         aprendiz_guardado=aprendiz_guardado,
         asociacion_exitosa=asociacion_exitosa,
+        instructores=instructores,
+        aprendiz_actualizado=aprendiz_actualizado,
     )
 
 
@@ -199,6 +204,7 @@ def guardar_aprendices():
                                 asignacion_existente.documento_instructor = (
                                     document_instructor
                                 )
+
                                 db.session.commit()
                                 print(
                                     "Se ha actualizado la ficha del aprendiz existente."
@@ -262,3 +268,32 @@ def guardar_aprendices():
         return "No se enviaron datos para guardar o todos los aprendices ya existen en la base de datos"
     else:
         return "Acción no permitida"
+
+
+@ruta_aprendices.route("/actualizar_aprendiz/<id_aprendiz>", methods=["GET", "POST"])
+def actualizar_aprendiz(id_aprendiz):
+    # Obtener todos los instructores disponibles
+
+    if request.method == "POST":
+        # Obtener los datos enviados desde el formulario
+        aprendiz = Aprendiz.query.filter_by(documento=id_aprendiz).first()
+        aprendiz.alternativa = request.form["alternativa"]
+        db.session.commit()
+        asignacion = Asignacion.query.filter_by(documento_aprendiz=id_aprendiz).first()
+        asignacion.documento_instructor = request.form["instructorSelect"]
+
+        # Guardar los cambios en la base de datos
+        db.session.commit()
+        aprendiz_actualizado = True
+        session["aprendiz_actualizado"] = aprendiz_actualizado
+        # Redirigir o mostrar un mensaje de éxito
+        return redirect(
+            url_for(
+                "ruta_aprendices.aprendices",
+                id_aprendiz=id_aprendiz,
+                aprendiz_actualizado=aprendiz_actualizado,
+            )
+        )
+
+    else:
+        pass

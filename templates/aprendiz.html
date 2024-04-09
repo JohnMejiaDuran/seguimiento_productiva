@@ -25,6 +25,11 @@
     #aprendizDocumento, #razonsocial {
         background-color: rgba(128, 128, 128, 0.151);
     }
+
+    .btn-success a {
+    color: inherit; /* Hereda el color del texto del botón */
+    text-decoration: none; /* Elimina la subrayado del enlace */
+}
 </style>
 <h1 class="text-center ">Aprendices</h1>
 <div class="container-fluid">
@@ -59,14 +64,67 @@
                     <td>{{asignacion.instructor.nombre}} {{asignacion.instructor.apellido}} </td> 
                     <td>
                         <div class="d-flex">
-                            <button type="button" class="btn btn-success mx-1" title="Editar datos aprendiz" data-toggle="modal" data-target="#ojitoModal"><i class="fa-sharp fa-solid fa-pen-to-square"></i></button>
+                            <button type="button" class="btn btn-success mx-1" title="Editar datos aprendiz" data-toggle="modal" data-target="#ojitoModal{{ loop.index }}">
+                                <i class="fa-sharp fa-solid fa-pen-to-square"></i>
+                            </button>
                             <button type="button" class="btn btn-warning mx-1" title="Asociar empresa" data-toggle="modal" data-target="#asociarEmpresaModal" data-documento="{{ asignacion.aprendiz.documento }}">
                             <i class="fa-solid fa-plus" style="color: #ffffff;"></i>
                             </button>
                         </div>
                     </td>
                 </tr>
-                
+                <div class="modal fade" id="ojitoModal{{ loop.index }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Editar datos del aprendiz</h5>
+                                <button type="button" class="button" data-dismiss="modal" style="border: none; background-color: transparent;">
+                                    <i class="fa-solid fa-x"></i>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Formulario para editar los datos del aprendiz -->
+                                <form action="{{ url_for('ruta_aprendices.actualizar_aprendiz', id_aprendiz=asignacion.aprendiz.documento)}}" method="POST">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <div class="form-group">
+                                        <label for="id_aprendiz"><b>Documento del Aprendiz:</b></label>
+                                        <input type="text" class="form-control" id="id_aprendiz" value="{{ asignacion.aprendiz.documento }}" readonly style="background-color: rgba(128, 128, 128, 0.151);">
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="alternativa"><b>Editar alternativa:</b></label>
+                                        <select name="alternativa" id="alternativa" class="form-control">
+                                            <option value="Sin Alternativa" {% if asignacion.aprendiz.alternativa == 'Sin Alternativa' %} selected {% endif %}>Sin Alternativa</option>
+                                            <option value="Contrato de aprendizaje" {% if asignacion.aprendiz.alternativa == 'Contrato de aprendizaje' %} selected {% endif %}>Contrato de aprendizaje</option>
+                                            <option value="Vinculo laboral" {% if asignacion.aprendiz.alternativa == 'Vinculo laboral' %} selected {% endif %}>Vinculo laboral</option>
+                                            <option value="Pasantia" {% if asignacion.aprendiz.alternativa == 'Pasantia' %} selected {% endif %}>Pasantia</option>
+                                            <option value="Monitoria" {% if asignacion.aprendiz.alternativa == 'Monitoria' %} selected {% endif %}>Monitoría</option>
+                                            <option value="Proyecto Productivo" {% if asignacion.aprendiz.alternativa == 'Proyecto Productivo' %} selected {% endif %}>Proyecto Productivo</option>
+                                            <option value="Creacion Unidad Productiva" {% if asignacion.aprendiz.alternativa == 'Creacion Unidad Productiva' %} selected {% endif %}>Creación de Unidad Productiva</option>
+                                            <!-- Otras opciones del select -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <label for="instructor"><b>Editar instructor asignado:</b></label>
+                                        <select class="form-control" name="instructorSelect" id="instructorSelect">                      
+                                            {% for instructor in instructores %}
+                                                {% if instructor.documento == asignacion.documento_instructor %}
+                                                    <option value="{{ instructor.documento }}" selected>{{ instructor.nombre }} {{ instructor.apellido }}</option>
+                                                {% else %}
+                                                    <option value="{{ instructor.documento }}">{{ instructor.nombre }} {{ instructor.apellido }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        
+                                    </div>
+                                    <div class="modal-footer mt-4">
+                                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </tbody>
     </table>
@@ -247,6 +305,7 @@
     });
 </script>
 <script>
+    $('#aprendices').DataTable().destroy();
     $(document).ready(function() {
     $('#aprendices').DataTable({
         language: {
@@ -280,6 +339,17 @@
         swal({
             title: 'Aprendices asignados',
             text: 'Los aprendices han sido asignados con éxito',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    </script>
+    {% endif %}
+    {% if aprendiz_actualizado == True %}
+    <script>
+        // Mostrar alerta aquí
+        swal({
+            title: 'Aprendices actualizado',
+            text: 'El aprendiz ha sido actualizado con éxito',
             icon: 'success',
             confirmButtonText: 'OK'
         });

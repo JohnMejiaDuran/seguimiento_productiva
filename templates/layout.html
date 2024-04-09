@@ -56,7 +56,9 @@
     </header>
         {%block upload%}{% endblock%}
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        
+        {% endblock %}
     </main>
     
     <input type="checkbox" id="btn-menu" >
@@ -79,7 +81,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/consultaraprendiz.js"></script>
     <script src="/static/js/main.js"></script>
-
+    
     <script>
       function cerrarMenu() {
         var checkbox = document.getElementById('btn-menu');

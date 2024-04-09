@@ -90,15 +90,16 @@
                         <td>{{ row['Apellidos'] }}</td>
                         <td>{{ row['Ficha'] }}</td>
                         <td>
-                            <select name="alternativa{{ index }}" id="alternativa{{ index }}"> 
-                                <option value="Sin Alternativa"></option>
-                                <option value="Contrato de aprendizaje">Contrato de aprendizaje</option>
-                                <option value="Vinculo laboral">Vinculo laboral</option>
-                                <option value="Pasantia">Pasantia</option>
-                                <option value="Monitoria">Monitoría</option>
-                                <option value="Proyecto Productivo">Proyecto Productivo</option>
-                                <option value="Creacion Unidad Productiva">Creación de Unidad Productiva</option>
+                            <select name="alternativa{{ index }}" id="alternativa{{ index }}" class="form-control text-center"> 
+                                <option value="Sin Alternativa" {% if asignaciones[index].aprendiz.alternativa == 'Sin Alternativa' or not ficha_nueva %} selected {% endif %}></option>
 
+                                <option value="Contrato de aprendizaje" {% if asignaciones[index].aprendiz.alternativa == 'Contrato de aprendizaje' %} selected {% endif %}>Contrato de aprendizaje</option>
+                                <option value="Vinculo laboral" {% if asignaciones[index].aprendiz.alternativa == 'Vinculo laboral' %} selected {% endif %}>Vinculo laboral</option>
+                                <option value="Pasantia" {% if asignaciones[index].aprendiz.alternativa == 'Pasantia' %} selected {% endif %}>Pasantia</option>
+                                <option value="Monitoria" {% if asignaciones[index].aprendiz.alternativa == 'Monitoria' %} selected {% endif %}>Monitoria</option>
+                                <option value="Proyecto Productivo" {% if asignaciones[index].aprendiz.alternativa == 'Proyecto Productivo' %} selected {% endif %}>Proyecto Productivo</option>
+                                <option value="Creacion Unidad Productiva" {% if asignaciones[index].aprendiz.alternativa == 'Creacion Unidad Productiva' %} selected {% endif %}>Creacion Unidad Productiva</option>
+                            
                                 <!-- Otras opciones del select -->
                             </select>
                         </td>

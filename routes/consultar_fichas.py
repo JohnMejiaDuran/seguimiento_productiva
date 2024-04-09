@@ -9,7 +9,7 @@ from flask import (
     send_file,
 )
 import pandas as pd
-from models.seguimientos import Instructor
+from models.seguimientos import Instructor, Asignacion, Ficha
 from datetime import datetime, timedelta
 import xlrd
 from io import BytesIO
@@ -96,6 +96,7 @@ def consultarficha():
 def table():
     rol = ""
     instructores = Instructor.query.all()
+    asignaciones = Asignacion.query.all()
     if request.method == "POST":
         # Verifica si se ha enviado un archivo en la solicitud.
 
@@ -190,7 +191,9 @@ def table():
                             "Ficha": aprendices_aprobados["Ficha"],
                         }
                     )
-
+                    
+                    ficha_existente = Ficha.query.filter_by(id_ficha=ficha_sin_decimal).first()
+                    ficha_nueva = not ficha_existente
                     #########################################################################
                     # APRENDICES CON JUICIOS PENDIENTES
 
@@ -410,6 +413,8 @@ def table():
                         ficha_sin_decimal=ficha_sin_decimal,
                         programa=programa,
                         ficha_en_vigencia=ficha_en_vigencia,
+                        asignaciones=asignaciones,
+                        ficha_nueva = ficha_nueva
                     )
                 except (ValueError, KeyError, TypeError) as e:
                     not_data = False
