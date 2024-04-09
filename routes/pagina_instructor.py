@@ -200,12 +200,6 @@ def aprendiz(documento):
         )
 
 
-@pagina_instructor.route("/crearseguimiento2")
-@login_required
-@instructor_required
-def crearseguimiento2():
-    return render_template("crearseguimiento2.html")
-
 
 @pagina_instructor.route(
     "/cambio_contrasena",

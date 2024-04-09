@@ -144,8 +144,6 @@ class Aprendiz(BaseUser):
     ficha_id = db.Column(db.Integer, db.ForeignKey("ficha.id_ficha"))
     ficha = relationship("Ficha", foreign_keys=[ficha_id])
 
-    
-
     __mapper_args__ = {
         "polymorphic_identity": "aprendiz",
     }
@@ -176,9 +174,22 @@ class Asignacion(db.Model):
     fecha_inicio = db.Column(db.Date)  # se extrae del excel con openpyxl
     fecha_fin = db.Column(db.Date)  # se extrae del excel con openpyxl
     fecha_asignacion = db.Column(db.Date)  # Fecha actual
+    estado = db.Column(db.Boolean, default=False)  # Estado inicializado en False
+    nombre_jefe_directo = db.Column(db.String(100), default="")  # Nombre inicializado en cadena vacía
+    cargo = db.Column(db.String(100), default="")  # Cargo inicializado en cadena vacía
+    celular = db.Column(db.Integer, default=None)  # Celular inicializado en None
+    email = db.Column(db.String(100), default="")  # Email inicializado en cadena vacía
 
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
+
+    def __init__(self, documento_aprendiz, documento_instructor, fecha_inicio, fecha_fin, fecha_asignacion):
+        self.documento_aprendiz = documento_aprendiz
+        self.documento_instructor = documento_instructor
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.fecha_asignacion = fecha_asignacion
+
 
 
 class Regional(db.Model):
@@ -308,16 +319,34 @@ class Asociacion(db.Model):
     fecha_fin_contrato = db.Column(db.Date)
 
     def __init__(
-        self,
-        nit_empresa,
-        id_aprendiz,
-        fecha_inicio_contrato,
-        fecha_fin_contrato
+        self, nit_empresa, id_aprendiz, fecha_inicio_contrato, fecha_fin_contrato
     ):
         self.nit_empresa = nit_empresa
         self.id_aprendiz = id_aprendiz
-        self.fecha_inicio_contrato = fecha_inicio_contrato  # Asignar el valor a fecha_inicio_contrato
+        self.fecha_inicio_contrato = (
+            fecha_inicio_contrato  # Asignar el valor a fecha_inicio_contrato
+        )
         self.fecha_fin_contrato = fecha_fin_contrato
+
+
+class Actividades(db.Model):
+    id_actividad = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_seguimiento = db.Column(db.Integer, db.ForeignKey("seguimiento.id_seguimiento"))
+    evidencia = db.Column(db.String(256))
+    fecha_inicio = db.Column(db.Date)
+    fecha_fin = db.Column(db.Date)
+    lugar = db.Column(db.String(100))
+
+    seguimientos = relationship("Seguimiento", foreign_keys=[id_seguimiento])
+
+    def __init__(
+        self, id_actividad, id_seguimiento, evidencia, fecha_inicio, fecha_fin
+    ):
+        self.id_actividad = id_actividad
+        self.id_seguimiento = id_seguimiento
+        self.evidencia = evidencia
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
 
 
 def insert_regionales(*args, **kwargs):
