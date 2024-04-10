@@ -66,14 +66,15 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     margin-top: 10px; /* Espacio entre los botones y los campos de entrada */
 }
 </style>
-<form class="container-fluid w-75 ">
+<form class="container-fluid w-75 " action="{{ url_for('pagina_instructor.guardarseguimiento') }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="border-top border-success mt-3 mb-3"></div>
     <div>
-        <label for="" class="mt-3">¿La reunión es virtual o presencial?</label><br>
-        <select name="" id="reunion">
-            <option value=""></option>
-            <option value="">Presencial</option>
-            <option value="">Virtual</option>
+        <label for="" class="mt-3"><b>¿La reunión es virtual o presencial?*</b></label><br>
+        <select name="tipo_reunion" id="tipo_reunion" class="form-control w-25" required >
+            <option value="" disabled selected>Escoge una opción</option>
+            <option value="presencial">Presencial</option>
+            <option value="virtual">Virtual</option>
         </select>
     </div>
     <div class="border-top border-success mt-3 mb-3"></div>
@@ -84,24 +85,13 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="form-group col-md-6 p-2" style="position: relative;">
             <label for="documento"><b>Identificación:</b></label>
             <div class="input-container">
-                <input type="text" class="form-control" id="documento" placeholder="Número de documento" autocomplete="off">
+                <input type="text" class="form-control" id="documento" name="documento" placeholder="Número de documento" autocomplete="off">
                 <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
             
             <div id="datalist" style="position: absolute; overflow-y: auto; max-height: 20rem; overflow-x: hidden;">
             
         </div>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-danger mt-2">
-                <ul>
-                    {% for category, message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-        {% endwith %}
             
 <!-- Lista desplegable -->
         </div>
@@ -144,7 +134,7 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         </div>
         <div class="form-group col-md-6 p-2 input-container">
             <label for="cargo_jefe"><b>Cargo:</b></label>
-            <input type="text" class="form-control" id="cargo_jefe" placeholder="Jefe directo" autocomplete="off">
+            <input type="text" class="form-control" id="cargo_jefe" placeholder="Jefe directo" autocomplete="off" name="cargo_jefe">
         </div>
     </div>
     <div class="form-row d-flex">
@@ -154,7 +144,7 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         </div>
         <div class="form-group col-md-6 p-2">
             <label for="telefono_jefe"><b>Teléfono:</b></label>
-            <input type="number" class="form-control" id="telefono_jefe" placeholder="Teléfono jefe directo">
+            <input type="text" class="form-control" id="telefono_jefe" placeholder="Teléfono jefe directo" name="telefono_jefe">
         </div>
     </div>
     <div class="form-row d-flex">
@@ -167,6 +157,14 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
             <input type="email" class="form-control" id="email_jefe" placeholder="Email jefe directo">
         </div>
     </div>
+    <input type="hidden" name="aprendiz" >
+    <input type="hidden" name="regional" ">
+    <input type="hidden" name="centro" >
+    <input type="hidden" name="ficha" >
+    <input type="hidden" name="programa" >
+    <input type="hidden" name="razonsocial">
+    <input type="hidden" name="nit" >
+    <input type="hidden" name="direccion" >
     <div class="border-top border-success mt-3 mb-3"></div>
     <h3 class="text-center mt-3">2. PLANEACIÓN DE ETAPA PRODUCTIVA</h3>
     <h5 class="text-center mt-2">CONCERTACIÓN PLAN DE TRABAJO DURANTE LA ETAPA PRODUCTIVA DEL APRENDIZ</h5>
@@ -174,23 +172,23 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="row ">
             <div class=" col actividades">
                 <label for="direccion"><b>Actividades a desarrollar:</b></label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="actividades" name="actividades">
             </div>
             <div class=" col evidencias">
                 <label for="email"><b>Evidencias de aprendizaje:</b></label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="evidencias" name="evidencias">
             </div>
             <div class=" col fecha_inicio">
                 <label for=""><b>Fecha inicio:</b></label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad">
             </div>
             <div class=" col fecha_fin">
                 <label for=""><b>Fecha fin:</b></label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" id="fecha_fin_actividad" name="fecha_fin_actividad">
             </div>
             <div class=" col lugar">
-                <label for="email"><b>Lugar:</b></label>
-                <input type="text" class="form-control">
+                <label for="lugar"><b>Lugar:</b></label>
+                <input type="text" class="form-control" id="lugar_actividad" name="lugar_actividad">
             </div>
             <div class="border-top border-success mt-3 mb-3"></div>
         </div>
@@ -200,30 +198,29 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <button class="btn btn-info mr-2 mx-2" type="button" id="addInput" onclick="addInputField()">+ Agregar</button>
         <button class="btn btn-danger mx-2" type="button" id="removeInput" onclick="removeInputField()">- Eliminar</button>
     </div>
-    <textarea name="" class="form-control mt-3"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones" style="resize: None; height: 2rem;"></textarea>
+    <textarea name="observaciones" class="form-control mt-3"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones" style="resize: None; height: 2rem;"></textarea>
     <div class="form-group mt-3">
-        <label for="tipoInforme"><b>TIPO DE INFORME:    </b></label>   
+        <label for="tipoInforme"><b>TIPO DE INFORME:</b></label>   
         <div class="form-check d-flex">
-          <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial"
-            onclick="mostrarObservaciones()" />
-          <label class="form-check-label" for="parcialRadio">Parcial</label>
+            <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial" onclick="mostrarObservaciones()" />
+            <label class="form-check-label" for="parcialRadio">Parcial</label>
         </div>
         <div class="form-check d-flex">
-          <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final"
-            onclick="mostrarObservaciones()" />
-          <label class="form-check-label" for="finalRadio">Final</label>
+            <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final" onclick="mostrarObservaciones()" />
+            <label class="form-check-label" for="finalRadio">Final</label>
         </div>
-      </div>
+        
+    </div>
       
         <h5>PERIODO EVALUADO</h5>
         <div class="form-row d-flex">
             <div class="form-group col-md-6 p-2">
-                <label for="direccion"><b>Dirección</b></label>
-                <input type="date" class="form-control">
+                <label for="inicio"><b>Inicio</b></label>
+                <input type="date" class="form-control" id="inicio_periodo" name="inicio_periodo">
             </div>
             <div class="form-group col-md-6 p-2">
-                <label for="email"><b>Email:</b></label>
-                <input type="date" class="form-control">
+                <label for="finalizacion"><b>Finalización:</b></label>
+                <input type="date" class="form-control" id="final_periodo" name="final_periodo">
             </div>
         </div>
         <h4 class="text-center">Tabla de Evaluación - Factores actitudinales y comportamentales</h4>
@@ -244,21 +241,22 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
                     <tr>
                         <td class="align-middle">{{ variable.nombre }}</td>
                         <td class="align-middle">{{ variable.descripcion }}</td>
+                        <input type="hidden" name="tipo_{{ variable.id_variable }}" value="{{ variable.tipo }}">
                         <td class="align-middle">
-                            <div class="d-flex" >
-                                <div class="d-flex m-2" >
-                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
-                                    <label class="form-check-label" for="satisfactorio">Satisfactorio</label>
+                            <div class="d-flex">
+                                <div class="d-flex m-2">
+                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
+                                    <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
                                 </div>
-                                <div class="d-flex m-2 ">
-                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
-                                    <label class="form-check-label" for="satisfactorio" style="white-space: nowrap;">Por mejorar</label>
+                                <div class="d-flex m-2">
+                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}"> 
+                                    <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
                                 </div>
                             </div>
-                            
-                            
                         </td>
-                        <td><textarea name="" id="" cols="20" rows="5"></textarea></td>
+                        <<td>
+                            <textarea name="observacion_{{ variable.id_variable }}" id="observacion_{{ variable.id_variable }}" cols="20" rows="5"></textarea>
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -278,22 +276,25 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <tbody>
             {% for variable in variables %}
                 {% if variable.tipo == 'Tecnica' %}
-                    <tr>
+                <tr>
                         <td class="align-middle">{{ variable.nombre }}</td>
                         <td class="align-middle">{{ variable.descripcion }}</td>
+                        <input type="hidden" name="tipo_{{ variable.id_variable }}" value="{{ variable.tipo }}">
                         <td class="align-middle">
-                            <div class="d-flex" >
-                                <div class="d-flex m-2" >
-                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
-                                    <label class="form-check-label" for="satisfactorio">Satisfactorio</label>
+                            <div class="d-flex">
+                                <div class="d-flex m-2">
+                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
+                                    <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
                                 </div>
-                                <div class="d-flex m-2 ">
-                                    <input type="radio" class="form-check-input" name="satisfactorio" id="satisfactorio">
-                                    <label class="form-check-label" for="satisfactorio" style="white-space: nowrap;">Por mejorar</label>
+                                <div class="d-flex m-2">
+                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}"> 
+                                    <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
                                 </div>
                             </div>
                         </td>
-                        <td><textarea name="" id="" cols="20" rows="5"></textarea></td>
+                        <<td>
+                            <textarea name="observacion_{{ variable.id_variable }}" id="observacion_{{ variable.id_variable }}" cols="20" rows="5"></textarea>
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -301,12 +302,12 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     </table>
     <div class="border-top border-success mt-3 mb-3"></div>
     <div class="form-group" id="observacionesContainer" style="display: none">
-        <label for="observaciones">Observaciones:</label>
-        <textarea class="form-control" id="observaciones" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)"></textarea>
+        <label for="observaciones_finales">Observaciones:</label>
+        <textarea name="observaciones_finales" class="form-control" id="observaciones_finales" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)"></textarea>
       </div>
       <div class="form-group" id="observacionesAprendizContainer" style="display: none">
-        <label for="observacionesAprendiz">Observaciones de Aprendiz:</label>
-        <textarea class="form-control" id="observacionesAprendiz" rows="4" style="resize: none;"></textarea>
+        <label for="observaciones_finales_aprendiz">Observaciones de Aprendiz:</label>
+        <textarea name="observaciones_finales_aprendiz" class="form-control" id="observaciones_finales_aprendiz" rows="4" style="resize: none;"></textarea>
       </div>
     </div>
       <div class="form-group" id="evaluacionProductiva" style="display: none;" >
@@ -315,34 +316,38 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="d-flex align-items-center m-4" >
             <label for=""><b>JUICIO DE EVALUACIÓN:</b></label>
             <div class="p-4">
-                <input type="radio" class="form-check-input" id="aprobado" name="juicio">
+                <input type="radio" class="form-check-input" id="aprobado" name="juicio" value="aprobado">
                 <label for="aprobado">APROBADO</label>
             </div>
             <div>
-                <input type="radio" class="form-check-input" id="no-aprobado" name="juicio">
+                <input type="radio" class="form-check-input" id="no_aprobado" name="juicio" value="no_aprobado">
                 <label for="no-aprobado">NO APROBADO</label>
             </div>
         </div>
         <div class="border-top border-success mt-3 mb-3"></div>
-        <div class="d-flex align-items-center m">
-            <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
-            <div class="p-4">
-                <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" onclick="mostrarObservacionesDesempeño()">
-                <label for="desempeñoSi">SI</label>
-            </div>
-            <div>
-                <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" onclick="mostrarObservacionesDesempeño()">
+            <div class="d-flex align-items-center m">
+                <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
+                <div class="p-4">
+                    <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" value="desempeñoSi" onclick="mostrarObservacionesDesempeño()">
+                    <label for="desempeñoSi">SI</label>
+                </div>
+                <div>
+                    <input type="radio" class="form-check-input" id="desempeñoNo" name="desempeño" value="desempeñoNo" onclick="mostrarObservacionesDesempeño()">
 
-                <label for="desempeñoNo">NO</label>
+                    <label for="desempeñoNo">NO</label>
+                </div>
             </div>
-        </div>
         <div class="form-group" id="observacionesAprendizDesempeño" style="display: none">
-            <label for="observacionesAprendiz"></label>
-            <textarea class="form-control" id="observacionesAprendiz" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
+            <label for="observaciones_desempeño"></label>
+            <textarea name="observaciones_desempeño" class="form-control" id="observaciones_desempeño" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
           </div>
         <div class="border-top border-success mt-3 mb-3"></div>
-      
-
+    </div>
+    <div class="d-flex justify-content-center mb-5 mt-5">
+        <button  type="submit" class="btn btn-success mb-5" name="registar_seguimiento" id="registrar_seguimiento">
+            Registrar Seguimiento
+        </button>
+    </div>
 </form>
 <script>
     function mostrarObservaciones() {
@@ -448,6 +453,55 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     });
 </script>
 <script>
-    
+    $(document).on("click", "#datalist .list-group-item", function(){
+    var documentoSeleccionado = $(this).data("documento");
+    $("#documento").val(documentoSeleccionado);
+    $("#datalist").empty();
+
+    // Realizar una solicitud AJAX adicional para obtener la información del aprendiz
+    $.ajax({
+        type: "get",
+        url: "/get_aprendiz/" + documentoSeleccionado,
+        success: function(aprendiz){
+            // Llenar los campos ocultos
+            $("input[name='aprendiz']").val(aprendiz.nombre_aprendiz + " " + aprendiz.apellido_aprendiz);
+            $("input[name='regional']").val(aprendiz.nombre_regional);
+            $("input[name='centro']").val(aprendiz.nombre_centro);
+            $("input[name='ficha']").val(aprendiz.codigo_ficha);
+            $("input[name='programa']").val(aprendiz.programa);
+            $("input[name='razonsocial']").val(aprendiz.razon_social);
+            $("input[name='nit']").val(aprendiz.nit);
+            $("input[name='direccion']").val(aprendiz.direccion);
+
+            // Obtener los datos dentro de los divs
+            var nit = $("#nit").text();
+            var direccion = $("#direccion").text();
+
+            // Enviar los datos del formulario y los datos del div mediante una solicitud POST
+            $.ajax({
+                type: "POST",
+                url: "/ruta_de_flask",
+                data: {
+                    'documento': documentoSeleccionado,
+                    'aprendiz': aprendiz.nombre_aprendiz + " " + aprendiz.apellido_aprendiz,
+                    'regional': aprendiz.nombre_regional,
+                    'centro': aprendiz.nombre_centro,
+                    'ficha': aprendiz.codigo_ficha,
+                    'programa': aprendiz.programa,
+                    'razonsocial': aprendiz.razon_social,
+                    'nit': nit,
+                    'direccion': direccion
+                    // Agrega más campos si es necesario
+                },
+                success: function(response){
+                    // Manejar la respuesta del servidor si es necesario
+                },
+                error: function(xhr, status, error){
+                    // Manejar errores si es necesario
+                }
+            });
+        }
+    });
+});
 </script>
 {% endblock %}

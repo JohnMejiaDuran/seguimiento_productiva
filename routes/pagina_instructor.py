@@ -9,7 +9,14 @@ from flask import (
     jsonify,
 )
 from flask_login import current_user
-from models.seguimientos import Aprendiz, Asignacion, Regional, Asociacion, Empresa, Variable
+from models.seguimientos import (
+    Aprendiz,
+    Asignacion,
+    Regional,
+    Asociacion,
+    Empresa,
+    Variable,
+)
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
 from functools import wraps
@@ -70,7 +77,56 @@ def aprendizasignado():
 def crearseguimiento():
     variables = Variable.query.all()
     regionales = Regional.query.all()
-    return render_template("crearseguimiento3.html", regionales=regionales, variables=variables)
+    aprendiz = Aprendiz.query.all()
+    return render_template(
+        "crearseguimiento3.html",
+        regionales=regionales,
+        variables=variables,
+        aprendiz=aprendiz,
+    )
+
+
+@pagina_instructor.route("/guardar_seguimiento", methods=["POST"])
+@login_required
+@instructor_required
+def guardarseguimiento():
+    print(request.form["tipo_reunion"])
+    print(request.form["documento"])
+    print(request.form["aprendiz"])
+    print(request.form["regional"])
+    print(request.form["centro"])
+    print(request.form["ficha"])
+    print(request.form["programa"])
+    print(request.form["razonsocial"])
+    print(request.form["cargo_jefe"])
+    print(request.form["nit"])
+    print(request.form["telefono_jefe"])
+    print(request.form["direccion"])
+    print(request.form["actividades"])
+    print(request.form["evidencias"])
+    print(request.form["fecha_inicio_actividad"])
+    print(request.form["fecha_fin_actividad"])
+    print(request.form["lugar_actividad"])
+    print(request.form["observaciones"])
+    print(request.form["tipoInforme"])
+    print(request.form["inicio_periodo"])
+    print(request.form["final_periodo"])
+    for variable_id, valoracion in request.form.items():
+        if variable_id.startswith("satisfactorio_"):
+            variable_id = variable_id.split("_")[-1]
+            tipo_variable = request.form.get("tipo_" + variable_id, "")
+            observacion = request.form.get("observacion_" + variable_id, "")
+            # Aquí puedes guardar la valoración y observación en tu base de datos o hacer lo que necesites con ellas
+            print(valoracion)
+            print(observacion)
+            print(tipo_variable)
+            print(variable_id)
+    print(request.form["observaciones_finales"])
+    print(request.form["observaciones_finales_aprendiz"])
+    print(request.form["juicio"])
+    print(request.form["desempeño"])
+    print(request.form["observaciones_desempeño"])
+    return "Seguimiento guardado"
 
 
 @pagina_instructor.route("/buscar_aprendiz", methods=["POST", "GET"])
@@ -198,7 +254,6 @@ def aprendiz(documento):
             ),
             404,
         )
-
 
 
 @pagina_instructor.route(

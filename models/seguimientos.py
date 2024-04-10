@@ -336,6 +336,7 @@ class Actividades(db.Model):
     fecha_inicio = db.Column(db.Date)
     fecha_fin = db.Column(db.Date)
     lugar = db.Column(db.String(100))
+    observaciones = db.Column(db.String(256))
 
     seguimientos = relationship("Seguimiento", foreign_keys=[id_seguimiento])
 
