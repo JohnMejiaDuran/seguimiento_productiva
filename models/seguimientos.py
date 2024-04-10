@@ -258,47 +258,43 @@ class Variable(db.Model):
 
 class Seguimiento(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB"}
-    id_seguimiento = db.Column(db.Integer, primary_key=True)
+    id_seguimiento = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tipo_seguimiento = db.Column(db.String(100))
     observacion = db.Column(db.String(100))
     fecha_inicio = db.Column(db.Date)
     fecha_fin = db.Column(db.Date)
     tipo = db.Column(db.String(100))
     id_asociacion = db.Column(db.Integer, db.ForeignKey("asociacion.id_asociacion"))
-    juicio = db.Column(db.String(15))
-    documento_aprendiz_aprendiz = db.Column(
-        db.String(15), ForeignKey("aprendiz.documento")
-    )
+    juicio = db.Column(db.String(15), nullable=True)
+    documento_aprendiz = db.Column(db.String(15), ForeignKey("aprendiz.documento"))
     documento_instructor = db.Column(db.String(15), ForeignKey("instructor.documento"))
-    reconocimiento = db.Column(db.String(50))
+    reconocimiento = db.Column(db.String(50), nullable=True)
 
-    aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz_aprendiz])
+    aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     empresa = relationship("Asociacion", foreign_keys=[id_asociacion])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
-
+    
     def __init__(
         self,
-        id_seguimiento,
         tipo_seguimiento,
         observacion,
         fecha_inicio,
         fecha_fin,
         tipo,
-        nit,
         documento_aprendiz,
         documento_instructor,
-        reconocimiento,
+        reconocimiento=None,
+        juicio=None,
     ):
-        self.id_seguimiento = id_seguimiento
         self.tipo_seguimiento = tipo_seguimiento
         self.observacion = observacion
         self.fecha_inicio = fecha_inicio
         self.fecha_fin = fecha_fin
         self.tipo = tipo
-        self.nit = nit
         self.documento_aprendiz = documento_aprendiz
         self.documento_instructor = documento_instructor
         self.reconocimiento = reconocimiento
+        self.juicio = juicio
 
 
 class Empresa(db.Model):

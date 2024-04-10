@@ -99,21 +99,32 @@ def guardarseguimiento():
     tipo = request.form["tipoInforme"]
     inicio_periodo = request.form["inicio_periodo"]
     final_periodo = request.form["final_periodo"]
+    print( request.form["juicio"])
 
+    reconocimiento = request.form["observaciones_desempeño"]
+    asociacion = Asociacion.query.filter_by(id_aprendiz=documento).first()
+    id_asociacion = asociacion.id_asociacion
+    print(id_asociacion)
+        # Create a new Seguimiento instance
     nuevo_seguimiento = Seguimiento(
         tipo_seguimiento=tipo_reunion,
         observacion=observaciones,
         fecha_inicio=inicio_periodo,
         fecha_fin=final_periodo,
         tipo=tipo,
-        documento_aprendiz_aprendiz=documento,documento_instructor=id_instructor
-    )
+        documento_aprendiz=documento,
+        documento_instructor=id_instructor,
+        reconocimiento=reconocimiento,
+        juicio=request.form["juicio"]
+        )
+        
+  
+        
+        # Add the new Seguimiento to the session and commit
     db.session.add(nuevo_seguimiento)
     db.session.commit()
 
 
-    print(request.form["juicio"])
-    print(request.form["observaciones_desempeño"])
     print(request.form["aprendiz"])
     print(request.form["regional"])
     print(request.form["centro"])
@@ -157,12 +168,14 @@ def buscar_aprendiz():
     # Filtrar las asignaciones solo para el instructor actual y con alternativa diferente a "Sin Alternativa"
     asignaciones = (
         Asignacion.query.join(Aprendiz)
+        .join(Asociacion)  # Unimos con la tabla Asociacion
         .filter(
             Asignacion.documento_instructor == documento_instructor_actual,
-            Aprendiz.alternativa != "Sin Alternativa",
+            Aprendiz.alternativa != "Sin Alternativa", 
             or_(
                 Aprendiz.documento.ilike(f"%{searchbox}%"),
                 Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
+                Asociacion.id_aprendiz.ilike(f"%{searchbox}%"),  # Validar documento en Asociacion
             ),
         )
         .all()
