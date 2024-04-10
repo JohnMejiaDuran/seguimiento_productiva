@@ -90,7 +90,7 @@
                         <td>{{ row['Apellidos'] }}</td>
                         <td>{{ row['Ficha'] }}</td>
                         <td>
-                            <select  name="alternativa{{ index }}" id="alternativa{{ index }}" class="form-control text-center" {% if asignaciones[index].aprendiz.alternativa != 'Sin Alternativa' and aprendiz_y_ficha_lista[index] == False %} readonly style="background-color: rgba(36, 181, 63, 0.435); " disabled {% endif %}> 
+                            <select  name="alternativa{{ index }}" id="alternativa{{ index }}" class="form-control text-center" {% if asignaciones[index].aprendiz.alternativa != 'Sin Alternativa' and aprendiz_y_ficha_lista[index] == False %} readonly style="background-color: rgba(36, 181, 63, 0.435); " {% endif %}> 
                                 <option value="Contrato de aprendizaje" {% if asignaciones[index].aprendiz.alternativa == 'Contrato de aprendizaje' %} selected {% endif %}>Contrato de aprendizaje</option>
                                 <option value="Vinculo laboral" {% if asignaciones[index].aprendiz.alternativa == 'Vinculo laboral' %} selected {% endif %}>Vínculo laboral</option>
                                 <option value="Pasantia" {% if asignaciones[index].aprendiz.alternativa == 'Pasantia' %} selected {% endif %}>Pasantía</option>
@@ -119,6 +119,7 @@
                     </select>
             </li>
             <li>
+                
                 <button type="submit" class="btn btn-success" name="asignar_instructor" id="asignar_instructor" disabled>
                     Asignar instructor
                 </button>

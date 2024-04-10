@@ -147,6 +147,11 @@ def guardar_aprendices():
         telefono = ""
         email = ""
         codigo_centro = request.form.get("codigo_centro")
+
+        document_instructor_anterior = request.form.get("document_instructor_anterior")
+
+        # Comparar y actualizar el documento del instructor si es necesario
+
         aprendices_a_agregar = []
         asignaciones_a_agregar = []
 
@@ -183,33 +188,34 @@ def guardar_aprendices():
                 alternativa = request.form.get(f"alternativa{index}")
                 password = documento
                 hashed_password = generate_password_hash(password)
+                
                 if documento and nombre and apellido and alternativa:
+                    print(alternativa)
+                    print(nombre)
+                    print(documento)
                     aprendiz_existente = Aprendiz.query.filter_by(
                         documento=documento
                     ).first()
-                    print(aprendiz_existente)
                     asignacion_existente = Asignacion.query.filter_by(
                         documento_aprendiz=documento
                     ).first()
-                    print(asignacion_existente)
+                    print("Aprendiz existente:", aprendiz_existente)
+                    print("Asignación existente:", asignacion_existente)
                     if aprendiz_existente and asignacion_existente:
-                        # Asignar la nueva ficha al aprendiz existente si es diferente
                         if nueva_ficha:
-                            if (
-                                aprendiz_existente.ficha_id != nueva_ficha.id_ficha
-                                or aprendiz_existente.ficha_id == nueva_ficha.id_ficha
-                            ):
-                                aprendiz_existente.ficha_id = nueva_ficha.id_ficha
+                            if aprendiz_existente.ficha_id != nueva_ficha.id_ficha or aprendiz_existente.ficha_id == nueva_ficha.id_ficha:
+                                aprendiz_existente.ficha_id = nueva_ficha.id_ficha  
                                 aprendiz_existente.alternativa = alternativa
-                                asignacion_existente.documento_instructor = (
-                                    document_instructor
-                                )
-
-                                db.session.commit()
-                                print(
-                                    "Se ha actualizado la ficha del aprendiz existente."
-                                )
-                                hay_aprendices = True
+                                if asignacion_existente.documento_instructor != document_instructor:
+                                    asignacion_existente.documento_instructor = document_instructor
+                                    print("Se ha actualizado el instructor del aprendiz existente.")
+                                try:
+                                    db.session.commit()
+                                    print("Se ha actualizado la ficha del aprendiz existente.")
+                                    hay_aprendices = True
+                                except Exception as e:
+                                    db.session.rollback()
+                                    print(f"Error al actualizar el aprendiz existente: {str(e)}")
 
                     else:
                         aprendiz = Aprendiz(
