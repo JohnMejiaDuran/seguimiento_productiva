@@ -16,6 +16,7 @@ from models.seguimientos import (
     Asociacion,
     Empresa,
     Variable,
+    Seguimiento,
 )
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
@@ -90,8 +91,29 @@ def crearseguimiento():
 @login_required
 @instructor_required
 def guardarseguimiento():
-    print(request.form["tipo_reunion"])
-    print(request.form["documento"])
+    id_instructor = current_user.documento
+    print(id_instructor)
+    tipo_reunion = request.form["tipo_reunion"]
+    documento = request.form["documento"]
+    observaciones = request.form["observaciones"]
+    tipo = request.form["tipoInforme"]
+    inicio_periodo = request.form["inicio_periodo"]
+    final_periodo = request.form["final_periodo"]
+
+    nuevo_seguimiento = Seguimiento(
+        tipo_seguimiento=tipo_reunion,
+        observacion=observaciones,
+        fecha_inicio=inicio_periodo,
+        fecha_fin=final_periodo,
+        tipo=tipo,
+        documento_aprendiz_aprendiz=documento,documento_instructor=id_instructor
+    )
+    db.session.add(nuevo_seguimiento)
+    db.session.commit()
+
+
+    print(request.form["juicio"])
+    print(request.form["observaciones_desempeño"])
     print(request.form["aprendiz"])
     print(request.form["regional"])
     print(request.form["centro"])
@@ -99,7 +121,6 @@ def guardarseguimiento():
     print(request.form["programa"])
     print(request.form["razonsocial"])
     print(request.form["cargo_jefe"])
-    print(request.form["nit"])
     print(request.form["telefono_jefe"])
     print(request.form["direccion"])
     print(request.form["actividades"])
@@ -107,10 +128,6 @@ def guardarseguimiento():
     print(request.form["fecha_inicio_actividad"])
     print(request.form["fecha_fin_actividad"])
     print(request.form["lugar_actividad"])
-    print(request.form["observaciones"])
-    print(request.form["tipoInforme"])
-    print(request.form["inicio_periodo"])
-    print(request.form["final_periodo"])
     for variable_id, valoracion in request.form.items():
         if variable_id.startswith("satisfactorio_"):
             variable_id = variable_id.split("_")[-1]
@@ -123,9 +140,7 @@ def guardarseguimiento():
             print(variable_id)
     print(request.form["observaciones_finales"])
     print(request.form["observaciones_finales_aprendiz"])
-    print(request.form["juicio"])
     print(request.form["desempeño"])
-    print(request.form["observaciones_desempeño"])
     return "Seguimiento guardado"
 
 

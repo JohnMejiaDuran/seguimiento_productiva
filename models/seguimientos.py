@@ -175,7 +175,9 @@ class Asignacion(db.Model):
     fecha_fin = db.Column(db.Date)  # se extrae del excel con openpyxl
     fecha_asignacion = db.Column(db.Date)  # Fecha actual
     estado = db.Column(db.Boolean, default=False)  # Estado inicializado en False
-    nombre_jefe_directo = db.Column(db.String(100), default="")  # Nombre inicializado en cadena vacía
+    nombre_jefe_directo = db.Column(
+        db.String(100), default=""
+    )  # Nombre inicializado en cadena vacía
     cargo = db.Column(db.String(100), default="")  # Cargo inicializado en cadena vacía
     celular = db.Column(db.Integer, default=None)  # Celular inicializado en None
     email = db.Column(db.String(100), default="")  # Email inicializado en cadena vacía
@@ -183,13 +185,19 @@ class Asignacion(db.Model):
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
 
-    def __init__(self, documento_aprendiz, documento_instructor, fecha_inicio, fecha_fin, fecha_asignacion):
+    def __init__(
+        self,
+        documento_aprendiz,
+        documento_instructor,
+        fecha_inicio,
+        fecha_fin,
+        fecha_asignacion,
+    ):
         self.documento_aprendiz = documento_aprendiz
         self.documento_instructor = documento_instructor
         self.fecha_inicio = fecha_inicio
         self.fecha_fin = fecha_fin
         self.fecha_asignacion = fecha_asignacion
-
 
 
 class Regional(db.Model):
@@ -253,10 +261,11 @@ class Seguimiento(db.Model):
     id_seguimiento = db.Column(db.Integer, primary_key=True)
     tipo_seguimiento = db.Column(db.String(100))
     observacion = db.Column(db.String(100))
-    fecha_inicio = db.Column(db.String(15))
-    fecha_fin = db.Column(db.String(15))
+    fecha_inicio = db.Column(db.Date)
+    fecha_fin = db.Column(db.Date)
     tipo = db.Column(db.String(100))
     id_asociacion = db.Column(db.Integer, db.ForeignKey("asociacion.id_asociacion"))
+    juicio = db.Column(db.String(15))
     documento_aprendiz_aprendiz = db.Column(
         db.String(15), ForeignKey("aprendiz.documento")
     )
