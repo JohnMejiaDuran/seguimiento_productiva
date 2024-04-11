@@ -30,7 +30,7 @@ from datetime import datetime
 import openpyxl
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
-
+from openpyxl.utils import range_boundaries
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -248,17 +248,36 @@ def guardarseguimiento():
         sheet[celda_lugar] = lugar
 
         fila += 1
-
+    sheet["A25"] = observaciones
     # Seleccionar la segunda hoja del libro
     sheet2 = book["Table 2"]
 
     # Marcar la casilla correspondiente según el tipo de informe
     if tipo == "parcial":
         sheet2["D2"] = "PARCIAL   [X]"
-        
+
     elif tipo == "final":
         sheet2["D3"] = "FINAL    [X]"
+    sheet2["J2"] = inicio_periodo
+    sheet2["J3"] = final_periodo
 
+    fila = 7
+
+    # Iterar sobre los datos recibidos del formulario
+    for variable_id, valoracion in request.form.items():
+        if variable_id.startswith("satisfactorio_"):
+            # Obtener el ID de la variable de la clave del formulario
+            variable_id = variable_id.split("_")[-1]
+            # Obtener la observación correspondiente a esta variable
+            observacion = request.form.get("observacion_" + variable_id, "")
+            # Escribir los datos en el archivo Excel
+            if valoracion == "satisfactorio":
+                pass
+            elif valoracion == "pormejorar":
+                sheet2[f"K{fila}"] = "X"
+            
+            # Incrementar el número de fila para la siguiente iteración
+            fila += 1
     # Guardar los cambios en el archivo Excel
     book.save("formato.xlsx")
     return "Seguimiento guardado"
