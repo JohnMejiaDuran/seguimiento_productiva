@@ -85,7 +85,7 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="form-group col-md-6 p-2" style="position: relative;">
             <label for="documento"><b>Identificación:</b></label>
             <div class="input-container">
-                <input type="text" class="form-control" id="documento" name="documento" placeholder="Número de documento" autocomplete="off">
+                <input type="text" class="form-control" id="documento" name="documento" placeholder="Número de documento" autocomplete="off" required>
                 <span class="icon"><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
             
@@ -132,20 +132,22 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
             <label for="razonsocial"><b>Razón social:</b></label>
             <div class="form-control auto" id="razonsocial"></div>
         </div>
-        <div class="form-group col-md-6 p-2 input-container">
-            <label for="cargo_jefe"><b>Cargo:</b></label>
-            <input type="text" class="form-control" id="cargo_jefe" placeholder="Jefe directo" autocomplete="off" name="cargo_jefe">
+        <div class="form-group col-md-6 p-2">
+            <label for="nombre_jefe"><b>Nombre jefe inmediato:</b></label>
+            <input type="text" class="form-control" id="nombre_jefe" placeholder="Nombre jefe inmediato" name="jefe_inmediato" required>
         </div>
+        
     </div>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
             <label for="nit"><b>Nit:</b></label>
             <div class="form-control auto" id="nit"></div>
         </div>
-        <div class="form-group col-md-6 p-2">
-            <label for="telefono_jefe"><b>Teléfono:</b></label>
-            <input type="text" class="form-control" id="telefono_jefe" placeholder="Teléfono jefe directo" name="telefono_jefe">
+        <div class="form-group col-md-6 p-2 input-container">
+            <label for="cargo_jefe"><b>Cargo:</b></label>
+            <input type="text" class="form-control" id="cargo_jefe" placeholder="Cargo jefe inmediato" autocomplete="off" name="cargo_jefe" required>
         </div>
+        
     </div>
     <div class="form-row d-flex">
         <div class="form-group col-md-6 p-2">
@@ -153,8 +155,15 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
             <div class="form-control auto" id="direccion"></div>
         </div>
         <div class="form-group col-md-6 p-2">
+            <label for="telefono_jefe"><b>Teléfono:</b></label>
+            <input type="text" class="form-control" id="telefono_jefe" placeholder="Teléfono jefe directo" name="telefono_jefe" required>
+        </div>
+        
+    </div>
+    <div class="form-row d-flex">
+        <div class="form-group col-md-6 p-2">
             <label for="email_jefe"><b>Email:</b></label>
-            <input type="email" class="form-control" id="email_jefe" placeholder="Email jefe directo">
+            <input type="email" class="form-control" id="email_jefe" placeholder="Email jefe directo" name="email_jefe" required>
         </div>
     </div>
     <input type="hidden" name="aprendiz" >
@@ -172,23 +181,23 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="row actividad">
             <div class="col actividades">
                 <label for="direccion"><b>Actividades a desarrollar:</b></label>
-                <input type="text" class="form-control" name="actividades[]">
+                <input type="text" class="form-control" name="actividades[]" required>
             </div>
             <div class="col evidencias">
                 <label for="email"><b>Evidencias de aprendizaje:</b></label>
-                <input type="text" class="form-control" name="evidencias[]">
+                <input type="text" class="form-control" name="evidencias[]" required>
             </div>
             <div class="col fecha_inicio">
                 <label for=""><b>Fecha inicio:</b></label>
-                <input type="date" class="form-control" name="fecha_inicio_actividad[]">
+                <input type="date" class="form-control" name="fecha_inicio_actividad[]" required>
             </div>
             <div class="col fecha_fin">
                 <label for=""><b>Fecha fin:</b></label>
-                <input type="date" class="form-control" name="fecha_fin_actividad[]">
+                <input type="date" class="form-control" name="fecha_fin_actividad[]" required>
             </div>
             <div class="col lugar">
                 <label for="lugar"><b>Lugar:</b></label>
-                <input type="text" class="form-control" name="lugar_actividad[]">
+                <input type="text" class="form-control" name="lugar_actividad[]" required>
             </div>
         </div>
     </div>
@@ -202,11 +211,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     <div class="form-group mt-3">
         <label for="tipoInforme"><b>TIPO DE INFORME:</b></label>   
         <div class="form-check d-flex">
-            <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial" onclick="mostrarObservaciones()" />
+            <input type="radio" class="form-check-input" id="parcialRadio" name="tipoInforme" value="parcial" onclick="mostrarObservaciones()" required />
             <label class="form-check-label" for="parcialRadio">Parcial</label>
         </div>
         <div class="form-check d-flex">
-            <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final" onclick="mostrarObservaciones()" />
+            <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final" onclick="mostrarObservaciones()"  required />
             <label class="form-check-label" for="finalRadio">Final</label>
         </div>
         
@@ -216,11 +225,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="form-row d-flex">
             <div class="form-group col-md-6 p-2">
                 <label for="inicio"><b>Inicio</b></label>
-                <input type="date" class="form-control" id="inicio_periodo" name="inicio_periodo">
+                <input type="date" class="form-control" id="inicio_periodo" name="inicio_periodo" required>
             </div>
             <div class="form-group col-md-6 p-2">
                 <label for="finalizacion"><b>Finalización:</b></label>
-                <input type="date" class="form-control" id="final_periodo" name="final_periodo">
+                <input type="date" class="form-control" id="final_periodo" name="final_periodo" required>
             </div>
         </div>
         <h4 class="text-center">Tabla de Evaluación - Factores actitudinales y comportamentales</h4>
@@ -245,11 +254,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
                         <td class="align-middle">
                             <div class="d-flex">
                                 <div class="d-flex m-2">
-                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
+                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" >
                                     <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
                                 </div>
                                 <div class="d-flex m-2">
-                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}"> 
+                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" > 
                                     <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
                                 </div>
                             </div>
@@ -283,11 +292,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
                         <td class="align-middle">
                             <div class="d-flex">
                                 <div class="d-flex m-2">
-                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
+                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" >
                                     <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
                                 </div>
                                 <div class="d-flex m-2">
-                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}"> 
+                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" > 
                                     <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
                                 </div>
                             </div>
@@ -303,11 +312,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     <div class="border-top border-success mt-3 mb-3"></div>
     <div class="form-group" id="observacionesContainer" style="display: none">
         <label for="observaciones_finales">Observaciones:</label>
-        <textarea name="observaciones_finales" class="form-control" id="observaciones_finales" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)"></textarea>
+        <textarea name="observaciones_finales" class="form-control" id="observaciones_finales" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)" ></textarea>
       </div>
       <div class="form-group" id="observacionesAprendizContainer" style="display: none">
         <label for="observaciones_finales_aprendiz">Observaciones de Aprendiz:</label>
-        <textarea name="observaciones_finales_aprendiz" class="form-control" id="observaciones_finales_aprendiz" rows="4" style="resize: none;"></textarea>
+        <textarea name="observaciones_finales_aprendiz" class="form-control" id="observaciones_finales_aprendiz" rows="4" style="resize: none;" ></textarea>
       </div>
     </div>
       <div class="form-group" id="evaluacionProductiva" style="display: none;" >
@@ -316,11 +325,11 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="d-flex align-items-center m-4" >
             <label for=""><b>JUICIO DE EVALUACIÓN:</b></label>
             <div class="p-4">
-                <input type="radio" class="form-check-input" id="juicio_aprobado" name="juicio_final" value="aprobado">
+                <input type="radio" class="form-check-input" id="juicio_aprobado" name="juicio_final" value="aprobado" >
                 <label for="juicio_aprobado">APROBADO</label>
             </div>
             <div>
-                <input type="radio" class="form-check-input" id="juicio_no_aprobado" name="juicio_final" value="no_aprobado">
+                <input type="radio" class="form-check-input" id="juicio_no_aprobado" name="juicio_final" value="no_aprobado" >
                 <label for="juicio_no_aprobado">NO APROBADO</label>
             </div>
         </div>
@@ -328,18 +337,18 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
             <div class="d-flex align-items-center m">
                 <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
                 <div class="p-4">
-                    <input type="radio" class="form-check-input" id="desempenoSi" name="desempeno" value="desempenoSi" onclick="mostrarObservacionesDesempeno()">
+                    <input type="radio" class="form-check-input" id="desempenoSi" name="desempeno" value="desempenoSi" onclick="mostrarObservacionesDesempeno()" >
                     <label for="desempenoSi">SI</label>
                 </div>
                 <div>
-                    <input type="radio" class="form-check-input" id="desempenoNo" name="desempeno" value="desempenoNo" onclick="mostrarObservacionesDesempeno()">
+                    <input type="radio" class="form-check-input" id="desempenoNo" name="desempeno" value="desempenoNo" onclick="mostrarObservacionesDesempeno()" >
 
                     <label for="desempenoNo">NO</label>
                 </div>
             </div>
         <div class="form-group" id="observacionesAprendizDesempeno" style="display: none">
             <label for="observaciones_desempeno"></label>
-            <textarea name="observaciones_desempeno" class="form-control" id="observaciones_desempeno" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
+            <textarea name="observaciones_desempeno" class="form-control" id="observaciones_desempeno" rows="4" style="resize: none;" placeholder="Explicar cuales" ></textarea>
           </div>
         <div class="border-top border-success mt-3 mb-3"></div>
     </div>

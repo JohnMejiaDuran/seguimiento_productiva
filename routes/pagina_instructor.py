@@ -27,6 +27,9 @@ from routes.consultar_fichas import admin_required
 from sqlalchemy import or_
 from sqlalchemy import desc
 from datetime import datetime
+import openpyxl
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
 
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
@@ -104,6 +107,11 @@ def guardarseguimiento():
     inicio_periodo = request.form["inicio_periodo"]
     final_periodo = request.form["final_periodo"]
     juicio_final = request.form.get("juicio_final")
+    jefe_inmediato = request.form["jefe_inmediato"]
+    cargo_jefe = request.form["cargo_jefe"]
+    telefono_jefe = request.form["telefono_jefe"]
+    email_jefe = request.form["email_jefe"]
+
     print(juicio_final)
     reconocimiento = request.form["observaciones_desempeno"]
     observaciones_finales = request.form["observaciones_finales"]
@@ -112,7 +120,10 @@ def guardarseguimiento():
     id_asociacion = asociacion.id_asociacion
     nombre_instructor = current_user.nombre + " " + current_user.apellido
     print(id_asociacion)
-    # Create a new Seguimiento instance
+    # Create a new Seguimiento instanc
+    ficha_aprendiz = Aprendiz.query.filter(Aprendiz.documento == documento).first()
+
+    print(ficha_aprendiz.ficha.centro.nombre_centro)
     if not juicio_final:
         juicio_final = None
     if not reconocimiento:
@@ -176,7 +187,80 @@ def guardarseguimiento():
             )
             db.session.add(valoracion_aprendiz)
         db.session.commit()
+    asignacion = Asignacion.query.filter_by(documento_aprendiz=documento).first()
+    asociacion = (
+        Asociacion.query.filter_by(id_aprendiz=documento)
+        .order_by(desc(Asociacion.id_asociacion))
+        .first()
+    )
+    if asociacion:
+        nit = asociacion.nit_empresa
+        empresa = Empresa.query.filter_by(nit=nit).first()
 
+        if empresa:
+            # Si se encuentra la empresa, obtener sus datos
+            razon_social = empresa.razon_social
+            telefono = empresa.telefono
+            direccion = empresa.direccion
+            email = empresa.email
+    book = openpyxl.load_workbook("formato.xlsx")
+
+    # Seleccionar la hoja activa
+    sheet = book.active
+
+    # Modificar las celdas en la hoja activa
+    sheet["J2"] = ficha_aprendiz.ficha.centro.nombre_centro
+    sheet["D3"] = ficha_aprendiz.ficha.programa
+    sheet["L3"] = ficha_aprendiz.ficha_id
+    sheet["F5"] = ficha_aprendiz.nombre + " " + ficha_aprendiz.apellido
+    sheet["F6"] = documento
+    sheet["F7"] = "Sin actualizar"
+    sheet["F8"] = "Sin actualizar"
+    sheet["F9"] = ficha_aprendiz.alternativa
+    sheet["F10"] = razon_social
+    sheet["F11"] = nit
+    sheet["F12"] = direccion
+    sheet["F13"] = jefe_inmediato
+    sheet["F14"] = cargo_jefe
+    sheet["F15"] = telefono_jefe
+
+    # Suponiendo que 'columna' es la columna inicial en la que deseas escribir las actividades
+    columna = "A"
+
+    # Suponiendo que 'fila' es la fila inicial en la que deseas escribir las actividades
+    fila = 22
+
+    for actividad, evidencia, fecha_inicio, fecha_fin, lugar in zip(
+        actividades, evidencias, fechas_inicio, fechas_fin, lugares
+    ):
+        celda = f"{columna}{fila}"
+        sheet[celda] = actividad
+
+        celda_evidencia = f"H{fila}"
+        sheet[celda_evidencia] = evidencia
+
+        # Escribir las fechas de inicio y fin en la misma celda con un salto de línea
+        celda_fecha = f"K{fila}"
+        contenido_fecha = f"{fecha_inicio}\n{fecha_fin}"
+        sheet[celda_fecha] = contenido_fecha
+
+        celda_lugar = f"M{fila}"
+        sheet[celda_lugar] = lugar
+
+        fila += 1
+
+    # Seleccionar la segunda hoja del libro
+    sheet2 = book["Table 2"]
+
+    # Marcar la casilla correspondiente según el tipo de informe
+    if tipo == "parcial":
+        sheet2["D2"] = "PARCIAL   [X]"
+        
+    elif tipo == "final":
+        sheet2["D3"] = "FINAL    [X]"
+
+    # Guardar los cambios en el archivo Excel
+    book.save("formato.xlsx")
     return "Seguimiento guardado"
 
 
