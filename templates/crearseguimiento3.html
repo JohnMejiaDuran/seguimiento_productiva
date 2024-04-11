@@ -169,35 +169,35 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     <h3 class="text-center mt-3">2. PLANEACIÓN DE ETAPA PRODUCTIVA</h3>
     <h5 class="text-center mt-2">CONCERTACIÓN PLAN DE TRABAJO DURANTE LA ETAPA PRODUCTIVA DEL APRENDIZ</h5>
     <div id="inputFields">
-        <div class="row ">
-            <div class=" col actividades">
+        <div class="row actividad">
+            <div class="col actividades">
                 <label for="direccion"><b>Actividades a desarrollar:</b></label>
-                <input type="text" class="form-control" id="actividades" name="actividades">
+                <input type="text" class="form-control" name="actividades[]">
             </div>
-            <div class=" col evidencias">
+            <div class="col evidencias">
                 <label for="email"><b>Evidencias de aprendizaje:</b></label>
-                <input type="text" class="form-control" id="evidencias" name="evidencias">
+                <input type="text" class="form-control" name="evidencias[]">
             </div>
-            <div class=" col fecha_inicio">
+            <div class="col fecha_inicio">
                 <label for=""><b>Fecha inicio:</b></label>
-                <input type="date" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad">
+                <input type="date" class="form-control" name="fecha_inicio_actividad[]">
             </div>
-            <div class=" col fecha_fin">
+            <div class="col fecha_fin">
                 <label for=""><b>Fecha fin:</b></label>
-                <input type="date" class="form-control" id="fecha_fin_actividad" name="fecha_fin_actividad">
+                <input type="date" class="form-control" name="fecha_fin_actividad[]">
             </div>
-            <div class=" col lugar">
+            <div class="col lugar">
                 <label for="lugar"><b>Lugar:</b></label>
-                <input type="text" class="form-control" id="lugar_actividad" name="lugar_actividad">
+                <input type="text" class="form-control" name="lugar_actividad[]">
             </div>
-            <div class="border-top border-success mt-3 mb-3"></div>
         </div>
-        
     </div>
-    <div class="button-container ">
-        <button class="btn btn-info mr-2 mx-2" type="button" id="addInput" onclick="addInputField()">+ Agregar</button>
-        <button class="btn btn-danger mx-2" type="button" id="removeInput" onclick="removeInputField()">- Eliminar</button>
+    
+    <div class="button-container">
+        <button class="btn btn-info mr-2 mx-2" type="button" id="addInput">+ Agregar</button>
+        <button class="btn btn-danger mx-2" type="button" id="removeInput">- Eliminar</button>
     </div>
+    
     <textarea name="observaciones" class="form-control mt-3"style="resize: none;"  id="observaciones" cols="30" rows="4" placeholder="Observaciones" style="resize: None; height: 2rem;"></textarea>
     <div class="form-group mt-3">
         <label for="tipoInforme"><b>TIPO DE INFORME:</b></label>   
@@ -316,30 +316,30 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         <div class="d-flex align-items-center m-4" >
             <label for=""><b>JUICIO DE EVALUACIÓN:</b></label>
             <div class="p-4">
-                <input type="radio" class="form-check-input" id="aprobado" name="juicio" value="juicio">
-                <label for="aprobado">APROBADO</label>
+                <input type="radio" class="form-check-input" id="juicio_aprobado" name="juicio_final" value="aprobado">
+                <label for="juicio_aprobado">APROBADO</label>
             </div>
             <div>
-                <input type="radio" class="form-check-input" id="no_aprobado" name="juicio" >
-                <label for="no_aprobado">NO APROBADO</label>
+                <input type="radio" class="form-check-input" id="juicio_no_aprobado" name="juicio_final" value="no_aprobado">
+                <label for="juicio_no_aprobado">NO APROBADO</label>
             </div>
         </div>
         <div class="border-top border-success mt-3 mb-3"></div>
             <div class="d-flex align-items-center m">
                 <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
                 <div class="p-4">
-                    <input type="radio" class="form-check-input" id="desempeñoSi" name="desempeño" value="desempeñoSi" onclick="mostrarObservacionesDesempeño()">
-                    <label for="desempeñoSi">SI</label>
+                    <input type="radio" class="form-check-input" id="desempenoSi" name="desempeno" value="desempenoSi" onclick="mostrarObservacionesDesempeno()">
+                    <label for="desempenoSi">SI</label>
                 </div>
                 <div>
-                    <input type="radio" class="form-check-input" id="desempeñoNo" name="desempeño" value="desempeñoNo" onclick="mostrarObservacionesDesempeño()">
+                    <input type="radio" class="form-check-input" id="desempenoNo" name="desempeno" value="desempenoNo" onclick="mostrarObservacionesDesempeno()">
 
-                    <label for="desempeñoNo">NO</label>
+                    <label for="desempenoNo">NO</label>
                 </div>
             </div>
-        <div class="form-group" id="observacionesAprendizDesempeño" style="display: none">
-            <label for="observaciones_desempeño"></label>
-            <textarea name="observaciones_desempeño" class="form-control" id="observaciones_desempeño" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
+        <div class="form-group" id="observacionesAprendizDesempeno" style="display: none">
+            <label for="observaciones_desempeno"></label>
+            <textarea name="observaciones_desempeno" class="form-control" id="observaciones_desempeno" rows="4" style="resize: none;" placeholder="Explicar cuales"></textarea>
           </div>
         <div class="border-top border-success mt-3 mb-3"></div>
     </div>
@@ -367,32 +367,46 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
       }
     }
 
-    function mostrarObservacionesDesempeño(){
-        const desempeñoSi = document.getElementById('desempeñoSi');
-        const observacionesAprendizDesempeño = document.getElementById('observacionesAprendizDesempeño');
+    function mostrarObservacionesDesempeno(){
+        const desempenoSi = document.getElementById('desempenoSi');
+        const observacionesAprendizDesempeno = document.getElementById('observacionesAprendizDesempeno');
 
-        if (desempeñoSi.checked) {
-        observacionesAprendizDesempeño.style.display = 'block';
+        if (desempenoSi.checked) {
+        observacionesAprendizDesempeno.style.display = 'block';
         
       } else {
-        observacionesAprendizDesempeño.style.display = 'none';
+        observacionesAprendizDesempeno.style.display = 'none';
       }
     }
   </script>
 <script>
-    function addInputField() {
-        var inputFields = document.getElementById('inputFields');
-        var newInputField = inputFields.firstElementChild.cloneNode(true);
-        inputFields.appendChild(newInputField);
-    }
-
-    function removeInputField() {
-        var inputFields = document.getElementById('inputFields');
-        if (inputFields.children.length > 1) {
-            inputFields.removeChild(inputFields.lastElementChild);
+    document.getElementById("addInput").addEventListener("click", function() {
+        var addInputButton = document.getElementById("addInput");
+        addInputButton.disabled = true; // Deshabilitar el botón mientras se clona el campo
+    
+        var inputFields = document.getElementById("inputFields");
+        var clonedInput = inputFields.firstElementChild.cloneNode(true);
+    
+        // Limpiar los valores de los campos de texto y de fecha clonados
+        clonedInput.querySelectorAll("input[type='text'], input[type='date']").forEach(function(input) {
+            input.value = "";
+        });
+    
+        inputFields.appendChild(clonedInput);
+    
+        addInputButton.disabled = false; // Habilitar el botón después de clonar el campo
+    });
+    
+    document.getElementById("removeInput").addEventListener("click", function() {
+        var inputFields = document.getElementById("inputFields");
+        var inputs = inputFields.querySelectorAll(".actividad");
+        if (inputs.length > 1) { // Solo eliminar si hay más de un conjunto de campos
+            inputFields.removeChild(inputs[inputs.length - 1]); // Eliminar el último conjunto de campos
         }
-    }
-</script>
+    });
+    </script>
+    
+    
 <script>
     $(document).ready(function(){
         $("#documento").on("input", function(e){

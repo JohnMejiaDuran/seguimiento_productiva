@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import relationship
 from sqlalchemy import event
-
+from datetime import datetime
 
 class UserRole(db.Model):
     __tablename__ = "user_role"
@@ -236,31 +236,30 @@ class Variable(db.Model):
         self.tipo = tipo
         self.descripcion = descripcion
 
-    class Valoracion(db.Model):
-        __table_args__ = {"mysql_engine": "InnoDB"}
-        id_valoracion = db.Column(db.Integer, primary_key=True)
-        id_variable = db.Column(db.Integer, ForeignKey("variable.id_variable"))
-        id_seguimiento = db.Column(db.Integer, ForeignKey("seguimiento.id_seguimiento"))
-        valoracion = db.Column(db.String(100))
-        observacion = db.Column(db.String(100))
+class Valoracion(db.Model):
+    __table_args__ = {"mysql_engine": "InnoDB"}
+    id_valoracion = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id_variable = db.Column(db.Integer, ForeignKey("variable.id_variable"))
+    id_seguimiento = db.Column(db.Integer, ForeignKey("seguimiento.id_seguimiento"))
+    valoracion = db.Column(db.String(100))
+    observacion = db.Column(db.String(100))
 
-        variable = relationship("Variable", foreign_keys=[id_variable])
+    variable = relationship("Variable", foreign_keys=[id_variable])
 
-        def __init__(
-            self, id_valoracion, id_variable, id_seguimiento, valoracion, observacion
-        ):
-            self.id_valoracion = id_valoracion
-            self.id_variable = id_variable
-            self.id_seguimiento = id_seguimiento
-            self.valoracion = valoracion
-            self.observacion = observacion
+    def __init__(
+        self, id_variable, id_seguimiento, valoracion, observacion
+    ):
+        self.id_variable = id_variable
+        self.id_seguimiento = id_seguimiento
+        self.valoracion = valoracion
+        self.observacion = observacion
 
 
 class Seguimiento(db.Model):
     __table_args__ = {"mysql_engine": "InnoDB"}
     id_seguimiento = db.Column(db.Integer, primary_key=True, autoincrement=True)
     tipo_seguimiento = db.Column(db.String(100))
-    observacion = db.Column(db.String(100))
+    observacion = db.Column(db.Text)
     fecha_inicio = db.Column(db.Date)
     fecha_fin = db.Column(db.Date)
     tipo = db.Column(db.String(100))
@@ -269,7 +268,10 @@ class Seguimiento(db.Model):
     documento_aprendiz = db.Column(db.String(15), ForeignKey("aprendiz.documento"))
     documento_instructor = db.Column(db.String(15), ForeignKey("instructor.documento"))
     reconocimiento = db.Column(db.String(50), nullable=True)
-
+    observaciones_finales = db.Column(db.Text, nullable=True)
+    observaciones_finales_aprendiz = db.Column(db.Text, nullable=True)
+    fecha_guardado = db.Column(db.DateTime, default=datetime.now)
+    nombre_instructor = db.Column(db.Text)
     aprendiz = relationship("Aprendiz", foreign_keys=[documento_aprendiz])
     empresa = relationship("Asociacion", foreign_keys=[id_asociacion])
     instructor = relationship("Instructor", foreign_keys=[documento_instructor])
@@ -283,8 +285,13 @@ class Seguimiento(db.Model):
         tipo,
         documento_aprendiz,
         documento_instructor,
+        id_asociacion,
+        nombre_instructor,
         reconocimiento=None,
         juicio=None,
+        observaciones_finales=None,
+        observaciones_finales_aprendiz=None
+        
     ):
         self.tipo_seguimiento = tipo_seguimiento
         self.observacion = observacion
@@ -293,8 +300,12 @@ class Seguimiento(db.Model):
         self.tipo = tipo
         self.documento_aprendiz = documento_aprendiz
         self.documento_instructor = documento_instructor
+        self.id_asociacion = id_asociacion
         self.reconocimiento = reconocimiento
         self.juicio = juicio
+        self.observaciones_finales = observaciones_finales
+        self.observaciones_finales_aprendiz = observaciones_finales_aprendiz
+        self.nombre_instructor = nombre_instructor
 
 
 class Empresa(db.Model):
@@ -337,22 +348,23 @@ class Asociacion(db.Model):
 class Actividades(db.Model):
     id_actividad = db.Column(db.Integer, primary_key=True, autoincrement=True)
     id_seguimiento = db.Column(db.Integer, db.ForeignKey("seguimiento.id_seguimiento"))
-    evidencia = db.Column(db.String(256))
+    descripcion_actividad = db.Column(db.Text)  # Nuevo campo
+    evidencia = db.Column(db.Text)
     fecha_inicio = db.Column(db.Date)
     fecha_fin = db.Column(db.Date)
     lugar = db.Column(db.String(100))
-    observaciones = db.Column(db.String(256))
 
     seguimientos = relationship("Seguimiento", foreign_keys=[id_seguimiento])
 
     def __init__(
-        self, id_actividad, id_seguimiento, evidencia, fecha_inicio, fecha_fin
+        self, id_seguimiento, descripcion_actividad, evidencia, fecha_inicio, fecha_fin, lugar
     ):
-        self.id_actividad = id_actividad
         self.id_seguimiento = id_seguimiento
+        self.descripcion_actividad = descripcion_actividad
         self.evidencia = evidencia
         self.fecha_inicio = fecha_inicio
         self.fecha_fin = fecha_fin
+        self.lugar = lugar
 
 
 def insert_regionales(*args, **kwargs):

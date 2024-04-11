@@ -12,6 +12,8 @@ from routes.pagina_instructor import pagina_instructor
 from routes.pagina_aprendiz import pagina_aprendiz
 from routes.asignaciones import asignaciones
 from routes.empresas import empresa
+from routes.reportes import reportes
+
 app = Flask(__name__)
 
 csrf = CSRFProtect()
@@ -39,3 +41,4 @@ app.register_blueprint(pagina_error)
 app.register_blueprint(pagina_instructor)
 app.register_blueprint(pagina_aprendiz)
 app.register_blueprint(empresa)
+app.register_blueprint(reportes)

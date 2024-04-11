@@ -17,6 +17,8 @@ from models.seguimientos import (
     Empresa,
     Variable,
     Seguimiento,
+    Actividades,
+    Valoracion,
 )
 from flask_login import login_user, logout_user, login_required
 from utils.db import db
@@ -24,6 +26,8 @@ from functools import wraps
 from routes.consultar_fichas import admin_required
 from sqlalchemy import or_
 from sqlalchemy import desc
+from datetime import datetime
+
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -99,13 +103,24 @@ def guardarseguimiento():
     tipo = request.form["tipoInforme"]
     inicio_periodo = request.form["inicio_periodo"]
     final_periodo = request.form["final_periodo"]
-    print( request.form["juicio"])
-
-    reconocimiento = request.form["observaciones_desempeño"]
+    juicio_final = request.form.get("juicio_final")
+    print(juicio_final)
+    reconocimiento = request.form["observaciones_desempeno"]
+    observaciones_finales = request.form["observaciones_finales"]
+    observaciones_finales_aprendiz = request.form["observaciones_finales_aprendiz"]
     asociacion = Asociacion.query.filter_by(id_aprendiz=documento).first()
     id_asociacion = asociacion.id_asociacion
+    nombre_instructor = current_user.nombre + " " + current_user.apellido
     print(id_asociacion)
-        # Create a new Seguimiento instance
+    # Create a new Seguimiento instance
+    if not juicio_final:
+        juicio_final = None
+    if not reconocimiento:
+        reconocimiento = None
+    if not observaciones_finales:
+        observaciones_finales = None
+    if not observaciones_finales_aprendiz:
+        observaciones_finales_aprendiz = None
     nuevo_seguimiento = Seguimiento(
         tipo_seguimiento=tipo_reunion,
         observacion=observaciones,
@@ -114,44 +129,54 @@ def guardarseguimiento():
         tipo=tipo,
         documento_aprendiz=documento,
         documento_instructor=id_instructor,
+        id_asociacion=id_asociacion,
         reconocimiento=reconocimiento,
-        juicio=request.form["juicio"]
-        )
-        
-  
-        
-        # Add the new Seguimiento to the session and commit
+        juicio=juicio_final,
+        observaciones_finales=observaciones_finales,
+        observaciones_finales_aprendiz=observaciones_finales_aprendiz,
+        nombre_instructor=nombre_instructor,
+    )
+
     db.session.add(nuevo_seguimiento)
     db.session.commit()
 
+    actividades = request.form.getlist("actividades[]")
+    evidencias = request.form.getlist("evidencias[]")
+    fechas_inicio = request.form.getlist("fecha_inicio_actividad[]")
+    fechas_fin = request.form.getlist("fecha_fin_actividad[]")
+    lugares = request.form.getlist("lugar_actividad[]")
 
-    print(request.form["aprendiz"])
-    print(request.form["regional"])
-    print(request.form["centro"])
-    print(request.form["ficha"])
-    print(request.form["programa"])
-    print(request.form["razonsocial"])
-    print(request.form["cargo_jefe"])
-    print(request.form["telefono_jefe"])
-    print(request.form["direccion"])
-    print(request.form["actividades"])
-    print(request.form["evidencias"])
-    print(request.form["fecha_inicio_actividad"])
-    print(request.form["fecha_fin_actividad"])
-    print(request.form["lugar_actividad"])
+    # Iterar sobre las listas y crear instancias de Actividades
+    for actividad, evidencia, fecha_inicio, fecha_fin, lugar in zip(
+        actividades, evidencias, fechas_inicio, fechas_fin, lugares
+    ):
+        nueva_actividad = Actividades(
+            id_seguimiento=nuevo_seguimiento.id_seguimiento,  # Id del seguimiento recién creado
+            descripcion_actividad=actividad,  # Utilizando el nombre de la actividad como descripción
+            evidencia=evidencia,
+            fecha_inicio=datetime.strptime(fecha_inicio, "%Y-%m-%d").date(),
+            fecha_fin=datetime.strptime(fecha_fin, "%Y-%m-%d").date(),
+            lugar=lugar,
+        )
+        db.session.add(nueva_actividad)
+
+    db.session.commit()
+
     for variable_id, valoracion in request.form.items():
         if variable_id.startswith("satisfactorio_"):
             variable_id = variable_id.split("_")[-1]
-            tipo_variable = request.form.get("tipo_" + variable_id, "")
+            # tipo_variable = request.form.get("tipo_" + variable_id, "")
             observacion = request.form.get("observacion_" + variable_id, "")
             # Aquí puedes guardar la valoración y observación en tu base de datos o hacer lo que necesites con ellas
-            print(valoracion)
-            print(observacion)
-            print(tipo_variable)
-            print(variable_id)
-    print(request.form["observaciones_finales"])
-    print(request.form["observaciones_finales_aprendiz"])
-    print(request.form["desempeño"])
+            valoracion_aprendiz = Valoracion(
+                id_variable=variable_id,
+                id_seguimiento=nuevo_seguimiento.id_seguimiento,
+                valoracion=valoracion,
+                observacion=observacion,
+            )
+            db.session.add(valoracion_aprendiz)
+        db.session.commit()
+
     return "Seguimiento guardado"
 
 
@@ -171,11 +196,13 @@ def buscar_aprendiz():
         .join(Asociacion)  # Unimos con la tabla Asociacion
         .filter(
             Asignacion.documento_instructor == documento_instructor_actual,
-            Aprendiz.alternativa != "Sin Alternativa", 
+            Aprendiz.alternativa != "Sin Alternativa",
             or_(
                 Aprendiz.documento.ilike(f"%{searchbox}%"),
                 Asignacion.documento_aprendiz.ilike(f"%{searchbox}%"),
-                Asociacion.id_aprendiz.ilike(f"%{searchbox}%"),  # Validar documento en Asociacion
+                Asociacion.id_aprendiz.ilike(
+                    f"%{searchbox}%"
+                ),  # Validar documento en Asociacion
             ),
         )
         .all()
