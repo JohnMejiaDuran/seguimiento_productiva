@@ -218,7 +218,6 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
             <input type="radio" class="form-check-input" id="finalRadio" name="tipoInforme" value="final" onclick="mostrarObservaciones()"  required />
             <label class="form-check-label" for="finalRadio">Final</label>
         </div>
-        
     </div>
       
         <h5>PERIODO EVALUADO</h5>
@@ -310,45 +309,45 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
         </tbody>
     </table>
     <div class="border-top border-success mt-3 mb-3"></div>
-    <div class="form-group" id="observacionesContainer" style="display: none">
+    <div class="form-group" id="observacionesContainer" >
         <label for="observaciones_finales">Observaciones:</label>
         <textarea name="observaciones_finales" class="form-control" id="observaciones_finales" rows="4" style="resize: none;" placeholder="(Sus observaciones proporcionan información que aporta al mejoramiento de la calidad de la Formación Profesional Integral)" ></textarea>
       </div>
-      <div class="form-group" id="observacionesAprendizContainer" style="display: none">
+      <div class="form-group" id="observacionesAprendizContainer" >
         <label for="observaciones_finales_aprendiz">Observaciones de Aprendiz:</label>
         <textarea name="observaciones_finales_aprendiz" class="form-control" id="observaciones_finales_aprendiz" rows="4" style="resize: none;" ></textarea>
       </div>
     </div>
-      <div class="form-group" id="evaluacionProductiva" style="display: none;" >
+    <div class="form-group" id="evaluacionProductiva">
         <h4 class="text-center mt-3">4. EVALUACIÓN ETAPA PRODUCTIVA</h4>
         <div class="border-top border-success mt-3 mb-3"></div>
-        <div class="d-flex align-items-center m-4" >
+        <div class="d-flex align-items-center m-4" id="juicioEvaluacion">
             <label for=""><b>JUICIO DE EVALUACIÓN:</b></label>
             <div class="p-4">
-                <input type="radio" class="form-check-input" id="juicio_aprobado" name="juicio_final" value="aprobado" >
+                <input type="radio" class="form-check-input" id="juicio_aprobado" name="juicio_final" value="aprobado" disabled>
                 <label for="juicio_aprobado">APROBADO</label>
             </div>
             <div>
-                <input type="radio" class="form-check-input" id="juicio_no_aprobado" name="juicio_final" value="no_aprobado" >
+                <input type="radio" class="form-check-input" id="juicio_no_aprobado" name="juicio_final" value="no_aprobado" disabled>
                 <label for="juicio_no_aprobado">NO APROBADO</label>
             </div>
         </div>
         <div class="border-top border-success mt-3 mb-3"></div>
-            <div class="d-flex align-items-center m">
-                <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
-                <div class="p-4">
-                    <input type="radio" class="form-check-input" id="desempenoSi" name="desempeno" value="desempenoSi" onclick="mostrarObservacionesDesempeno()" >
-                    <label for="desempenoSi">SI</label>
-                </div>
-                <div>
-                    <input type="radio" class="form-check-input" id="desempenoNo" name="desempeno" value="desempenoNo" onclick="mostrarObservacionesDesempeno()" >
-
-                    <label for="desempenoNo">NO</label>
-                </div>
+        <div class="d-flex align-items-center m" id="reconocimientoDesempeno">
+            <label for=""><b>RECONOCIMIENTO ESPECIALES SOBRE EL DESEMPEÑO:</b></label>
+            <div class="p-4">
+                <input type="radio" class="form-check-input" id="desempenoSi" name="desempeno" value="desempenoSi" onclick="mostrarObservacionesDesempeno()" disabled>
+                <label for="desempenoSi">SI</label>
             </div>
-        <div class="form-group" id="observacionesAprendizDesempeno" style="display: none">
+            <div>
+                <input type="radio" class="form-check-input" id="desempenoNo" name="desempeno" value="desempenoNo" onclick="mostrarObservacionesDesempeno()" disabled>
+                <label for="desempenoNo">NO</label>
+            </div>
+        </div>
+    </div>
+        <div class="form-group" id="observacionesAprendizDesempeno" >
             <label for="observaciones_desempeno"></label>
-            <textarea name="observaciones_desempeno" class="form-control" id="observaciones_desempeno" rows="4" style="resize: none;" placeholder="Explicar cuales" ></textarea>
+            <textarea name="observaciones_desempeno" class="form-control" id="observaciones_desempeno" rows="4" style="resize: none;" placeholder="Explicar cuales"  disabled></textarea>
           </div>
         <div class="border-top border-success mt-3 mb-3"></div>
     </div>
@@ -359,34 +358,68 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
     </div>
 </form>
 <script>
-    function mostrarObservaciones() {
-      const finalRadio = document.getElementById('finalRadio');
-      const observacionesContainer = document.getElementById('observacionesContainer');
-      const observacionesAprendizContainer = document.getElementById('observacionesAprendizContainer');
-      const evaluacionProductiva = document.getElementById('evaluacionProductiva');
+function limpiarCampos() {
+    const juicioEvaluacionInputs = document.querySelectorAll('#juicioEvaluacion input');
+    const reconocimientoDesempenoInputs = document.querySelectorAll('#reconocimientoDesempeno input');
+    const observacionesAprendizDesempenoTextarea = document.getElementById('observaciones_desempeno');
 
-      if (finalRadio.checked) {
-        observacionesContainer.style.display = 'block';
-        observacionesAprendizContainer.style.display = 'block';
-        evaluacionProductiva.style.display = 'block';
-      } else {
-        observacionesContainer.style.display = 'none';
-        observacionesAprendizContainer.style.display = 'none';
-        evaluacionProductiva.style.display = 'none';
-      }
+    // Limpiar valores de los inputs dentro de juicioEvaluacion
+    juicioEvaluacionInputs.forEach(input => {
+        input.checked = false;
+    });
+
+    // Limpiar valores de los inputs dentro de reconocimientoDesempeno
+    reconocimientoDesempenoInputs.forEach(input => {
+        input.checked = false;
+    });
+
+    // Limpiar valor del textarea observaciones_desempeno
+    observacionesAprendizDesempenoTextarea.value = '';
+}
+
+function mostrarObservaciones() {
+    const finalRadio = document.getElementById('finalRadio');
+    const evaluacionProductiva = document.getElementById('evaluacionProductiva');
+
+    // Habilitar evaluacionProductiva solo si se selecciona "Final"
+    evaluacionProductiva.disabled = !finalRadio.checked;
+
+    const juicioEvaluacion = document.getElementById('juicioEvaluacion');
+    const reconocimientoDesempeno = document.getElementById('reconocimientoDesempeno');
+
+    // Habilitar campos dentro de juicioEvaluacion solo si se selecciona "Final"
+    juicioEvaluacion.querySelectorAll('input').forEach(element => {
+        element.disabled = !finalRadio.checked;
+    });
+
+    // Habilitar campos dentro de reconocimientoDesempeno solo si se selecciona "Final"
+    reconocimientoDesempeno.querySelectorAll('input').forEach(element => {
+        element.disabled = !finalRadio.checked;
+    });
+
+    // Limpiar valores si se selecciona "Parcial"
+    if (!finalRadio.checked) {
+        limpiarCampos();
     }
+}
+function mostrarObservacionesDesempeno() {
+    const desempenoSi = document.getElementById('desempenoSi');
+    const desempenoNo = document.getElementById('desempenoNo');
+    const observacionesAprendizDesempeno = document.getElementById('observaciones_desempeno');
 
-    function mostrarObservacionesDesempeno(){
-        const desempenoSi = document.getElementById('desempenoSi');
-        const observacionesAprendizDesempeno = document.getElementById('observacionesAprendizDesempeno');
-
-        if (desempenoSi.checked) {
-        observacionesAprendizDesempeno.style.display = 'block';
-        
-      } else {
-        observacionesAprendizDesempeno.style.display = 'none';
-      }
+    if (desempenoSi.checked) {
+        observacionesAprendizDesempeno.disabled = false;
+    } else if (desempenoNo.checked) {
+        // Si se selecciona "NO", borrar el contenido del textarea antes de deshabilitarlo
+        observacionesAprendizDesempeno.value = ''; // Esto borra el contenido del textarea
+        observacionesAprendizDesempeno.disabled = true;
+    } else {
+        // Si no se selecciona ninguna opción, mantener el textarea deshabilitado y sin cambios en el contenido
+        observacionesAprendizDesempeno.disabled = true;
     }
+}
+
+
   </script>
 <script>
     document.getElementById("addInput").addEventListener("click", function() {

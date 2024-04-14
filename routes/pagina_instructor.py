@@ -31,6 +31,7 @@ import openpyxl
 from openpyxl import Workbook, load_workbook
 from openpyxl.utils import get_column_letter
 from openpyxl.utils import range_boundaries
+from openpyxl.styles import Font
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -111,9 +112,13 @@ def guardarseguimiento():
     cargo_jefe = request.form["cargo_jefe"]
     telefono_jefe = request.form["telefono_jefe"]
     email_jefe = request.form["email_jefe"]
-
+    regional = request.form["regional"]
+    desempeno= request.form.get("desempeno")
+    print("DESEMPEÑO")
+    print(desempeno)
     print(juicio_final)
-    reconocimiento = request.form["observaciones_desempeno"]
+    reconocimiento = request.form.get("observaciones_desempeno")
+    print(reconocimiento)
     observaciones_finales = request.form["observaciones_finales"]
     observaciones_finales_aprendiz = request.form["observaciones_finales_aprendiz"]
     asociacion = Asociacion.query.filter_by(id_aprendiz=documento).first()
@@ -126,7 +131,7 @@ def guardarseguimiento():
     print(ficha_aprendiz.ficha.centro.nombre_centro)
     if not juicio_final:
         juicio_final = None
-    if not reconocimiento:
+    if reconocimiento is None or reconocimiento == "":
         reconocimiento = None
     if not observaciones_finales:
         observaciones_finales = None
@@ -209,77 +214,105 @@ def guardarseguimiento():
     sheet = book.active
 
     # Modificar las celdas en la hoja activa
-    sheet["J2"] = ficha_aprendiz.ficha.centro.nombre_centro
-    sheet["D3"] = ficha_aprendiz.ficha.programa
-    sheet["L3"] = ficha_aprendiz.ficha_id
-    sheet["F5"] = ficha_aprendiz.nombre + " " + ficha_aprendiz.apellido
-    sheet["F6"] = documento
-    sheet["F7"] = "Sin actualizar"
-    sheet["F8"] = "Sin actualizar"
-    sheet["F9"] = ficha_aprendiz.alternativa
-    sheet["F10"] = razon_social
-    sheet["F11"] = nit
-    sheet["F12"] = direccion
-    sheet["F13"] = jefe_inmediato
-    sheet["F14"] = cargo_jefe
-    sheet["F15"] = telefono_jefe
-
+    sheet["C2"] = regional
+    sheet["R2"] = ficha_aprendiz.ficha.centro.nombre_centro
+    sheet["G3"] = ficha_aprendiz.ficha.programa
+    sheet["T3"] = ficha_aprendiz.ficha_id
+    sheet["J5"] = ficha_aprendiz.nombre + " " + ficha_aprendiz.apellido
+    sheet["J6"] = documento
+    sheet["J7"] = "Sin actualizar"
+    sheet["J8"] = "Sin actualizar"
+    sheet["J9"] = ficha_aprendiz.alternativa
+    sheet["J10"] = razon_social
+    sheet["J11"] = nit
+    sheet["J12"] = direccion
+    sheet["J13"] = jefe_inmediato
+    sheet["J14"] = cargo_jefe
+    sheet["J15"] = telefono_jefe
+    sheet["J16"] = email_jefe
     # Suponiendo que 'columna' es la columna inicial en la que deseas escribir las actividades
     columna = "A"
 
     # Suponiendo que 'fila' es la fila inicial en la que deseas escribir las actividades
-    fila = 22
+    fila = 23
 
     for actividad, evidencia, fecha_inicio, fecha_fin, lugar in zip(
         actividades, evidencias, fechas_inicio, fechas_fin, lugares
     ):
+        print(actividad)
+        print(actividades)
         celda = f"{columna}{fila}"
         sheet[celda] = actividad
 
-        celda_evidencia = f"H{fila}"
+        celda_evidencia = f"N{fila}"
         sheet[celda_evidencia] = evidencia
 
         # Escribir las fechas de inicio y fin en la misma celda con un salto de línea
-        celda_fecha = f"K{fila}"
+        celda_fecha = f"S{fila}"
         contenido_fecha = f"{fecha_inicio}\n{fecha_fin}"
         sheet[celda_fecha] = contenido_fecha
 
-        celda_lugar = f"M{fila}"
+        celda_lugar = f"V{fila}"
         sheet[celda_lugar] = lugar
 
         fila += 1
-    sheet["A25"] = observaciones
+    sheet["A26"] = observaciones
     # Seleccionar la segunda hoja del libro
-    sheet2 = book["Table 2"]
 
     # Marcar la casilla correspondiente según el tipo de informe
     if tipo == "parcial":
-        sheet2["D2"] = "PARCIAL   [X]"
+        sheet["F29"] = "PARCIAL   [X]"
 
     elif tipo == "final":
-        sheet2["D3"] = "FINAL    [X]"
-    sheet2["J2"] = inicio_periodo
-    sheet2["J3"] = final_periodo
+        sheet["F30"] = "FINAL    [X]"
+    sheet["Q29"] = inicio_periodo
+    sheet["Q30"] = final_periodo
 
-    fila = 7
+    fila_actual = 34  # Fila inicial donde empezamos a escribir
 
-    # Iterar sobre los datos recibidos del formulario
+    # Iterar sobre las valoraciones y observaciones y escribir en el libro de Excel
     for variable_id, valoracion in request.form.items():
         if variable_id.startswith("satisfactorio_"):
-            # Obtener el ID de la variable de la clave del formulario
             variable_id = variable_id.split("_")[-1]
-            # Obtener la observación correspondiente a esta variable
             observacion = request.form.get("observacion_" + variable_id, "")
-            # Escribir los datos en el archivo Excel
+
+            # Determinar las celdas dependiendo de la valoración y escribir los datos
             if valoracion == "satisfactorio":
-                pass
-            elif valoracion == "pormejorar":
-                sheet2[f"K{fila}"] = "X"
-            
-            # Incrementar el número de fila para la siguiente iteración
-            fila += 1
+                sheet.cell(row=fila_actual, column=16).value = "X"  # Columna P
+                sheet.cell(row=fila_actual, column=21).value = observacion  # Columna U
+            else:
+                sheet.cell(row=fila_actual, column=19).value = "X"  # Columna S
+                sheet.cell(row=fila_actual, column=21).value = observacion  # Columna U
+
+            # Pasar a la siguiente fila
+            if fila_actual == 38:
+                fila_actual = 42
+            elif fila_actual < 49:
+                fila_actual += 1
+    sheet["A52"] = observaciones_finales
+    sheet["A54"] = observaciones_finales_aprendiz
+    if juicio_final == "aprobado":
+        sheet["A57"] = (
+            "JUICIO DE EVALUACIÓN:           APROBADO [X]        NO APROBADO"
+        )
+    # Si el juicio_final es "no_aprobado"
+    elif juicio_final == "no_aprobado":
+        sheet["A57"] = (
+            "JUICIO DE EVALUACIÓN:           APROBADO            NO APROBADO [X]"
+        )
+    else:
+        sheet["A57"] = f"JUICIO DE EVALUACIÓN:           APROBADO          NO APROBADO"
+
+    if  desempeno == "desempenoSi":
+        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI[X]     NO"
+    elif desempeno == "desempenoNo":
+        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO[X]"
+    else:
+        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO"
+    sheet["A60"] = reconocimiento
     # Guardar los cambios en el archivo Excel
-    book.save("formato.xlsx")
+    nombre_archivo = "formato_" + str(ficha_aprendiz.ficha_id) + ".xlsx"
+    book.save(nombre_archivo)
     return "Seguimiento guardado"
 
 
