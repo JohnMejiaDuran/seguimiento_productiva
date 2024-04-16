@@ -48,7 +48,7 @@
                     <td>{{asignacion.fecha_asignacion}}</td>
                     <td>{{ ultimas_asociaciones.get(asignacion.documento_aprendiz, {}).fecha_inicio_contrato }}</td>
                     <td>{{ ultimas_asociaciones.get(asignacion.documento_aprendiz, {}).fecha_fin_contrato }}</td>
-                    <td>0</td>
+                    <td>{{ conteo_seguimientos_por_documento.get(asignacion.documento_aprendiz, 0) }}</td>
                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ojitoModal"><i class="fas fa-eye"></i></td>
                 </tr>
             {% endfor %}

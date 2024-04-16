@@ -90,6 +90,10 @@
                                         <label for="id_aprendiz"><b>Documento del Aprendiz:</b></label>
                                         <input type="text" class="form-control" id="id_aprendiz" value="{{ asignacion.aprendiz.documento }}" readonly style="background-color: rgba(128, 128, 128, 0.151);">
                                     </div>
+                                    <div class="form-group">
+                                        <label for=""><b>Nombre del Aprendiz</b></label>
+                                        <div class="form-control" id="nombre_aprendiz_edit" style="background-color: rgba(128, 128, 128, 0.151);">{{asignacion.aprendiz.nombre}} {{asignacion.aprendiz.apellido}}</div>
+                                    </div>
                                     <div class="form-group mt-2">
                                         <label for="alternativa"><b>Editar alternativa:</b></label>
                                         <select name="alternativa" id="alternativa" class="form-control">

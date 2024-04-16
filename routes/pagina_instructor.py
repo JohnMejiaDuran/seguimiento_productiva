@@ -113,7 +113,7 @@ def guardarseguimiento():
     telefono_jefe = request.form["telefono_jefe"]
     email_jefe = request.form["email_jefe"]
     regional = request.form["regional"]
-    desempeno= request.form.get("desempeno")
+    desempeno = request.form.get("desempeno")
     print("DESEMPEÑO")
     print(desempeno)
     print(juicio_final)
@@ -292,28 +292,33 @@ def guardarseguimiento():
     sheet["A52"] = observaciones_finales
     sheet["A54"] = observaciones_finales_aprendiz
     if juicio_final == "aprobado":
-        sheet["A57"] = (
-            "JUICIO DE EVALUACIÓN:           APROBADO [X]        NO APROBADO"
-        )
+        sheet["A57"] = "JUICIO DE EVALUACIÓN:           APROBADO [X]        NO APROBADO"
     # Si el juicio_final es "no_aprobado"
     elif juicio_final == "no_aprobado":
         sheet["A57"] = (
             "JUICIO DE EVALUACIÓN:           APROBADO            NO APROBADO [X]"
         )
     else:
-        sheet["A57"] = f"JUICIO DE EVALUACIÓN:           APROBADO          NO APROBADO"
+        sheet["A57"] = "JUICIO DE EVALUACIÓN:           APROBADO          NO APROBADO"
 
-    if  desempeno == "desempenoSi":
-        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI[X]     NO"
+    if desempeno == "desempenoSi":
+        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI[X]     NO"
     elif desempeno == "desempenoNo":
-        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO[X]"
+        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO[X]"
     else:
-        sheet["A58"] = f"RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO"
+        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO"
     sheet["A60"] = reconocimiento
     # Guardar los cambios en el archivo Excel
-    nombre_archivo = "formato_" + str(ficha_aprendiz.ficha_id) + ".xlsx"
+    fecha_actual = datetime.now().strftime("%d-%m-%Y")  # Formato: Día-Mes-Año
+
+    nombre_archivo = f"{documento}_{ficha_aprendiz.ficha_id}_{fecha_actual}.xlsx"
     book.save(nombre_archivo)
     return "Seguimiento guardado"
+
+
+@pagina_instructor.route("/formato_seguimiento")
+def formato_seguimiento():
+    return render_template("/formato.html")
 
 
 @pagina_instructor.route("/buscar_aprendiz", methods=["POST", "GET"])

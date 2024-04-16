@@ -1,9 +1,12 @@
-from flask import Blueprint, render_template, url_for, redirect, request
+from flask import Blueprint, render_template, url_for, redirect, request, session
 from models.seguimientos import Asignacion, Seguimiento, Asociacion
 from utils.db import db
 from routes.consultar_fichas import admin_required
 from flask_login import login_required
 from sqlalchemy import desc
+from sqlalchemy.orm import sessionmaker
+from collections import defaultdict
+
 asignaciones = Blueprint("asignaciones", __name__)
 
 
@@ -11,7 +14,19 @@ asignaciones = Blueprint("asignaciones", __name__)
 def asignacion():
     # Obtener todas las asignaciones y asociaciones, ordenadas por fecha de inicio de contrato descendente
     asignaciones = Asignacion.query.all()
-    asociaciones = Asociacion.query.order_by(desc(Asociacion.fecha_inicio_contrato)).all()
+    asociaciones = Asociacion.query.order_by(
+        desc(Asociacion.fecha_inicio_contrato)
+    ).all()
+    seguimiento = Seguimiento.query.all()
+    conteo_seguimientos_por_documento = defaultdict(int)
+
+    # Suponiendo que cada elemento en 'seguimiento' es un objeto con un atributo 'documento_aprendiz'
+    for seguimiento in seguimiento:
+        conteo_seguimientos_por_documento[seguimiento.documento_aprendiz] += 1
+
+    # Imprimir el conteo
+    for documento, conteo in conteo_seguimientos_por_documento.items():
+        print(f"Documento: {documento}, Seguimientos: {conteo}")
 
     # Crear un diccionario para almacenar la última asociación de cada aprendiz
     ultimas_asociaciones = {}
@@ -20,4 +35,9 @@ def asignacion():
             ultimas_asociaciones[asociacion.id_aprendiz] = asociacion
 
     # Pasar las asignaciones y las últimas asociaciones a la plantilla
-    return render_template("/seguimientos.html", asignaciones=asignaciones, ultimas_asociaciones=ultimas_asociaciones)
+    return render_template(
+        "/seguimientos.html",
+        asignaciones=asignaciones,
+        ultimas_asociaciones=ultimas_asociaciones,
+        conteo_seguimientos_por_documento=conteo_seguimientos_por_documento,
+    )
