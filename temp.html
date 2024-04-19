@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='src/formato.css') }}">
+    <link rel="stylesheet" href="/static/src/formato.css">
 </head>
 <head>
     
@@ -30,46 +30,46 @@
     </div>
     <div class="grid1">
         <div class="regional gris">Regional: </div>
-        <div class="regional_input">{{data.regional}}</div>
+        <div class="regional_input">Regional Santander</div>
         <div class="centro gris">Centro de Formación:</div>
-        <div class="centro_input borde_derecha">{{data.centro}}</div>
+        <div class="centro_input borde_derecha">CENTRO INDUSTRIAL Y DEL DESARROLLO TECNOLOGICO</div>
 
         <div class="programa gris"> Programa de Formación:
         </div>
-        <div class="programa_input justificar">{{data.programa}}</div>
+        <div class="programa_input justificar">INTEGRACION DE CONTENIDOS DIGITALES.</div>
         <div class="ficha gris"> No. de Ficha:
         </div>
-        <div class="ficha_input borde_derecha">{{data.ficha}}</div>
+        <div class="ficha_input borde_derecha">5050505</div>
 
         <div class="vacio borde_derecha"></div>
     </div>
     <div class="grid2">
         <div class="gris">Datos del Aprendiz</div>
         <div class="gris">Nombre:</div>
-        <div class="borde_derecha">{{data.nombre_aprendiz}}</div>
+        <div class="borde_derecha">ANGELINA TOSCANO FLOREZ</div>
         <div class="gris">Identificación:</div>
-        <div class="borde_derecha">{{data.documento_aprendiz}}</div>
+        <div class="borde_derecha">1097183735</div>
         <div class="gris">Teléfono:</div>
-        <div class="borde_derecha">{{data.telefono_aprendiz}}</div>
+        <div class="borde_derecha">Sin actualizar</div>
         <div class="gris">Email:</div>
-        <div class="borde_derecha">{{data.email_aprendiz}}</div>
+        <div class="borde_derecha">Sin actualizar</div>
         <div class="gris">Alternativa registrada en SOFIA plus</div>
-        <div class="borde_derecha">{{data.alternativa}}</div>  
+        <div class="borde_derecha">Contrato de aprendizaje</div>  
         <div class="border_bottom gris">Ente Conformador:</div>
         <div class="gris">Razón social Empresa:</div>
-        <div class="borde_derecha">{{data.razon_social}}</div>
+        <div class="borde_derecha">Ecopetrol SAS</div>
         <div class="gris">Nit:</div>
-        <div class="borde_derecha">{{data.nit}}</div>
+        <div class="borde_derecha">12254645-8</div>
         <div class="gris">Dirección:</div>
-        <div class="borde_derecha">{{data.direccion}}</div>
+        <div class="borde_derecha">Calle 72 Barrio la libertad</div>
         <div class="gris">Nombre del Jefe inmediato del aprendiz:</div>
-        <div class="borde_derecha">{{data.jefe_inmediato}}</div>
+        <div class="borde_derecha">dasdas</div>
         <div class="gris">Cargo:</div>
-        <div class="borde_derecha">{{data.cargo_jefe}}</div>
+        <div class="borde_derecha">dsadasdsa</div>
         <div class="gris">Teléfono:</div>
-        <div class="borde_derecha">{{data.telefono_jefe}}</div>
+        <div class="borde_derecha">dsadsad</div>
         <div class="border_bottom gris">Email:</div>
-        <div class="borde_derecha border_bottom">{{data.email_jefe}}</div>
+        <div class="borde_derecha border_bottom">ddfsjkdjskd@gmail.com</div>
     </div>
 
     <div class="grid3" >
@@ -107,14 +107,14 @@
     </div>
 
     <div class="grid4 actividades_evidencias">
-        {% for actividad in data.actividades %}
+        
             <div style="border: 0;"></div>
-            <div style="margin-left: -9px;">{{ actividad.descripcion_actividad }}</div>
-            <div>121{{ actividad.evidencia }} </div>
-            <div>{{ actividad.fecha_inicio }}<br>{{actividad.fecha_fin}}</div>
-            <div class="borde_derecha">{{actividad.lugar}}</div>
-        {% endfor %}
-        <div class="observaciones_actividades"><b>OBSERVACIONES:</b> &nbsp;&nbsp;{{data.observaciones_actividades}}</b></div>
+            <div style="margin-left: -9px;">sda</div>
+            <div>121asdasdasdsa </div>
+            <div>2024-04-19<br>2024-04-26</div>
+            <div class="borde_derecha">dsadasd</div>
+        
+        <div class="observaciones_actividades"><b>OBSERVACIONES:</b> &nbsp;&nbsp;sadasdsadsadsa</b></div>
     </div>
     <div class="grid6">
         <div class="firma border_izq"></div>
@@ -195,19 +195,15 @@
     <div class="grid7">
         <div class="borde_derecha"><b><i>3. SEGUIMIENTO ETAPA PRODUCTIVA</i></b></div>
         <div class="gris fila_doble"><b>TIPO DE INFORME</b></div>
-        {% if data.tipo_informe == "parcial" %}
-        <div>Parcial:&nbsp;&nbsp;&nbsp;&nbsp;[ X ]</div>
-        {% else %}
+        
         <div>Parcial:&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;]</div>
-        {% endif %}
+        
         <div class="gris fila_doble" style="justify-content: center;"><b>PERÍODO EVALUADO</b></div>
-        <div class="borde_derecha">{{data.periodo_inicio}}</div>
-        {% if data.tipo_informe == "final" %}
+        <div class="borde_derecha">2024-04-26</div>
+        
         <div>Final:&nbsp;&nbsp;&nbsp;&nbsp;[ X ]</div>
-        {% else %}
-        <div>Final:&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;]</div>
-        {% endif %}
-        <div class="borde_derecha">{{data.periodo_finalizacion}}</div>
+        
+        <div class="borde_derecha">2024-05-09</div>
         <div class="borde_derecha gris" style="border-bottom: 2px solid black;"><b><i>FACTORES ACTITUDINALES Y COMPORTAMENTALES</i></b></div>
     </div>
 
@@ -308,21 +304,114 @@
     </style>
 
          <div class="grid9">
-        {% for valoracion in data.valoraciones %}
-        <div class="gris izq" style="text-transform: uppercase;"> <b>{{valoracion.nombre_variable}}</b> </div>
-        <div class="justificar">{{valoracion.descripcion_variable}}</div>
-        {% if valoracion.valoracion == "satisfactorio" %}
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Relaciones Interpersonales</b> </div>
+        <div class="justificar">Desarrolla relaciones interpersonales con las personas de los diferentes niveles del ente coformador en forma armoniosa,respetuosa y enmarcada dentro de los principios de convivencia social</div>
+        
         <div class="valoracion">X</div>
         <div class="valoracion"></div>
-        {% else %}
-        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Trabajo en equipo</b> </div>
+        <div class="justificar">Participa en forma activa y propositiva en equipos de trabajo asumiendo los roles, de acuerdo a sus fortalezas.</div>
+        
         <div class="valoracion">X</div>
-        {% endif %}
-        <div class="borde_derecha" style="padding: 5px;">{{valoracion.observacion}}</div>
-        {% if loop.index == 5 %}
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>solucion de problemas</b> </div>
+        <div class="justificar">Propone alternativas de solucion a situaciones problematicas en el contexto del desarrollo de su etapa productiva.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Cumplimiento</b> </div>
+        <div class="justificar">Asume compromiso de las funciones y responsabilidades asignadas en el desarrollo de su trabajo.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Organizacion</b> </div>
+        <div class="justificar">Demuestra capacidad para ordenar y disponer los elementos necesarios e informacion para facilitar la ejecucion de un trabajo y el logro de los objetivos.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
         <div class="tecnicos gris borde_derecha"><b><i>FACTORES TÉCNICOS</i></b></div>
-        {% endif %}
-        {% if loop.index == 9 %}
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Transferencia de conocimiento</b> </div>
+        <div class="justificar">Demuestra las competencias específicas delprograma de formación en situaciones reales detrabajo.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Mejora continua</b> </div>
+        <div class="justificar">Aporta al mejoramiento de los procesos propios de su desempeño.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Fortalecimiento Ocupacional</b> </div>
+        <div class="justificar">Autogestiona acciones que fortalezca su perfil ocupacional en el marco de su proyecto de vida.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Oportunidad y calidad</b> </div>
+        <div class="justificar">Presenta con oportunidad y calidad los productos generados en el desarrollo de sus funciones y actividades.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
         <div class="versionn" style="margin-top: 30px; border: 0; display: flex; justify-content: end;">
             GFPI-F-023 V3
         </div>
@@ -334,12 +423,60 @@
                 </td>
             </tr>
         </table>
-        {% endif %}
+        
 
-        {% if loop.index == 9 %}
+        
         <div style="grid-column-start: span 5; border-bottom: 2px solid black; border-left: 0; margin-top: 0;"  ></div>
-        {% endif %}
-        {% endfor %}
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Responsabilidad ambiental</b> </div>
+        <div class="justificar">Administra los recursos para el desarrollo de sus actividades con criterios de responsabilidad ambiental.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Administracion de recursos</b> </div>
+        <div class="justificar">Utiliza de manera racional los materiales, equipos y herramientas suministrados para el desempeño de sus actividades o funciones</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Seguridad ocupacional e industrial</b> </div>
+        <div class="justificar">Utiliza los elementos de seguridad y salud ocupacional de acuerdo con la normatividad vigente establecida para sus actividades o funciones.</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
+        <div class="gris izq" style="text-transform: uppercase;"> <b>Documentacion etapa productiva</b> </div>
+        <div class="justificar">Actualiza permanentemente el portafolio de evidencias</div>
+        
+        <div class="valoracion">X</div>
+        <div class="valoracion"></div>
+        
+        <div class="borde_derecha" style="padding: 5px;"></div>
+        
+        
+
+        
+        
 
     </div>
     
@@ -387,8 +524,8 @@
 
     <div class="grid11">
         <div class="borde_derecha" style="border-top: 0;"> <b>Observaciones del responsable ente Coformador.</b> (Sus observaciones proporcionan información que aporta al<br>
-            mejoramiento de la calidad de la Formación Profesional Integral): {{data.observaciones_finales}}<br> </div>
-        <div class="borde_derecha"><b>Observaciones del Aprendiz:<br> </b>{{data.observaciones_finales_aprendiz}}</div>
+            mejoramiento de la calidad de la Formación Profesional Integral): <br> </div>
+        <div class="borde_derecha"><b>Observaciones del Aprendiz:<br> </b></div>
         <div class="borde_derecha"><b><i>4. EVALUACIÓN ETAPA PRODUCTIVA</i></b></div>
         <div class="borde_derecha gris"></div>
     </div>
@@ -419,13 +556,10 @@
     </style>
     <div class="grid12">
         <div>JUICIO DE EVALUACIÓN:</div>
-        {% if data.juicio_final == "aprobado" %}
-        <div><b>APROBADO&nbsp;&nbsp;[&nbsp;&nbsp;X&nbsp;&nbsp;]</b></div>
-        <div><b>NO APROBADO</b></div>
-        {% else %}
+        
         <div><b>APROBADO</b></div>
         <div><b>NO APROBADO&nbsp;&nbsp;[&nbsp;&nbsp;X&nbsp;&nbsp;]</b></div>
-        {% endif %}
+        
     </div>
     <style>
         .grid13 {
@@ -450,13 +584,10 @@
         }
     </style>
     <div class="grid13">
-        {% if data.reconocimiento_especial == "desempenoSi" %}
-        <div>RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO:&nbsp;&nbsp; <b> SI ___<u>X</u>___ </b> <b> &nbsp;&nbsp;&nbsp;&nbsp;NO_______</b> </div>
         
-        {% else %}
         <div>RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO:&nbsp;&nbsp; <b> SI _______ </b> <b> &nbsp;&nbsp;&nbsp;&nbsp;NO___<b><u>X</u></b>___</b> </div>
-        {% endif %}
-        <div style="border-bottom: 2px solid black;">Especificar cuáles:&nbsp;&nbsp;<br>{{data.reconocimiento}}</div>
+        
+        <div style="border-bottom: 2px solid black;">Especificar cuáles:&nbsp;&nbsp;<br>None</div>
     </div>
     <style>
         .grid14 {
@@ -516,7 +647,7 @@
             <div class="ente "> <b>Nombre y firma Instructor seguimiento</b></div>
         </div>
         <div class="ciudadfecha" style="display: flex;">
-            <p style="text-transform: uppercase;">{{data.regional}},</p>&nbsp;&nbsp;<p>{{data.centro}}</p>&nbsp;&nbsp;<p>{{data.fecha_actual}}</p>
+            <p style="text-transform: uppercase;">Regional Santander,</p>&nbsp;&nbsp;<p>CENTRO INDUSTRIAL Y DEL DESARROLLO TECNOLOGICO</p>&nbsp;&nbsp;<p>19/04/2024</p>
         </div>
     </div>
     <div class="version" style="margin-top: 80px;">

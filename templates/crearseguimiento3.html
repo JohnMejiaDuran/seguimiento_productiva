@@ -235,83 +235,56 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
                 <input type="date" class="form-control" id="final_periodo" name="final_periodo" required>
             </div>
         </div>
-        <h4 class="text-center">Tabla de Evaluación - Factores actitudinales y comportamentales</h4>
+        
 
       
-      <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
-        <thead>
-            <tr class="">
-                <th class="text-center">VARIABLE</th>
-                <th class="text-center">DESCRIPCIÓN</th>
-                <th class="text-center">VALORACIÓN</th>
-                <th class="text-center">OBSERVACIÓN</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for variable in variables %}
-                {% if variable.tipo == 'Actitudinal' %}
-                    <tr>
-                        <td class="align-middle">{{ variable.nombre }}</td>
-                        <td class="align-middle">{{ variable.descripcion }}</td>
-                        <input type="hidden" name="tipo_{{ variable.id_variable }}" value="{{ variable.tipo }}">
-                        <td class="align-middle">
-                            <div class="d-flex">
-                                <div class="d-flex m-2">
-                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" >
-                                    <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
-                                </div>
-                                <div class="d-flex m-2">
-                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" > 
-                                    <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
-                                </div>
-                            </div>
-                        </td>
-                        <<td>
-                            <textarea name="observacion_{{ variable.id_variable }}" id="observacion_{{ variable.id_variable }}" cols="20" rows="5"></textarea>
-                        </td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="border-top border-success mt-3 mb-3"></div>
-    <h4 class="text-center">Tabla de Evaluación - Factores Técnicos</h4>
-    <table  id="aprendices" class= "text-center tabla table table-success table-bordered table-striped table-hover style="width:100%" >
-        <thead>
-            <tr class="">
-                <th class="text-center">VARIABLE</th>
-                <th class="text-center">DESCRIPCIÓN</th>
-                <th class="text-center">VALORACIÓN</th>
-                <th class="text-center">OBSERVACIÓN</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for variable in variables %}
-                {% if variable.tipo == 'Tecnica' %}
+        <table id="tabla_actitudinal" class="text-center tabla table table-success table-bordered table-striped table-hover" style="width:100%">
+            <thead>
                 <tr>
-                        <td class="align-middle">{{ variable.nombre }}</td>
-                        <td class="align-middle">{{ variable.descripcion }}</td>
+                    <td colspan="4" class="text-center" style="font-size: 24px;"><h4><b>FACTORES ACTITUDINALES Y COMPORTAMENTALES</b></h4></td>
+                </tr>
+                <tr>
+                    <th class="text-center">VARIABLE</th>
+                    <th class="text-center">DESCRIPCIÓN</th>
+                    <th class="text-center">VALORACIÓN</th>
+                    <th class="text-center">OBSERVACIÓN</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for variable in variables %}
+                    <tr>
+                       
+                        <input type="hidden" name="nombre_{{ variable.id_variable }}" value="{{ variable.nombre }}">
+                        <input type="hidden" name="descripcion_{{ variable.id_variable }}" value="{{ variable.descripcion }}">
+                        <td class="align-middle" data-nombre="{{ variable.nombre }}">{{ variable.nombre }}</td>
+                        <td class="align-middle" data-descripcion="{{ variable.descripcion }}">{{ variable.descripcion }}</td>
                         <input type="hidden" name="tipo_{{ variable.id_variable }}" value="{{ variable.tipo }}">
                         <td class="align-middle">
                             <div class="d-flex">
                                 <div class="d-flex m-2">
-                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" >
+                                    <input value="satisfactorio" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="satisfactorio_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
                                     <label class="form-check-label" for="satisfactorio_{{ variable.nombre }}_{{ loop.index }}">Satisfactorio</label>
                                 </div>
                                 <div class="d-flex m-2">
-                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}" > 
+                                    <input value="pormejorar" type="radio" class="form-check-input" name="satisfactorio_{{ loop.index }}" id="pormejorar_{{ variable.nombre }}_{{ loop.index }}" data-variable-id="{{ variable.id_variable }}">
                                     <label class="form-check-label" for="pormejorar_{{ variable.nombre }}_{{ loop.index }}" style="white-space: nowrap;">Por mejorar</label>
                                 </div>
                             </div>
                         </td>
-                        <<td>
+                        <td>
                             <textarea name="observacion_{{ variable.id_variable }}" id="observacion_{{ variable.id_variable }}" cols="20" rows="5"></textarea>
                         </td>
                     </tr>
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% if loop.index == 5 %}
+                    <tr>
+                        <td colspan="4" class="text-center" style="font-size: 24px;"><h4><b>FACTORES TÉCNICOS</b></h4></td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        
     <div class="border-top border-success mt-3 mb-3"></div>
     <div class="form-group" id="observacionesContainer" >
         <label for="observaciones_finales">Observaciones:</label>

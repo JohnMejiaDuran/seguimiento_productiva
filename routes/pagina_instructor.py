@@ -27,11 +27,8 @@ from routes.consultar_fichas import admin_required
 from sqlalchemy import or_
 from sqlalchemy import desc
 from datetime import datetime
-import openpyxl
-from openpyxl import Workbook, load_workbook
-from openpyxl.utils import get_column_letter
-from openpyxl.utils import range_boundaries
-from openpyxl.styles import Font
+import pdfkit
+import os
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
 
@@ -114,9 +111,6 @@ def guardarseguimiento():
     email_jefe = request.form["email_jefe"]
     regional = request.form["regional"]
     desempeno = request.form.get("desempeno")
-    print("DESEMPEÑO")
-    print(desempeno)
-    print(juicio_final)
     reconocimiento = request.form.get("observaciones_desempeno")
     print(reconocimiento)
     observaciones_finales = request.form["observaciones_finales"]
@@ -178,12 +172,28 @@ def guardarseguimiento():
 
     db.session.commit()
 
+    lista_valoraciones = []
+
     for variable_id, valoracion in request.form.items():
         if variable_id.startswith("satisfactorio_"):
             variable_id = variable_id.split("_")[-1]
-            # tipo_variable = request.form.get("tipo_" + variable_id, "")
             observacion = request.form.get("observacion_" + variable_id, "")
-            # Aquí puedes guardar la valoración y observación en tu base de datos o hacer lo que necesites con ellas
+            variable_nombre = request.form.get(
+                "nombre_" + variable_id, ""
+            )  # Agregar este campo
+            variable_descripcion = request.form.get(
+                "descripcion_" + variable_id, ""
+            )  # Agregar este campo
+            # Crear un diccionario para cada valoración
+            valoracion_data = {
+                "id_variable": variable_id,
+                "valoracion": valoracion,
+                "observacion": observacion,
+                "nombre_variable": variable_nombre,  # Agregar el nombre de la variable
+                "descripcion_variable": variable_descripcion,  # Agregar la descripción de la variable
+            }
+            lista_valoraciones.append(valoracion_data)
+            # Guardar las valoraciones en la base de datos
             valoracion_aprendiz = Valoracion(
                 id_variable=variable_id,
                 id_seguimiento=nuevo_seguimiento.id_seguimiento,
@@ -191,7 +201,9 @@ def guardarseguimiento():
                 observacion=observacion,
             )
             db.session.add(valoracion_aprendiz)
-        db.session.commit()
+    print(lista_valoraciones)
+    # Commit después de agregar todas las valoraciones
+    db.session.commit()
     asignacion = Asignacion.query.filter_by(documento_aprendiz=documento).first()
     asociacion = (
         Asociacion.query.filter_by(id_aprendiz=documento)
@@ -205,115 +217,89 @@ def guardarseguimiento():
         if empresa:
             # Si se encuentra la empresa, obtener sus datos
             razon_social = empresa.razon_social
-            telefono = empresa.telefono
             direccion = empresa.direccion
-            email = empresa.email
-    book = openpyxl.load_workbook("formato.xlsx")
 
-    # Seleccionar la hoja activa
-    sheet = book.active
-
-    # Modificar las celdas en la hoja activa
-    sheet["C2"] = regional
-    sheet["R2"] = ficha_aprendiz.ficha.centro.nombre_centro
-    sheet["G3"] = ficha_aprendiz.ficha.programa
-    sheet["T3"] = ficha_aprendiz.ficha_id
-    sheet["J5"] = ficha_aprendiz.nombre + " " + ficha_aprendiz.apellido
-    sheet["J6"] = documento
-    sheet["J7"] = "Sin actualizar"
-    sheet["J8"] = "Sin actualizar"
-    sheet["J9"] = ficha_aprendiz.alternativa
-    sheet["J10"] = razon_social
-    sheet["J11"] = nit
-    sheet["J12"] = direccion
-    sheet["J13"] = jefe_inmediato
-    sheet["J14"] = cargo_jefe
-    sheet["J15"] = telefono_jefe
-    sheet["J16"] = email_jefe
-    # Suponiendo que 'columna' es la columna inicial en la que deseas escribir las actividades
-    columna = "A"
-
-    # Suponiendo que 'fila' es la fila inicial en la que deseas escribir las actividades
-    fila = 23
+    lista_actividades = []
 
     for actividad, evidencia, fecha_inicio, fecha_fin, lugar in zip(
         actividades, evidencias, fechas_inicio, fechas_fin, lugares
     ):
-        print(actividad)
-        print(actividades)
-        celda = f"{columna}{fila}"
-        sheet[celda] = actividad
+        nueva_actividad = {
+            "descripcion_actividad": actividad,
+            "evidencia": evidencia,
+            "fecha_inicio": fecha_inicio,
+            "fecha_fin": fecha_fin,
+            "lugar": lugar,
+        }
+        lista_actividades.append(nueva_actividad)
 
-        celda_evidencia = f"N{fila}"
-        sheet[celda_evidencia] = evidencia
+    fecha_actual = datetime.now()
+    fecha_formateada = fecha_actual.strftime("%d/%m/%Y")
+    data = {
+        "regional": regional,
+        "centro": ficha_aprendiz.ficha.centro.nombre_centro,
+        "programa": ficha_aprendiz.ficha.programa,
+        "ficha": ficha_aprendiz.ficha_id,
+        "nombre_aprendiz": ficha_aprendiz.nombre + " " + ficha_aprendiz.apellido,
+        "documento_aprendiz": documento,
+        "telefono_aprendiz": "Sin actualizar",
+        "email_aprendiz": "Sin actualizar",
+        "alternativa": ficha_aprendiz.alternativa,
+        "razon_social": razon_social,
+        "nit": nit,
+        "direccion": direccion,
+        "jefe_inmediato": jefe_inmediato,
+        "cargo_jefe": cargo_jefe,
+        "telefono_jefe": telefono_jefe,
+        "email_jefe": email_jefe,
+        "actividades": lista_actividades,
+        "observaciones_actividades": observaciones,
+        "tipo_informe": tipo,
+        "periodo_inicio": inicio_periodo,
+        "periodo_finalizacion": final_periodo,
+        "valoraciones": lista_valoraciones,
+        "observaciones_ente": observaciones_finales,
+        "observaciones_aprendiz": observaciones_finales_aprendiz,
+        "juicio_final": juicio_final,
+        "reconocimiento_especial": desempeno,
+        "reconocimiento": reconocimiento,
+        "fecha_actual": fecha_formateada,
+    }
 
-        # Escribir las fechas de inicio y fin en la misma celda con un salto de línea
-        celda_fecha = f"S{fila}"
-        contenido_fecha = f"{fecha_inicio}\n{fecha_fin}"
-        sheet[celda_fecha] = contenido_fecha
+    def convertir_html_a_pdf(data):
+        path_to_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+        html_content = render_template("formato.html", data=data)
 
-        celda_lugar = f"V{fila}"
-        sheet[celda_lugar] = lugar
+        # Guardar el HTML generado en un archivo temporal
+        with open("temp.html", "w", encoding="utf-8") as f:
+            f.write(html_content)
 
-        fila += 1
-    sheet["A26"] = observaciones
-    # Seleccionar la segunda hoja del libro
+        path_to_file = "temp.html"  # Ruta al archivo HTML generado
+        config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 
-    # Marcar la casilla correspondiente según el tipo de informe
-    if tipo == "parcial":
-        sheet["F29"] = "PARCIAL   [X]"
+        # Opciones de PDF para especificar tamaño de página y escala
+        css_path = os.path.join(os.getcwd(), "static", "src", "formato.css")
+        pdf_options = {
+            "page-size": "A4",
+            "zoom": 0.5,  # Escala del 100%, sin escalamiento
+            "print-media-type": None,  # Imprimir usando estilos de medios
+            "enable-local-file-access": None,  # Permitir acceso a archivos locales
+            "user-style-sheet": css_path,  # Ruta al archivo CSS
+        }
 
-    elif tipo == "final":
-        sheet["F30"] = "FINAL    [X]"
-    sheet["Q29"] = inicio_periodo
-    sheet["Q30"] = final_periodo
+        try:
+            pdfkit.from_file(
+                path_to_file,
+                output_path="formatoseguimiento.pdf",
+                configuration=config,
+                options=pdf_options,
+            )
+        except OSError as e:
+            print("Error al convertir HTML a PDF:", e)
 
-    fila_actual = 34  # Fila inicial donde empezamos a escribir
-
-    # Iterar sobre las valoraciones y observaciones y escribir en el libro de Excel
-    for variable_id, valoracion in request.form.items():
-        if variable_id.startswith("satisfactorio_"):
-            variable_id = variable_id.split("_")[-1]
-            observacion = request.form.get("observacion_" + variable_id, "")
-
-            # Determinar las celdas dependiendo de la valoración y escribir los datos
-            if valoracion == "satisfactorio":
-                sheet.cell(row=fila_actual, column=16).value = "X"  # Columna P
-                sheet.cell(row=fila_actual, column=21).value = observacion  # Columna U
-            else:
-                sheet.cell(row=fila_actual, column=19).value = "X"  # Columna S
-                sheet.cell(row=fila_actual, column=21).value = observacion  # Columna U
-
-            # Pasar a la siguiente fila
-            if fila_actual == 38:
-                fila_actual = 42
-            elif fila_actual < 49:
-                fila_actual += 1
-    sheet["A52"] = observaciones_finales
-    sheet["A54"] = observaciones_finales_aprendiz
-    if juicio_final == "aprobado":
-        sheet["A57"] = "JUICIO DE EVALUACIÓN:           APROBADO [X]        NO APROBADO"
-    # Si el juicio_final es "no_aprobado"
-    elif juicio_final == "no_aprobado":
-        sheet["A57"] = (
-            "JUICIO DE EVALUACIÓN:           APROBADO            NO APROBADO [X]"
-        )
-    else:
-        sheet["A57"] = "JUICIO DE EVALUACIÓN:           APROBADO          NO APROBADO"
-
-    if desempeno == "desempenoSi":
-        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI[X]     NO"
-    elif desempeno == "desempenoNo":
-        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO[X]"
-    else:
-        sheet["A58"] = "RECONOCIMIENTOS ESPECIALES SOBRE EL DESEMPEÑO: SI     NO"
-    sheet["A60"] = reconocimiento
-    # Guardar los cambios en el archivo Excel
-    fecha_actual = datetime.now().strftime("%d-%m-%Y")  # Formato: Día-Mes-Año
-
-    nombre_archivo = f"{documento}_{ficha_aprendiz.ficha_id}_{fecha_actual}.xlsx"
-    book.save(nombre_archivo)
-    return "Seguimiento guardado"
+    # Llamada a la función con los datos necesarios
+    convertir_html_a_pdf(data)
+    return render_template("formato.html", data=data)
 
 
 @pagina_instructor.route("/formato_seguimiento")
