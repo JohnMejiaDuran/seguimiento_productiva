@@ -9,6 +9,7 @@ from flask import (
     jsonify,
 )
 from flask_login import current_user
+
 from models.seguimientos import (
     Aprendiz,
     Asignacion,
@@ -28,6 +29,7 @@ from sqlalchemy import or_
 from sqlalchemy import desc
 from datetime import datetime
 import pdfkit
+from flask import render_template_string
 import os
 
 pagina_instructor = Blueprint("pagina_instructor", __name__)
@@ -265,40 +267,61 @@ def guardarseguimiento():
         "reconocimiento": reconocimiento,
         "fecha_actual": fecha_formateada,
     }
+    path_to_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+    # def convertir_html_a_pdf(data):
+    #     path_to_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
+    #     html_content = render_template("formato.html", data=data)
 
-    def convertir_html_a_pdf(data):
-        path_to_wkhtmltopdf = r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe"
-        html_content = render_template("formato.html", data=data)
+    #     # Guardar el HTML generado en un archivo temporal
+    #     with open("temp.html", "w", encoding="utf-8") as f:
+    #         f.write(html_content)
 
-        # Guardar el HTML generado en un archivo temporal
-        with open("temp.html", "w", encoding="utf-8") as f:
-            f.write(html_content)
+    #     path_to_file = "temp.html"  # Ruta al archivo HTML generado
+    #     config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
 
-        path_to_file = "temp.html"  # Ruta al archivo HTML generado
-        config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+    #     # Opciones de PDF para especificar tamaño de página y escala
+    #     css_path = os.path.join(os.getcwd(), "static", "src", "formato.css")
+    #     pdf_options = {
+    #         "page-size": "A4",
+    #         "zoom": 0.5,  # Escala del 100%, sin escalamiento
+    #         "print-media-type": None,  # Imprimir usando estilos de medios
+    #         "enable-local-file-access": None,  # Permitir acceso a archivos locales
+    #         "user-style-sheet": css_path,  # Ruta al archivo CSS
+    #     }
 
-        # Opciones de PDF para especificar tamaño de página y escala
-        css_path = os.path.join(os.getcwd(), "static", "src", "formato.css")
-        pdf_options = {
-            "page-size": "A4",
-            "zoom": 0.5,  # Escala del 100%, sin escalamiento
-            "print-media-type": None,  # Imprimir usando estilos de medios
-            "enable-local-file-access": None,  # Permitir acceso a archivos locales
-            "user-style-sheet": css_path,  # Ruta al archivo CSS
-        }
+    #     try:
+    #         pdfkit.from_file(
+    #             path_to_file,
+    #             output_path="formatoseguimiento.pdf",
+    #             configuration=config,
+    #             options=pdf_options,
+    #         )
+    #     except OSError as e:
+    #         print("Error al convertir HTML a PDF:", e)
 
-        try:
-            pdfkit.from_file(
-                path_to_file,
-                output_path="formatoseguimiento.pdf",
-                configuration=config,
-                options=pdf_options,
-            )
-        except OSError as e:
-            print("Error al convertir HTML a PDF:", e)
+    # # Llamada a la función con los datos necesarios
+    # convertir_html_a_pdf(data)
+    html_content = render_template("formato.html", data=data)
 
-    # Llamada a la función con los datos necesarios
-    convertir_html_a_pdf(data)
+    # Guardar el HTML generado en un archivo temporal
+    with open("temp.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    # Ruta al archivo HTML generado
+    path_to_file = "temp.html"
+
+    # Configuración de pdfkit con la ruta al ejecutable
+    config = pdfkit.configuration(wkhtmltopdf=path_to_wkhtmltopdf)
+
+    # Generar el archivo PDF
+    try:
+        pdfkit.from_file(path_to_file, "output.pdf", configuration=config)
+        print("Archivo PDF generado con éxito.")
+    except Exception as e:
+        print("Error al generar el archivo PDF:", e)
+
+
+
     return render_template("formato.html", data=data)
 
 

@@ -10,6 +10,308 @@
 <head>
     
 </head>
+<style>
+    
+body {
+    font-family: 'Calibri', sans-serif;
+    
+}
+.contenedor {
+    margin: 0 auto; /* Esto centra el contenedor horizontalmente */
+    width: 50%; /* Ancho del contenedor */
+    margin-top: 50px;
+}
+table {
+    border-collapse: collapse;
+    width: 100%; /* Ancho de la tabla */
+}
+td {
+    border: 2px solid black;
+    padding: 10px; /* Espaciado interno de las celdas */
+    height: 130px;
+}
+.foto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.titulo_ancho {
+    width: 600px;
+}
+.titulo {
+    font-size: 26px;
+    text-align: center;
+}
+.titulo_informacion {
+    text-align: center; /* Alinea el contenido del div al centro */
+}
+.justificar {
+    text-align: justify;
+    padding: 5px;
+}
+.grid1 {
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+    
+}
+
+.grid1 div{
+    font-size: 16px;
+    display: flex;
+    padding: 5px;
+    border: 2px solid;
+    border-right: 0;
+    border-bottom: 0;
+    align-items: center;
+}
+
+.grid1 .borde_derecha {
+    border-right: 2px solid black;
+}
+
+.gris{
+    background-color: #D9D9D9;
+}
+
+.grid1 .regional {
+    grid-column: 1/3;
+    
+}
+.grid1 .regional_input{
+    grid-column: 3/6;
+}
+.grid1 .centro{
+    grid-column: 6/8;
+}
+.grid1 .centro_input{
+    grid-column: 8/13;
+}
+
+.grid1 .programa{
+    grid-column: 1/4;
+}
+.grid1 .programa_input{
+    grid-column: 4/8;
+}
+.grid1 .ficha{
+    grid-column: 8/10;
+    
+}
+.grid1 .ficha_input{
+    grid-column: 10/13;
+    display: flex;
+    justify-content: center;
+}
+
+.grid1 .vacio{
+    grid-column: 1/13;
+    height: 5px;
+    
+}
+
+.grid2 {
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 20% 15% 65%;  
+}
+.grid2 .borde_derecha {
+    border-right: 2px solid black;
+}
+.grid2 div{
+    border: solid black 2px;
+    border-right: 0;
+    border-bottom: 0;
+}
+.grid2 div:first-child{
+    
+    grid-row-start: span 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid2 div:nth-child(12){
+    grid-row-start: span 7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.grid2 .border_bottom {
+    border-bottom: solid black 2px;
+}
+
+.grid3 {
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 40% 30% 10% 20%;
+    margin-top: 30px;
+    grid-auto-rows: 30px;  
+    
+}
+.grid3 div{
+    border: solid black 2px;
+    border-right: 0;
+    border-bottom: 0;
+    grid-template-rows: auto;
+}
+.grid3 div:first-child{
+    display: flex;
+    justify-content: center;
+    grid-column-start: span 4;
+    border: 2px solid black;
+    border-bottom: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.grid3 .planeacion{
+    font-size: 24px;
+}
+.grid3 div:nth-child(2){
+    display: flex;
+    justify-content: center;
+    grid-column-start: span 4;
+    border: solid black 2px;
+    border-bottom: 0;
+    align-items: center;
+}
+.grid3 div:nth-child(3){
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.grid3 div:nth-child(4){
+    display: flex;
+    justify-content: center;
+    grid-row-start: span 4;
+
+    align-items: center;
+    text-align: center;
+}
+.grid3 div:nth-child(5){
+    display: flex;
+    justify-content: center;
+    grid-column-start: span 2;
+    grid-row-start: span 2;
+    text-align: center;
+    align-items: center;
+}
+.grid3 div:nth-child(6){
+    display: flex;
+    justify-content: center;
+    grid-row-start: span 3;
+    align-items: center;
+    border-top: 0;
+    text-align: justify;
+    padding: 10px;
+
+}
+.grid3 div:nth-child(7){
+    display: flex;
+    justify-content: center;
+    border: solid black 2px;
+    border-bottom: 0;
+    border-right: 0;
+    align-items: center;
+    text-align: center;
+    grid-row-start: span 2;
+}
+.grid3 div:nth-child(8){
+    display: flex;
+    justify-content: center;
+    border: solid black 2px;
+    border-bottom: 0;
+    align-items: center;
+    text-align: center;
+    grid-row-start: span 2;
+}
+.grid3 .borde_derecha {
+    border-right: 2px solid black;
+}
+.grid4 {
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1% 39% 30% 10% 20%; /* Ajuste del ancho de las columnas */
+}
+
+.grid4 div {
+    border: solid black 2px;
+    border-right: 0;
+    border-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px;
+}
+
+.grid4 .borde_derecha {
+    border-right: 2px solid black;
+    text-align: center; /* Alineación del texto al centro */
+}
+
+.grid4 .observaciones_actividades {
+    grid-column-start: span 5;
+    border: solid black 2px;
+    justify-content: left;
+    align-items: self-start;
+    min-height: 30px;
+    
+}
+
+.grid6 {
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid6 .firma{
+    
+    border-bottom: 0;
+    
+    border-top: 0;
+    grid-row-start: span 3;
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.grid6 .borde_derecha {
+    border-right: black solid 2px;
+}
+
+.grid6 .border_izq {
+    border-left: 2px solid black;
+}
+.grid6 .raya {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 2px solid black;
+}
+.grid6 .ente {
+    display: flex;
+    justify-content: space-around;
+    border-top: solid black 2px;
+    padding-bottom: 15px;
+    
+}
+
+.version {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: end;
+    margin-top: 30px;
+}
+</style>
 <body>
     <div class="contenedor">
         <table>
