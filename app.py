@@ -28,7 +28,7 @@ def load_user(id):
 
 app.secret_key = "your_secret_key_here"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/seguimientos"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:@localhost/seguimientos?charset=utf8"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 app.register_blueprint(asignaciones)

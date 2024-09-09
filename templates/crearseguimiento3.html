@@ -18,6 +18,8 @@
 <style>
     .container-fluid {
         background-color:  rgb(243, 234, 234);
+        width: 95%;
+        
     }
     .form-control {
         
@@ -70,7 +72,7 @@ div > .fecha_inicio, div > .fecha_fin, div > .lugar {
 }
 
 </style>
-<form class="container-fluid w-75 " action="{{ url_for('pagina_instructor.guardarseguimiento') }}" method="POST">
+<form class="container-fluid " action="{{ url_for('pagina_instructor.guardarseguimiento') }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="border-top border-success mt-3 mb-3"></div>
     <div>

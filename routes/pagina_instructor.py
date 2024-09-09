@@ -393,7 +393,7 @@ def aprendiz(documento):
     )
 
     if asignacion:
-        # Si se encuentra la asignación, obtener los datos del aprendiz
+        # Si se encuentra la asignación, obtener los datos de la empresa del aprendiz
         nit = None
         razon_social = None
         telefono = None
